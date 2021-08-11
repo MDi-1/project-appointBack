@@ -15,6 +15,7 @@ public class DoctorController {
     private final DoctorMapper doctorMapper;
     private final DoctorRepository repository;
 
+    /*
     @GetMapping("/{doctorId}")
     public DoctorDto getDoctor(@PathVariable Long doctorId) throws IllegalArgumentException {
         return doctorMapper.mapToDoctorDto(repository.findById(doctorId).orElseThrow(IllegalArgumentException::new));
@@ -34,6 +35,7 @@ public class DoctorController {
     public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
         return doctorMapper.mapToDoctorDto(repository.save(doctorMapper.mapToDoctor(dto)));
     }
+     */
 
     @DeleteMapping("/{doctorId}")
     public void deleteDoctor(@PathVariable Long doctorId) {

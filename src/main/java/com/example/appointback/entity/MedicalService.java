@@ -22,6 +22,7 @@ public class MedicalService {
     @Column(name = "DESCRIPTION")
     private String description;
 
+/*
     @ManyToOne
     @JoinColumn(name = "ID")
     private Doctor doctor;
@@ -30,4 +31,5 @@ public class MedicalService {
         this.description = description;
         this.doctor = doctor;
     }
+*/
 }

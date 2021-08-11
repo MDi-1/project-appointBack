@@ -21,7 +21,7 @@ public class DoctorMapper {
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
         return new DoctorDto(doctor.getId(), doctor.getFirstName(), doctor.getLastName(), doctor.getPosition());
     }
-
+/*
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
         return new DoctorDto(doctor.getId(), doctor.getFirstName(), doctor.getLastName(), doctor.getPosition(),
                 doctor.getTimeFrame().getId(),
@@ -33,4 +33,5 @@ public class DoctorMapper {
     public List<DoctorDto> mapToDoctorDtoList(final List<Doctor> doctorList) {
         return doctorList.stream().map(this::mapToDoctorDto).collect(Collectors.toList());
     }
+ */
 }

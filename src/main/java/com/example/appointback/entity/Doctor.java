@@ -36,11 +36,13 @@ public class Doctor {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private TimeFrame timeFrame;
 
+/*
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MedicalService> medicalServices = new ArrayList<>();
+*/
 
     public Doctor(String firstName, String lastName, String position) {
         this.firstName = firstName;

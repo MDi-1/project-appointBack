@@ -49,6 +49,7 @@ public class TimeFrame {
     @Column(name = "FRI_DURATION")
     private Long friDuration;
 
+/*
     @JoinColumn(name = "ID")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Doctor doctor;
@@ -56,4 +57,5 @@ public class TimeFrame {
     public TimeFrame(Doctor doctor) {
         this.doctor = doctor;
     }
+*/
 }

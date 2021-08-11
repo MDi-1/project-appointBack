@@ -28,6 +28,7 @@ public class Patient {
     @Column(name = "LAST_NAME")
     private String lastName;
 
+/*
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
@@ -35,4 +36,5 @@ public class Patient {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+*/
 }

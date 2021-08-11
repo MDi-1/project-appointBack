@@ -28,6 +28,7 @@ public class Appointment {
     @Column(name = "DURATION")
     private long duration; // użyć później plusMinutes(long minutes)
 
+/*
     @ManyToOne
     @JoinColumn(name = "ID")
     private Doctor doctor;
@@ -35,4 +36,5 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "ID")
     private Patient patient;
+*/
 }
