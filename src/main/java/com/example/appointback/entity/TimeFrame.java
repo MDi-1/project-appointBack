@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -16,39 +16,44 @@ public class TimeFrame {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    int id;
+    Long id;
 
+    // zamiast tych wszystkich pól zrobić tablicę / fixme
     @Column(name = "MON_START")
-    SimpleDateFormat mon_start;
+    private LocalDateTime monStart;
 
-    @Column(name = "MON_END")
-    SimpleDateFormat mon_end;
+    @Column(name = "MON_DURATION")
+    private Long monDuration;
 
     @Column(name = "TUE_START")
-    SimpleDateFormat tue_start;
+    private LocalDateTime tueStart;
 
-    @Column(name = "TUE_END")
-    SimpleDateFormat tue_end;
+    @Column(name = "TUE_DURATION")
+    private Long tueDuration;
 
     @Column(name = "WED_START")
-    SimpleDateFormat wed_start;
+    private LocalDateTime wedStart;
 
-    @Column(name = "WED_END")
-    SimpleDateFormat wed_end;
+    @Column(name = "WED_DURATION")
+    private Long wedDuration;
 
     @Column(name = "THU_START")
-    SimpleDateFormat thu_start;
+    private LocalDateTime thuStart;
 
-    @Column(name = "THU_END")
-    SimpleDateFormat thu_end;
+    @Column(name = "THU_DURATION")
+    private Long thuDuration;
 
     @Column(name = "FRI_START")
-    SimpleDateFormat fri_start;
+    private LocalDateTime friStart;
 
-    @Column(name = "FRI_END")
-    SimpleDateFormat fri_end;
+    @Column(name = "FRI_DURATION")
+    private Long friDuration;
 
     @JoinColumn(name = "ID")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Doctor doctor;
+
+    public TimeFrame(Doctor doctor) {
+        this.doctor = doctor;
+    }
 }

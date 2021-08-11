@@ -12,27 +12,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorController {
 
+    private final DoctorMapper doctorMapper;
+    private final DoctorRepository repository;
+
     @GetMapping("/{doctorId}")
-    public DoctorDto getDoctor(@PathVariable int doctorId) {
-        return null; // fixme
+    public DoctorDto getDoctor(@PathVariable Long doctorId) throws IllegalArgumentException {
+        return doctorMapper.mapToDoctorDto(repository.findById(doctorId).orElseThrow(IllegalArgumentException::new));
     }
 
     @GetMapping("/getAll")
     public List<DoctorDto> getDoctors() {
-        return null; // fixme
+        return doctorMapper.mapToDoctorDtoList(repository.findAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto createDoctor(@RequestBody DoctorDto dto) {
-        return null; // fixme
+        return doctorMapper.mapToNewDoctorDto(repository.save(doctorMapper.mapToDoctor(dto)));
     }
 
-    @PutMapping("/{doctorId}")
-    public DoctorDto updateDoctor(@PathVariable int doctorId, @RequestBody DoctorDto dto) {
-        return null; // fixme
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
+        return doctorMapper.mapToDoctorDto(repository.save(doctorMapper.mapToDoctor(dto)));
     }
 
     @DeleteMapping("/{doctorId}")
-    public void deleteDoctor(@PathVariable int doctorId) {
+    public void deleteDoctor(@PathVariable Long doctorId) {
+        repository.deleteById(doctorId);
     }
 }

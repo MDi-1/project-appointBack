@@ -1,12 +1,15 @@
 package com.example.appointback.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -16,13 +19,14 @@ public class Appointment {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    int id;
+    Long id;
 
+    @NotNull
     @Column(name = "START_DATE")
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    @Column(name = "END_DATE")
-    private Date endDate;
+    @Column(name = "DURATION")
+    private long duration; // użyć później plusMinutes(long minutes)
 
     @ManyToOne
     @JoinColumn(name = "ID")

@@ -13,27 +13,27 @@ import java.util.List;
 public class AppointmentController {
 
     @GetMapping("/{apId}")
-    public AppointmentDto getAppointment(@PathVariable int apId) {
-        return null; // fixme
+    public AppointmentDto getAppointment(@PathVariable Long apId) {
+        return null; // ToDo
     }
 
     @GetMapping("/getAll")
     public List<AppointmentDto> getAppointments() {
-        return null; // there will be param inside this f. for a single doctor / fixme
+        return null; // there will be param inside this f. for a single doctor / ToDo
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public AppointmentDto createAppointment(@RequestBody AppointmentDto dto) {
-        return null; // fixme
+        return null; // ToDo
     }
 
     @PutMapping("/{apId}")
-    public AppointmentDto updateAppointment(@PathVariable int apId, @RequestBody AppointmentDto dto) {
-        return null; // fixme
+    public AppointmentDto updateAppointment(@PathVariable Long apId, @RequestBody AppointmentDto dto) {
+        return null; // ToDo
     }
 
     @DeleteMapping("/{apId}")
-    public void deleteAppointment(@PathVariable int apId) {
-        // fixme
+    public void deleteAppointment(@PathVariable Long apId) {
+        // ToDo
     }
 }
