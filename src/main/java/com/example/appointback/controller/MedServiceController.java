@@ -1,6 +1,5 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.DoctorDto;
 import com.example.appointback.entity.MedicalServiceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -13,28 +12,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedServiceController {
 
+    private final MedServiceMapper mapper;
+    private final MedServiceRepository repository;
+
     @GetMapping("/{serviceId}")
-    public MedicalServiceDto getMedService(@PathVariable int serviceId) {
-        return null; // fixme
+    public MedicalServiceDto getMedService(@PathVariable Long serviceId) {
+        return mapper.mapToMedServiceDto(repository.findById(serviceId).orElseThrow(IllegalArgumentException::new));
     }
 
     @GetMapping("/getAll")
-    public List<DoctorDto> getMedServices() {
-        return null; // fixme
+    public List<MedicalServiceDto> getMedServices() {
+        return mapper.mapToMedServiceDtoList(repository.findAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public MedicalServiceDto createMedService(@RequestBody MedicalServiceDto dto) {
-        return null; // fixme
+        return mapper.mapToMedServiceDto(repository.save(mapper.mapToMedService(dto)));
     }
 
-    @PutMapping("/{serviceId}")
-    public MedicalServiceDto updateMedService(@PathVariable int serviceId, @RequestBody MedicalServiceDto dto) {
-        return null; // fixme
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public MedicalServiceDto updateMedService(@RequestBody MedicalServiceDto dto) {
+        return mapper.mapToMedServiceDto(repository.save(mapper.mapToMedService(dto)));
     }
 
     @DeleteMapping("/{serviceId}")
-    public void deleteMedService(@PathVariable int serviceId) {
+    public void deleteMedService(@PathVariable Long serviceId) {
+        repository.deleteById(serviceId);
     }
-
 }

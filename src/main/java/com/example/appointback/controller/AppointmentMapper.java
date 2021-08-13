@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class AppointmentMapper {
@@ -30,5 +33,9 @@ public class AppointmentMapper {
                 appointment.getDuration(),
                 appointment.getDoctor().getId(),
                 appointment.getPatient().getId());
+    }
+
+    public List<AppointmentDto> mapToAppointmentDtoList(final List<Appointment> appointments) {
+        return appointments.stream().map(this::mapToAppointmentDto).collect(Collectors.toList());
     }
 }
