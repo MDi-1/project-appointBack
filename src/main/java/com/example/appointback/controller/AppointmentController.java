@@ -12,6 +12,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppointmentController {
 
+    private final AppointmentMapper mapper;
+    private final AppointmentRepository repository;
+
     @GetMapping("/{apId}")
     public AppointmentDto getAppointment(@PathVariable Long apId) {
         return null; // ToDo
@@ -34,6 +37,6 @@ public class AppointmentController {
 
     @DeleteMapping("/{apId}")
     public void deleteAppointment(@PathVariable Long apId) {
-        // ToDo
+        repository.deleteById(apId);
     }
 }

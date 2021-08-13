@@ -1,0 +1,13 @@
+Możliwe endpointy:
+> Doctor; przy tworzeniu pola tylko firstname, lastname, position
+        operacje: CRUD
+> Timeframe od początku zawsze związane z obiektem klasy Doctor
+        operacje: CRUD bez Listowania
+> MedicalService od początku zawsze związane z obiektem klasy Doctor
+        operacje: CRUD
+> Appointment od początku zawsze związane z obiektem klasy Doctor, Patient, w odpowiedniej TimeFrame
+        operacje: CRUD
+> Patient przy tworzeniu pola tylko firstname, lastname
+        operacje: CRUD
+
+Ewentualnie w ramach oszczędności na początku możemy nawet nie pisać ani jednego endpointa na delete, no może oprócz Appointment

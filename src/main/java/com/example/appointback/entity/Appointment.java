@@ -26,15 +26,14 @@ public class Appointment {
     private LocalDateTime startDate;
 
     @Column(name = "DURATION")
-    private long duration; // użyć później plusMinutes(long minutes)
+    private long duration; // użyć później plusMinutes(Long minutes)
 
-/*
     @ManyToOne
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
-*/
+
 }

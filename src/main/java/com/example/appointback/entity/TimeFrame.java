@@ -16,7 +16,7 @@ public class TimeFrame {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    Long id;
+    private Long id;
 
     // zamiast tych wszystkich pól zrobić tablicę / fixme
     @Column(name = "MON_START")
@@ -49,13 +49,11 @@ public class TimeFrame {
     @Column(name = "FRI_DURATION")
     private Long friDuration;
 
-/*
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "DOCTOR_ID")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Doctor doctor;
 
     public TimeFrame(Doctor doctor) {
         this.doctor = doctor;
     }
-*/
 }
