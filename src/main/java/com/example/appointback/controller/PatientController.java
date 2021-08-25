@@ -1,6 +1,5 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.DoctorDto;
 import com.example.appointback.entity.PatientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

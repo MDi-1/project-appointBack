@@ -1,6 +1,5 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.Appointment;
 import com.example.appointback.entity.AppointmentDto;
 import com.example.appointback.entity.Doctor;
 import lombok.RequiredArgsConstructor;

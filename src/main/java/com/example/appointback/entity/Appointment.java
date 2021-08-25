@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,10 +31,12 @@ public class Appointment {
     private long duration; // użyć później plusMinutes(Long minutes)
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
@@ -41,5 +45,10 @@ public class Appointment {
         this.duration = duration;
         this.doctor = doctor;
         this.patient = patient;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" + "id= " + id + ", startDate= " + startDate + ", duration= " + duration + '}';
     }
 }
