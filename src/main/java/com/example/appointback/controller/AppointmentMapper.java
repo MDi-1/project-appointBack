@@ -20,7 +20,7 @@ public class AppointmentMapper {
     public Appointment mapToAppointment(final AppointmentDto dto) {
         return new Appointment(
                 dto.getId(),
-                LocalDateTime.parse(dto.getStartDate()),
+                LocalDateTime.parse(dto.getStartDateTime()),
                 dto.getDuration(),
                 doctorRepository.findById(dto.getDoctorId()).orElseThrow(IllegalArgumentException::new),
                 patientRepository.findById(dto.getPatientId()).orElseThrow(IllegalArgumentException::new));
@@ -29,7 +29,7 @@ public class AppointmentMapper {
     public AppointmentDto mapToAppointmentDto(final Appointment appointment) {
         return new AppointmentDto(
                 appointment.getId(),
-                appointment.getStartDate().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")), // fixme
+                appointment.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm")),
                 appointment.getDuration(),
                 appointment.getDoctor().getId(),
                 appointment.getPatient().getId());

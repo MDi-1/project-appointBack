@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class AppointmentDto {
 
     private Long id;
-    private String startDate;
+    private String startDateTime;
     private Long duration;
     private Long doctorId;
     private Long patientId;
