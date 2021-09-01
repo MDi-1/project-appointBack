@@ -19,6 +19,4 @@ public class TimeFrameDto {
     private String friStart;
     private Long friDuration;
     private Long doctorId;
-
-
 }

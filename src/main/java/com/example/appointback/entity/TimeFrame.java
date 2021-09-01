@@ -25,31 +25,31 @@ public class TimeFrame {
     private LocalDateTime monStart;
 
     @Column(name = "MON_DURATION")
-    private Long monDuration;
+    private LocalDateTime monEnd;
 
     @Column(name = "TUE_START")
     private LocalDateTime tueStart;
 
     @Column(name = "TUE_DURATION")
-    private Long tueDuration;
+    private LocalDateTime tueEnd;
 
     @Column(name = "WED_START")
     private LocalDateTime wedStart;
 
     @Column(name = "WED_DURATION")
-    private Long wedDuration;
+    private LocalDateTime wedEnd;
 
     @Column(name = "THU_START")
     private LocalDateTime thuStart;
 
     @Column(name = "THU_DURATION")
-    private Long thuDuration;
+    private LocalDateTime thuEnd;
 
     @Column(name = "FRI_START")
     private LocalDateTime friStart;
 
     @Column(name = "FRI_DURATION")
-    private Long friDuration;
+    private LocalDateTime friEnd;
 
     @JoinColumn(name = "DOCTOR_ID")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
