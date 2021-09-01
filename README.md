@@ -1,4 +1,4 @@
-#Tiny Clinic
+# Tiny Clinic
 
 Tiny Clinic is the application designed to manage a team of Doctors and help them arrange appointments with patients in a specified time frame.
 
