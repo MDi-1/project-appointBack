@@ -43,7 +43,7 @@ public class TestObjectController {
     }
 
     @GetMapping("/sampleDataFeed")
-    public boolean sampleDataFeed() {
+    public void sampleDataFeed() {
         Doctor doc1 = new Doctor("Doug", "Smith", "Specialist");
         Doctor doc2 = new Doctor("Alison", "Green", "Specialist");
         Doctor doc3 = new Doctor("Doc", "Marshall", "Specialist");
@@ -66,6 +66,5 @@ public class TestObjectController {
         appointmentRepository.save(appt1);
         appointmentRepository.save(appt2);
         appointmentRepository.save(appt3);
-        return true;
     }
 }
