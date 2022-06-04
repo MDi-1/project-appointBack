@@ -32,7 +32,7 @@ public class TimeFrame {
     private LocalTime timeStart;
 
     @NotNull
-    @Column(name = "TIME_START")
+    @Column(name = "TIME_END")
     private LocalTime timeEnd;
 
     @JoinColumn(name = "DOCTOR_ID")
