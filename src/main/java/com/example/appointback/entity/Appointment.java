@@ -28,8 +28,7 @@ public class Appointment {
     private LocalDateTime startDate;
 
     @Column(name = "DURATION")
-    private long duration; // użyć później plusMinutes(Long minutes)
-
+    private long duration; // plusMinutes(Long minutes)
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

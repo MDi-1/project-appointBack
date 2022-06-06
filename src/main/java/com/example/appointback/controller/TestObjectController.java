@@ -1,9 +1,6 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.Appointment;
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.Patient;
-import com.example.appointback.entity.TestObjectDto;
+import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +17,7 @@ public class TestObjectController {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
+    private final MedServiceRepository medServiceRepository;
     private final TestObjectMapper mapper;
 
     @GetMapping("/{testObjId}")
@@ -66,5 +64,7 @@ public class TestObjectController {
         appointmentRepository.save(appt1);
         appointmentRepository.save(appt2);
         appointmentRepository.save(appt3);
+        MedicalService medService1 = new MedicalService("Laryngologist,", doc1);
+        MedicalService medService2 = new MedicalService("Laryngologist,", doc2);
     }
 }
