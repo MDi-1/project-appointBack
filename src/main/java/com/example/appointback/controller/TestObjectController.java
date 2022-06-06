@@ -42,9 +42,9 @@ public class TestObjectController {
         return mapper.mapToTestObjectDto(repository.save(mapper.mapToTestObject(dto)));
     }
 
-    @GetMapping("/sampleDataFeed")
+    @PostMapping("/sampleDataFeed")
     public void sampleDataFeed() {
-        Doctor doc1 = new Doctor("Doug", "Smith", "Specialist");
+        Doctor doc1 = new Doctor("Dough", "Smith", "Specialist");
         Doctor doc2 = new Doctor("Alison", "Green", "Specialist");
         Doctor doc3 = new Doctor("Doc", "Marshall", "Specialist");
         doctorRepository.save(doc1);

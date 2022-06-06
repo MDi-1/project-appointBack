@@ -30,14 +30,17 @@ public class Appointment {
     @Column(name = "DURATION")
     private long duration; // użyć później plusMinutes(Long minutes)
 
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "DOCTOR_ID")
+    @NotNull
     private Doctor doctor;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "PATIENT_ID")
+    @NotNull
     private Patient patient;
 
     public Appointment(LocalDateTime startDate, long duration, Doctor doctor, Patient patient) {
