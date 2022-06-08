@@ -36,7 +36,10 @@ public class Doctor {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private TimeFrame timeFrame;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor",
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",
