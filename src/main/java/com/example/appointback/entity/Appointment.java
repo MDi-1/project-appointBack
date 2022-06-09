@@ -27,31 +27,28 @@ public class Appointment {
     @Column(name = "START_DATE")
     private LocalDateTime startDate;
 
-    @Column(name = "DURATION")
-    private long duration; // użyć później plusMinutes(Long minutes)
-
+    @Column(name = "PRICE")
+    private int price;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "DOCTOR_ID")
-    @NotNull
     private Doctor doctor;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "PATIENT_ID")
-    @NotNull
     private Patient patient;
 
-    public Appointment(LocalDateTime startDate, long duration, Doctor doctor, Patient patient) {
+    public Appointment(LocalDateTime startDate, int price, Doctor doctor, Patient patient) {
         this.startDate = startDate;
-        this.duration = duration;
+        this.price = price;
         this.doctor = doctor;
         this.patient = patient;
     }
 
     @Override
     public String toString() {
-        return "Appointment{" + "id= " + id + ", startDate= " + startDate + ", duration= " + duration + '}';
+        return "Appointment{" + "id= " + id + ", startDate= " + startDate + ", price= " + price + '}';
     }
 }

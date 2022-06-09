@@ -26,7 +26,7 @@ public class DoctorMapper {
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
         Long id;
         List<Long> listOfAppIds;
-        List<Long> listOfServiceIds;
+        List<Short> listOfServiceIds;
         if(doctor.getTimeFrame() == null) id = 0L; else id = doctor.getTimeFrame().getId();
         if(doctor.getAppointments() != null) {
             listOfAppIds = doctor.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());

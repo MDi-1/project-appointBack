@@ -21,7 +21,7 @@ public class AppointmentMapper {
         return new Appointment(
                 dto.getId(),
                 LocalDateTime.parse(dto.getStartDateTime()),
-                dto.getDuration(),
+                dto.getPrice(),
                 doctorRepository.findById(dto.getDoctorId()).orElseThrow(IllegalArgumentException::new),
                 patientRepository.findById(dto.getPatientId()).orElseThrow(IllegalArgumentException::new));
     }
@@ -30,7 +30,7 @@ public class AppointmentMapper {
         return new AppointmentDto(
                 appointment.getId(),
                 appointment.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd','hh:mm")),
-                appointment.getDuration(),
+                appointment.getPrice(),
                 appointment.getDoctor().getId(),
                 appointment.getPatient().getId());
     }

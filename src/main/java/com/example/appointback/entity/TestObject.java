@@ -21,7 +21,7 @@ public class TestObject {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "NAME")

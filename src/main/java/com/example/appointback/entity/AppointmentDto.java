@@ -11,7 +11,7 @@ public class AppointmentDto {
 
     private Long id;
     private String startDateTime;
-    private Long duration;
+    private Integer price;
     private Long doctorId;
     private Long patientId;
 }
