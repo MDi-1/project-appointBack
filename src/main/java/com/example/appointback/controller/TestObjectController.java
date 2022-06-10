@@ -16,8 +16,8 @@ public class TestObjectController {
     private final TestObjectRepository repository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
-    private final AppointmentRepository appointmentRepository;
-    private final MedServiceRepository medServiceRepository;
+    private final AppointmentRepository appointmentRepo;
+    private final MedServiceRepository medServiceRepo;
     private final TestObjectMapper mapper;
 
     @GetMapping("/{testObjId}")
@@ -61,10 +61,10 @@ public class TestObjectController {
         Appointment appt1 = new Appointment(LocalDateTime.of(2021, 12, 30, 12, 55), 30, doc1, patient1);
         Appointment appt2 = new Appointment(LocalDateTime.of(2022, 9, 2, 13, 45), 25, doc2, patient2);
         Appointment appt3 = new Appointment(LocalDateTime.of(2022, 10, 3, 9, 0), 25, doc3, patient3);
-        appointmentRepository.save(appt1);
-        appointmentRepository.save(appt2);
-        appointmentRepository.save(appt3);
+        appointmentRepo.save(appt1);
+        appointmentRepo.save(appt2);
+        appointmentRepo.save(appt3);
         MedicalService ms1 = new MedicalService("Laryngologist", doc1);
-        medServiceRepository.save(ms1);
+        medServiceRepo.save(ms1);
     }
 }

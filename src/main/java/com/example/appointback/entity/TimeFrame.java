@@ -36,8 +36,8 @@ public class TimeFrame {
     private LocalTime timeEnd;
 
     @JoinColumn(name = "DOCTOR_ID")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //fixme
-    private Doctor doctor;                                          //fixme
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Doctor doctor;
 
     public TimeFrame(Doctor doctor) {
         this.doctor = doctor;

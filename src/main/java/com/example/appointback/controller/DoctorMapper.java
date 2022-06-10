@@ -1,9 +1,6 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.Appointment;
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.DoctorDto;
-import com.example.appointback.entity.MedicalService;
+import com.example.appointback.entity.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,22 +21,26 @@ public class DoctorMapper {
     }
 
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
-        Long id;
+
+        List<Long> listOfTimeFrames;
+        if(doctor.getTimeFrames() != null) {
+            listOfTimeFrames = doctor.getTimeFrames().stream().map(TimeFrame::getId).collect(Collectors.toList());
+        } else listOfTimeFrames = new ArrayList<>();
+
         List<Long> listOfAppIds;
-        List<Short> listOfServiceIds;
-        if(doctor.getTimeFrame() == null) id = 0L; else id = doctor.getTimeFrame().getId();
         if(doctor.getAppointments() != null) {
             listOfAppIds = doctor.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());
         } else listOfAppIds = new ArrayList<>();
-        if(doctor.getMedicalServices() != null) {
-            listOfServiceIds = doctor.getMedicalServices()
+
+        List<Short> listOfServiceIds;
+        if(doctor.getMedicalServices() != null) {listOfServiceIds = doctor.getMedicalServices()
                     .stream()
                     .map(MedicalService::getId)
                     .collect(Collectors.toList());
         } else  listOfServiceIds = new ArrayList<>();
 
         return new DoctorDto(doctor.getId(), doctor.getFirstName(), doctor.getLastName(), doctor.getPosition(),
-                id, listOfAppIds, listOfServiceIds);
+                listOfTimeFrames, listOfAppIds, listOfServiceIds);
     }
 
     public List<DoctorDto> mapToDoctorDtoList(final List<Doctor> doctorList) {

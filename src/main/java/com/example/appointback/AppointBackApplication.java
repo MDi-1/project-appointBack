@@ -8,6 +8,6 @@ public class AppointBackApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AppointBackApplication.class, args);
-        System.out.println("---- Tiny Clinic application starting; version (pre alpha) 0.0 ----\n");
+        System.out.println("---- Project Appoint application starting; version (pre alpha) 0.0 ----\n");
     }
 }

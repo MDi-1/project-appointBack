@@ -15,7 +15,7 @@ public class DoctorDto {
     private String firstName;
     private String lastName;
     private String position;
-    private Long timeFrameId;
+    private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
     private List<Short> medServiceIds;
 
