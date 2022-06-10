@@ -54,6 +54,9 @@ public class TestObjectController {
         TimeFrame tf1 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), doc1);
         TimeFrame tf2 = new TimeFrame(LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), doc1);
         TimeFrame tf3 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(10, 30), LocalTime.of(14, 0), doc1);
+        timeFrameRepository.save(tf1);
+        timeFrameRepository.save(tf2);
+        timeFrameRepository.save(tf3);
         doc1.getTimeFrames().add(tf1);
         doc1.getTimeFrames().add(tf2);
         doc1.getTimeFrames().add(tf3);
