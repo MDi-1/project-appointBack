@@ -39,7 +39,10 @@ public class TimeFrame {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Doctor doctor;
 
-    public TimeFrame(Doctor doctor) {
+    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, Doctor doctor) {
+        this.timeframeDate = timeframeDate;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
         this.doctor = doctor;
     }
 }
