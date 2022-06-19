@@ -24,7 +24,7 @@ public class Appointment {
 
     @NotNull
     @Column(name = "START_DATE")
-    private LocalDateTime startDate;
+    private LocalDateTime startDateTime;
 
     @Column(name = "PRICE")
     private int price;
@@ -39,8 +39,8 @@ public class Appointment {
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
-    public Appointment(LocalDateTime startDate, int price, Doctor doctor, Patient patient) {
-        this.startDate = startDate;
+    public Appointment(LocalDateTime startDateTime, int price, Doctor doctor, Patient patient) {
+        this.startDateTime = startDateTime;
         this.price = price;
         this.doctor = doctor;
         this.patient = patient;
@@ -48,6 +48,6 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Appointment{" + "id= " + id + ", startDate= " + startDate + ", price= " + price + '}';
+        return "Appointment{" + "id= " + id + ", startDate= " + startDateTime + ", price= " + price + '}';
     }
 }

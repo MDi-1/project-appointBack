@@ -32,7 +32,7 @@ public class DoctorMapper {
             listOfAppIds = doctor.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());
         } else listOfAppIds = new ArrayList<>();
 
-        List<Short> listOfServiceIds;
+        List<Integer> listOfServiceIds;
         if(doctor.getMedicalServices() != null) {listOfServiceIds = doctor.getMedicalServices()
                     .stream()
                     .map(MedicalService::getId)

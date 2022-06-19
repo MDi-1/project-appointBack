@@ -17,7 +17,7 @@ public class DoctorDto {
     private String position;
     private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
-    private List<Short> medServiceIds;
+    private List<Integer> medServiceIds;
 
     public DoctorDto(Long id, String firstName, String lastName, String position) {
         this.id = id;

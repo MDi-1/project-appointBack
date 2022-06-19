@@ -2,12 +2,14 @@ package com.example.appointback.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class MedicalServiceDto {
+public class OccurrenceDto {
 
-    private int id;
-    private String description;
+    private String startDateTime;
     private Long doctorId;
+    private Long patientId;
 }

@@ -79,4 +79,11 @@ public class TestObjectController {
         MedicalService ms1 = new MedicalService("Laryngologist", doc1);
         medServiceRepo.save(ms1);
     }
+
+    @PostMapping("/sampleDataFeed_TF")
+    public void sampleDataFeed_TF() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        doctors.forEach(doc -> doc.getTimeFrames().stream());// fixme - auto TF creation for all docs in DB
+        // (one day starts with 8:00, next day with other hour)
+    }
 }

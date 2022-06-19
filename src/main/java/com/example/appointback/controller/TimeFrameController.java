@@ -38,5 +38,4 @@ public class TimeFrameController {
     public void deleteTimeFrame(@PathVariable Long timeFrameId) {
         repository.deleteById(timeFrameId);
     }
-
 }
