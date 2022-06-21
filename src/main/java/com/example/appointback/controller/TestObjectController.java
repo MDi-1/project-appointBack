@@ -48,9 +48,6 @@ public class TestObjectController {
         Doctor doc1 = new Doctor("Dough", "Smith", "Specialist");
         Doctor doc2 = new Doctor("Alison", "Green", "Specialist");
         Doctor doc3 = new Doctor("Doc", "Marshall", "Specialist");
-        doctorRepository.save(doc1);
-        doctorRepository.save(doc2);
-        doctorRepository.save(doc3);
         TimeFrame tf1 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), doc1);
         TimeFrame tf2 = new TimeFrame(LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), doc1);
         TimeFrame tf3 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(10, 30), LocalTime.of(14, 0), doc1);
@@ -60,6 +57,9 @@ public class TestObjectController {
         doc1.getTimeFrames().add(tf1);
         doc1.getTimeFrames().add(tf2);
         doc1.getTimeFrames().add(tf3);
+        doctorRepository.save(doc1);
+        doctorRepository.save(doc2);
+        doctorRepository.save(doc3);
         Patient patient1 = new Patient("Jane", "Dou");
         Patient patient2 = new Patient("John", "Doe");
         Patient patient3 = new Patient("Hugo", "Bossy");

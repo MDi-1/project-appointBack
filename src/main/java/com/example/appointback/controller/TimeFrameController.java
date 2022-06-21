@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -44,30 +47,36 @@ public class TimeFrameController {
         repository.deleteById(timeFrameId);
     }
 
+    @PostMapping("/autoCreateTfList")
     public List<TimeFrameDto> autoCreateTimeFrames() {
+        //at the end of this f. preparation newly created objects has to be written to DB
         LocalDate today = LocalDate.now();
-
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
             List<TimeFrame> tfList = doc.getTimeFrames();
             TimeFrame current = null;
+            boolean found = false;
             for(TimeFrame singleTF : tfList) {
                 if(today.equals(singleTF.getTimeframeDate())) {
                     current = singleTF;
+                    found = true;
                 }
+            }
+            if(!found) {
+                current = new TimeFrame(today, LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
+                System.out.println("---- sout ---- create TF for today: " + today);
+                tfList.add(current);//index of this item is likely to be wrong
             }
             int todaysIndex = tfList.indexOf(current);
-            for (int n = 1; n < 32; n++) {
-                // TimeFrame singleTF = tfList.get(i);
-                TimeFrame next = tfList.get(todaysIndex);
-
-
-                assert current != null;
-                if(today.plusDays(n).equals(next)) {
-                    //create tf for that day.
+            for (int n = 0; n < 31; n++) {
+                LocalDate date2check = today.plusDays(n);
+                LocalDate dateOfExaminedTf = tfList.get(todaysIndex + n).getTimeframeDate(); // Optional here
+                if(date2check.equals(dateOfExaminedTf)) {
+                    System.out.println("---- sout ---- TF for date " + date2check + " does exist.");
                 }
+                else System.out.println("---- sout ---- simulate - create TF for day: " + date2check);
+                //create TF for that day.
             }
-        }
-        return null;
+        } return Collections.emptyList();
     }
 }
