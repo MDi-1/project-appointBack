@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SchedulerRepository extends CrudRepository<Scheduler, Short> {
+public interface SchedulerRepository extends CrudRepository<Scheduler, Integer> {
 
     List<Scheduler> findAll();
 }

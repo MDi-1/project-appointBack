@@ -10,11 +10,12 @@ import java.util.List;
 @Getter
 public class SchedulerDto {
 
-    private short id;
+    private int id;
     private String name;
     private List<Long> appointmentsIds;
+//fixme: use primitives as much as possible
 
-    public SchedulerDto(short id, String name) {
+    public SchedulerDto(int id, String name) {
         this.id = id;
         this.name = name;
     }

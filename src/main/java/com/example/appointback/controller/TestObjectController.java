@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/v1/test")
@@ -48,18 +49,24 @@ public class TestObjectController {
         Doctor doc1 = new Doctor("Dough", "Smith", "Specialist");
         Doctor doc2 = new Doctor("Alison", "Green", "Specialist");
         Doctor doc3 = new Doctor("Doc", "Marshall", "Specialist");
+        TimeFrame tf0 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(9, 0), LocalTime.of(15, 0), doc2);
+        TimeFrame tf1 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), doc1);
+        TimeFrame tf2 = new TimeFrame(LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), doc1);
+        TimeFrame tf3 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(10, 0), LocalTime.of(14, 0), doc1);
+        TimeFrame tf4 = new TimeFrame(LocalDate.of(2022, 6, 1), LocalTime.of(9, 0), LocalTime.of(15, 0), doc2);
+        TimeFrame tf5 = new TimeFrame(LocalDate.of(2022, 6, 6), LocalTime.of(10, 0), LocalTime.of(13, 0), doc2);
+        TimeFrame tf6 = new TimeFrame(LocalDate.of(2022, 5, 30), LocalTime.of(11, 0), LocalTime.of(14, 0), doc2);
+        TimeFrame tf7 = new TimeFrame(LocalDate.of(2022, 5, 30), LocalTime.of(12, 0), LocalTime.of(14, 0), doc3);
+        TimeFrame tf8 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
+        TimeFrame tf9 = new TimeFrame(LocalDate.of(2022, 11, 1), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
+        List<TimeFrame> list = new ArrayList<>(Arrays.asList(tf0, tf1, tf2, tf3, tf4, tf5, tf6, tf7, tf8, tf9));
+        timeFrameRepository.saveAll(list);
+        Collections.addAll(doc1.getTimeFrames(), tf1, tf2, tf3);
+        Collections.addAll(doc2.getTimeFrames(), tf0, tf4, tf5, tf6);
+        Collections.addAll(doc3.getTimeFrames(), tf7, tf8, tf9);
         doctorRepository.save(doc1);
         doctorRepository.save(doc2);
         doctorRepository.save(doc3);
-        TimeFrame tf1 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), doc1);
-        TimeFrame tf2 = new TimeFrame(LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), doc1);
-        TimeFrame tf3 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(10, 30), LocalTime.of(14, 0), doc1);
-        timeFrameRepository.save(tf1);
-        timeFrameRepository.save(tf2);
-        timeFrameRepository.save(tf3);
-        doc1.getTimeFrames().add(tf1);
-        doc1.getTimeFrames().add(tf2);
-        doc1.getTimeFrames().add(tf3);
         Patient patient1 = new Patient("Jane", "Dou");
         Patient patient2 = new Patient("John", "Doe");
         Patient patient3 = new Patient("Hugo", "Bossy");
@@ -78,5 +85,12 @@ public class TestObjectController {
         appointmentRepo.save(appt3);
         MedicalService ms1 = new MedicalService("Laryngologist", doc1);
         medServiceRepo.save(ms1);
+    }
+
+    @PostMapping("/sampleDataFeed_TF")
+    public void sampleDataFeed_TF() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        doctors.forEach(doc -> doc.getTimeFrames().stream());// fixme - auto TF creation for all docs in DB
+        // (one day starts with 8:00, next day with other hour)
     }
 }

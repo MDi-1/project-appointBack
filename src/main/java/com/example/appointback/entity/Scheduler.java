@@ -18,7 +18,7 @@ public class Scheduler {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private short id;
+    private int id;
 
     @NotNull
     @Column(name = "NAME")

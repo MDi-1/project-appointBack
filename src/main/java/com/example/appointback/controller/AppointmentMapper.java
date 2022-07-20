@@ -29,7 +29,7 @@ public class AppointmentMapper {
     public AppointmentDto mapToAppointmentDto(final Appointment appointment) {
         return new AppointmentDto(
                 appointment.getId(),
-                appointment.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd','hh:mm")),
+                appointment.getStartDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd','HH:mm")),
                 appointment.getPrice(),
                 appointment.getDoctor().getId(),
                 appointment.getPatient().getId());

@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @AllArgsConstructor
@@ -35,7 +34,7 @@ public class TimeFrame {
     private LocalTime timeEnd;
 
     @JoinColumn(name = "DOCTOR_ID")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private Doctor doctor;
 
     public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, Doctor doctor) {

@@ -16,7 +16,7 @@ public class SchedulerController {
     private final SchedulerRepository repository;
 
     @GetMapping("/{schedulerId}")
-    public SchedulerDto getScheduler(@PathVariable short schedulerId) throws IllegalArgumentException {
+    public SchedulerDto getScheduler(@PathVariable int schedulerId) throws IllegalArgumentException {
         return mapper.mapToSchedulerDto(repository.findById(schedulerId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -36,7 +36,7 @@ public class SchedulerController {
     }
 
     @DeleteMapping("/{schedulerId}")
-    public void deleteScheduler(@PathVariable short schedulerId) {
+    public void deleteScheduler(@PathVariable int schedulerId) {
         repository.deleteById(schedulerId);
     }
 }
