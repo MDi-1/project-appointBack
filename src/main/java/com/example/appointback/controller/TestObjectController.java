@@ -59,7 +59,8 @@ public class TestObjectController {
         TimeFrame tf7 = new TimeFrame(LocalDate.of(2022, 5, 30), LocalTime.of(12, 0), LocalTime.of(14, 0), doc3);
         TimeFrame tf8 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
         TimeFrame tf9 = new TimeFrame(LocalDate.of(2022, 11, 1), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
-        List<TimeFrame> list = new ArrayList<>(Arrays.asList(tf0, tf1, tf2, tf3, tf4, tf5, tf6, tf7, tf8, tf9));
+        TimeFrame tfn = new TimeFrame(LocalDate.now(), LocalTime.of(8, 0), LocalTime.of(16, 0), doc3);
+        List<TimeFrame> list = new ArrayList<>(Arrays.asList(tf0, tf1, tf2, tf3, tf4, tf5, tf6, tf7, tf8, tf9, tfn));
         timeFrameRepository.saveAll(list);
         Collections.addAll(doc1.getTimeFrames(), tf1, tf2, tf3);
         Collections.addAll(doc2.getTimeFrames(), tf0, tf4, tf5, tf6);

@@ -53,6 +53,7 @@ public class TimeFrameController {
         LocalDate today = LocalDate.now();
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
+            System.out.println("---- sout ---- doc. under inspection: " + doc.getFirstName() +" "+ doc.getLastName());
             List<TimeFrame> tfList = doc.getTimeFrames();
             TimeFrame current = null;
             boolean found = false;
@@ -60,6 +61,7 @@ public class TimeFrameController {
                 if(today.equals(singleTF.getTimeframeDate())) {
                     current = singleTF;
                     found = true;
+                    System.out.println("---- sout ---- found ");
                 }
             }
             if(!found) {
@@ -67,6 +69,7 @@ public class TimeFrameController {
                 System.out.println("---- sout ---- create TF for today: " + today);
                 tfList.add(current);//index of this item is likely to be wrong
             }
+            /*
             int todaysIndex = tfList.indexOf(current);
             for (int n = 0; n < 31; n++) {
                 LocalDate date2check = today.plusDays(n);
@@ -77,6 +80,8 @@ public class TimeFrameController {
                 else System.out.println("---- sout ---- simulate - create TF for day: " + date2check);
                 //create TF for that day.
             }
+
+             */
         } return Collections.emptyList();
     }
 }
