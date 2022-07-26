@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DoctorRepository extends CrudRepository<Doctor, Long> {
+public interface DoctorRepository extends CrudRepository<Doctor, Integer> {
 
     List<Doctor> findAll();
 }

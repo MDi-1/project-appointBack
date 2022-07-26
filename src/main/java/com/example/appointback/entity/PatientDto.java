@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 public class PatientDto {
 
-    private Long id;
+    private int id;
     private String firstName;
     private String lastName;
     private List<Long> appointmentsIds;

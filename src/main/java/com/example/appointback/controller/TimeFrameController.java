@@ -22,7 +22,7 @@ public class TimeFrameController {
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
 
-    @GetMapping("/{timeFrameId}")
+    @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
         return mapper.mapToTimeFrameDto(repository.findById(timeFrameId).orElseThrow(IllegalArgumentException::new));
     }
@@ -30,6 +30,15 @@ public class TimeFrameController {
     @GetMapping("/getAll")
     public List<TimeFrameDto> getTimeFrames() {
         return mapper.mapToTimeFrameDtoList(repository.findAll());
+    }
+
+    @GetMapping("/byDoc/{docId}")
+    public List<TimeFrameDto> getTimeFramesByDoctor(@PathVariable int docId) {
+        List <TimeFrameDto> list = mapper.mapToTimeFrameDtoList(repository.findTimeFrameByDoc(docId));
+        for (TimeFrameDto element: list) {
+            System.out.println(element.getTimeFrameDate());
+        }
+        return list;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -54,27 +63,7 @@ public class TimeFrameController {
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
             List<TimeFrame> tfList = doc.getTimeFrames();
-            TimeFrame current = null;
-            boolean found = false;
-            for(TimeFrame singleTF : tfList) {
-                if(today.equals(singleTF.getTimeframeDate())) {
-                    current = singleTF;
-                    found = true;
-                }
-            }
-            if(!found) {
-                current = new TimeFrame(today, LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
-                tfList.add(current);//index of this item is likely to be wrong
-            } // it works till this point - code has been tested with s.out
-            int todaysIndex = tfList.indexOf(current);
-            for (int n = 0; n < 31; n++) {
-                LocalDate date2check = today.plusDays(n);
-                LocalDate dateOfExaminedTf = tfList.get(todaysIndex + n).getTimeframeDate(); // Optional here
-                if(date2check.equals(dateOfExaminedTf)) {
-                    System.out.println("---- sout ---- TF for date " + date2check + " does exist.");
-                }
-                else System.out.println("---- sout ---- simulate - create TF for day: " + date2check);
-                //create TF for that day.
+            for(int n = 0; n < 30; n++) {
             }
         } return Collections.emptyList();
     }

@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class TimeFrameDto {
     
-    private Long id;
+    private long id;
     private String timeFrameDate;
     private String timeStart;
     private String timeEnd;
-    private Long doctorId;
+    private int doctorId;
 }

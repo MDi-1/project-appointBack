@@ -17,7 +17,7 @@ public class Doctor {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "FIRST_NAME")
@@ -34,6 +34,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor",
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
+    @OrderBy("t_date ASC")
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",
