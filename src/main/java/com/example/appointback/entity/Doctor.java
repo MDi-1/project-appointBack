@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class Doctor {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "FIRST_NAME")

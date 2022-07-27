@@ -9,6 +9,11 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@NamedNativeQuery(
+        name = "TimeFrame.findTimeFrameByDoc",
+        query = "SELECT * FROM timeframes WHERE doctor_id = :ID ORDER BY t_date",
+        resultClass = TimeFrame.class
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,7 +24,7 @@ public class TimeFrame {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id;
+    private long id;
 
     @NotNull
     @Column(name = "T_DATE")

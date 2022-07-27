@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,7 +21,7 @@ public class TimeFrameController {
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
 
-    @GetMapping("/{timeFrameId}")
+    @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
         return mapper.mapToTimeFrameDto(repository.findById(timeFrameId).orElseThrow(IllegalArgumentException::new));
     }
@@ -30,6 +29,11 @@ public class TimeFrameController {
     @GetMapping("/getAll")
     public List<TimeFrameDto> getTimeFrames() {
         return mapper.mapToTimeFrameDtoList(repository.findAll());
+    }
+
+    @GetMapping("/byDoc/{docId}")
+    public List<TimeFrameDto> getTimeFramesByDoctor(@PathVariable int docId) {
+        return mapper.mapToTimeFrameDtoList(repository.findTimeFrameByDoc(docId));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -48,35 +52,23 @@ public class TimeFrameController {
     }
 
     @PostMapping("/autoCreateTfList")
-    public List<TimeFrameDto> autoCreateTimeFrames() {
-        //at the end of this f. preparation newly created objects has to be written to DB
+    public boolean autoCreateTimeFrames() {
         LocalDate today = LocalDate.now();
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
-            List<TimeFrame> tfList = doc.getTimeFrames();
-            TimeFrame current = null;
-            boolean found = false;
-            for(TimeFrame singleTF : tfList) {
-                if(today.equals(singleTF.getTimeframeDate())) {
-                    current = singleTF;
-                    found = true;
+            List<TimeFrame> tfList = repository.findTimeFrameByDoc(doc.getId());
+            List<TimeFrame> newTfList = new ArrayList<>();
+            for(int n = 0; n < 30; n++) {
+                TimeFrame sampleTf = new TimeFrame(today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
+                boolean found = false;
+                for (TimeFrame singleTf : tfList) {
+                    if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) { found = true; break; }
                 }
+                if (!found) newTfList.add(sampleTf);
             }
-            if(!found) {
-                current = new TimeFrame(today, LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
-                System.out.println("---- sout ---- create TF for today: " + today);
-                tfList.add(current);//index of this item is likely to be wrong
-            }
-            int todaysIndex = tfList.indexOf(current);
-            for (int n = 0; n < 31; n++) {
-                LocalDate date2check = today.plusDays(n);
-                LocalDate dateOfExaminedTf = tfList.get(todaysIndex + n).getTimeframeDate(); // Optional here
-                if(date2check.equals(dateOfExaminedTf)) {
-                    System.out.println("---- sout ---- TF for date " + date2check + " does exist.");
-                }
-                else System.out.println("---- sout ---- simulate - create TF for day: " + date2check);
-                //create TF for that day.
-            }
-        } return Collections.emptyList();
+            tfList.addAll(newTfList);
+            repository.saveAll(tfList);
+        }
+        return true;
     }
 }

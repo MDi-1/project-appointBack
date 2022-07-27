@@ -20,7 +20,7 @@ public class Patient {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    Long id;
+    private int id;
 
     @NotNull
     @Column(name = "FIRST_NAME")
@@ -39,5 +39,7 @@ public class Patient {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 }
+// During bootcamp we have been learnt to use Long type for ID of entities but for some entities I decided to try
+// other types like Integer and int.
+

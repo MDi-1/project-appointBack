@@ -28,7 +28,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/doctorApps/{docId}")
-    public List<AppointmentDto> getAppsForOneDoctor(@PathVariable Long docId) {
+    public List<AppointmentDto> getAppsForOneDoctor(@PathVariable int docId) {
         Doctor doc = doctorRepository.findById(docId).orElseThrow(IllegalArgumentException::new);
         return mapper.mapToAppointmentDtoList(doc.getAppointments());
     }

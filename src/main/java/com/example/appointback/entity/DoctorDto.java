@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class DoctorDto {
 
-    private Long id;
+    private int id;
     private String firstName;
     private String lastName;
     private String position;
@@ -19,7 +19,7 @@ public class DoctorDto {
     private List<Long> appointmentIds;
     private List<Integer> medServiceIds;
 
-    public DoctorDto(Long id, String firstName, String lastName, String position) {
+    public DoctorDto(int id, String firstName, String lastName, String position) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

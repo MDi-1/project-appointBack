@@ -9,5 +9,5 @@ public class MedicalServiceDto {
 
     private int id;
     private String description;
-    private Long doctorId;
+    private int doctorId;
 }
