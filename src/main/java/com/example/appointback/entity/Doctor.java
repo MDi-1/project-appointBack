@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 @NoArgsConstructor
@@ -34,7 +35,6 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor",
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
-    @OrderBy("t_date ASC")
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",

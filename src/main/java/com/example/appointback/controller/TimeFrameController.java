@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,11 +33,7 @@ public class TimeFrameController {
 
     @GetMapping("/byDoc/{docId}")
     public List<TimeFrameDto> getTimeFramesByDoctor(@PathVariable int docId) {
-        List <TimeFrameDto> list = mapper.mapToTimeFrameDtoList(repository.findTimeFrameByDoc(docId));
-        for (TimeFrameDto element: list) {
-            System.out.println(element.getTimeFrameDate());
-        }
-        return list;
+        return mapper.mapToTimeFrameDtoList(repository.findTimeFrameByDoc(docId));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -57,14 +52,23 @@ public class TimeFrameController {
     }
 
     @PostMapping("/autoCreateTfList")
-    public List<TimeFrameDto> autoCreateTimeFrames() {
-        //at the end of this f. preparation newly created objects has to be written to DB
+    public boolean autoCreateTimeFrames() {
         LocalDate today = LocalDate.now();
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
-            List<TimeFrame> tfList = doc.getTimeFrames();
+            List<TimeFrame> tfList = repository.findTimeFrameByDoc(doc.getId());
+            List<TimeFrame> newTfList = new ArrayList<>();
             for(int n = 0; n < 30; n++) {
+                TimeFrame sampleTf = new TimeFrame(today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
+                boolean found = false;
+                for (TimeFrame singleTf : tfList) {
+                    if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) { found = true; break; }
+                }
+                if (!found) newTfList.add(sampleTf);
             }
-        } return Collections.emptyList();
+            tfList.addAll(newTfList);
+            repository.saveAll(tfList);
+        }
+        return true;
     }
 }
