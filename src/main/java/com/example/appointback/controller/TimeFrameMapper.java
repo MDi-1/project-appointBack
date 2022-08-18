@@ -28,8 +28,8 @@ public class TimeFrameMapper {
     public TimeFrameDto mapToTimeFrameDto(final TimeFrame timeFrame) {
         return new TimeFrameDto(timeFrame.getId(),
                 timeFrame.getTimeframeDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                timeFrame.getTimeStart().format(DateTimeFormatter.ofPattern("hh:mm")),
-                timeFrame.getTimeEnd().format(DateTimeFormatter.ofPattern("hh:mm")),
+                timeFrame.getTimeStart().format(DateTimeFormatter.ofPattern("HH:mm")),
+                timeFrame.getTimeEnd().format(DateTimeFormatter.ofPattern("HH:mm")),
                 timeFrame.getDoctor().getId());
     }
 
