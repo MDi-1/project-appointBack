@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,7 +48,21 @@ public class Appointment {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return Objects.equals(startDateTime, that.startDateTime) && Objects.equals(doctor, that.doctor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDateTime, doctor);
+    }
+
+    @Override
     public String toString() {
-        return "Appointment{" + "id= " + id + ", startDate= " + startDateTime + ", price= " + price + '}';
+        return "Appointment{" + "id=" + id + ", startDateTime=" + startDateTime + ", price=" + price +
+                ", doctor=" + doctor + ", patient=" + patient + '}';
     }
 }
