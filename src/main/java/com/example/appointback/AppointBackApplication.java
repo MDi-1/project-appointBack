@@ -11,6 +11,3 @@ public class AppointBackApplication {
         System.out.println("---- Project Appoint application starting; version (pre alpha) 0.0 ----\n");
     }
 }
-
-//todo: consider precedent interface of Repositories
-//todo: working time 8:00 - 16:00 is too narrow, it has to be changed for like 6:00 to 18:00 due to flexible timeframes

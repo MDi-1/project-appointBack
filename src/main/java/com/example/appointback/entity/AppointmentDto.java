@@ -14,4 +14,10 @@ public class AppointmentDto {
     private Integer price;
     private int doctorId;
     private int patientId;
+
+    @Override
+    public String toString() {
+        return "AppointmentDto{" + "id=" + id + ", startDateTime='" + startDateTime + '\'' + ", price=" + price +
+                ", doctorId=" + doctorId + ", patientId=" + patientId + '}';
+    }
 }
