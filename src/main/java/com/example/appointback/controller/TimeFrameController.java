@@ -1,8 +1,6 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.TimeFrame;
-import com.example.appointback.entity.TimeFrameDto;
+import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +16,10 @@ import java.util.List;
 public class TimeFrameController {
 
     private final TimeFrameMapper mapper;
+    private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
+    private final List<Appointment> appOutsideList = new ArrayList<>();
 
     @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
@@ -38,12 +38,20 @@ public class TimeFrameController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto createTimeFrame(@RequestBody TimeFrameDto dto) {
-        return mapper.mapToTimeFrameDto(repository.save(mapper.mapToTimeFrame(dto)));
+        if (dto.getTimeStart().equals("-")) dto.setTimeStart("08:00");
+        if (dto.getTimeEnd().equals("-")) dto.setTimeEnd("16:00");
+        TimeFrame tf = mapper.mapToTimeFrame(dto);
+        checkForAppsOutsideTf(tf);
+        return mapper.mapToTimeFrameDto(repository.save(tf));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto updateTimeFrame(@RequestBody TimeFrameDto dto) {
-        return mapper.mapToTimeFrameDto(repository.save(mapper.mapToTimeFrame(dto)));
+        if (dto.getTimeStart().equals("-")) dto.setTimeStart("08:00");
+        if (dto.getTimeEnd().equals("-")) dto.setTimeEnd("16:00");
+        TimeFrame tf = mapper.mapToTimeFrame(dto);
+        checkForAppsOutsideTf(tf);
+        return mapper.mapToTimeFrameDto(repository.save(tf));
     }
 
     @DeleteMapping("/{timeFrameId}")
@@ -62,7 +70,10 @@ public class TimeFrameController {
                 TimeFrame sampleTf = new TimeFrame(today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
                 boolean found = false;
                 for (TimeFrame singleTf : tfList) {
-                    if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) { found = true; break; }
+                    if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) {
+                        found = true;
+                        break;
+                    }
                 }
                 if (!found) newTfList.add(sampleTf);
             }
@@ -70,5 +81,22 @@ public class TimeFrameController {
             repository.saveAll(tfList);
         }
         return true;
+    }
+
+    @GetMapping("/getAppsOutsideTf")
+    public List<AppointmentDto> getAppsOutsideTf() {
+        return aMapper.mapToAppointmentDtoList(appOutsideList);
+    }
+
+    public void checkForAppsOutsideTf(TimeFrame tf) {
+        for (Appointment item : tf.getDoctor().getAppointments()) {
+            LocalDate aDate = LocalDate.from(item.getStartDateTime());
+            LocalTime aTime = LocalTime.from(item.getStartDateTime());
+            if (tf.getTimeframeDate().equals(aDate)) {
+                if (tf.getTimeStart().isBefore(aTime) || tf.getTimeEnd().isAfter(aTime)) {
+                    appOutsideList.add(item);
+                }
+            }
+        }
     }
 }

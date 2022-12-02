@@ -13,6 +13,14 @@ public class TimeFrameDto {
     private String timeEnd;
     private int doctorId;
 
+    public void setTimeStart(String timeStart) {
+        this.timeStart = timeStart;
+    }
+
+    public void setTimeEnd(String timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
     @Override
     public String toString() {
         return "TimeFrameDto{" + "id=" + id + ", timeFrameDate='" + timeFrameDate + '\'' +
