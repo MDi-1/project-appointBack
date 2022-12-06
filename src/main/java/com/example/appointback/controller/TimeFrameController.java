@@ -19,7 +19,6 @@ public class TimeFrameController {
     private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
-    private final List<Appointment> appOutsideList = new ArrayList<>();
 
     @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
@@ -83,20 +82,23 @@ public class TimeFrameController {
         return true;
     }
 
-    @GetMapping("/getAppsOutsideTf")
-    public List<AppointmentDto> getAppsOutsideTf() {
-        return aMapper.mapToAppointmentDtoList(appOutsideList);
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<AppointmentDto> getAppsOutsideTf(@RequestBody TimeFrameDto dto) {
+        return aMapper.mapToAppointmentDtoList(checkForAppsOutsideTf(mapper.mapToTimeFrame(dto)));
     }
 
-    public void checkForAppsOutsideTf(TimeFrame tf) {
+    public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {
+        List<Appointment> appOutsideList = new ArrayList<>();
         for (Appointment item : tf.getDoctor().getAppointments()) {
             LocalDate aDate = LocalDate.from(item.getStartDateTime());
             LocalTime aTime = LocalTime.from(item.getStartDateTime());
             if (tf.getTimeframeDate().equals(aDate)) {
-                if (tf.getTimeStart().isBefore(aTime) || tf.getTimeEnd().isAfter(aTime)) {
+                if (aTime.isBefore(tf.getTimeStart()) ||aTime.isAfter(tf.getTimeEnd()) ||aTime.equals(tf.getTimeEnd()))
+                {
                     appOutsideList.add(item);
                 }
             }
         }
+        return appOutsideList;
     }
 }
