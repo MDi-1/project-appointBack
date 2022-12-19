@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -39,8 +42,8 @@ public class TimeFrame {
     @Column(name = "TIME_END")
     private LocalTime timeEnd;
 
+    @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private Doctor doctor;
 
     public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, Doctor doctor) {

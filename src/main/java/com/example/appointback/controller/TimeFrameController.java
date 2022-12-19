@@ -82,9 +82,10 @@ public class TimeFrameController {
         return true;
     }
 
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<AppointmentDto> getAppsOutsideTf(@RequestBody TimeFrameDto dto) {
-        return aMapper.mapToAppointmentDtoList(checkForAppsOutsideTf(mapper.mapToTimeFrame(dto)));
+    @GetMapping("getAppsOutsideTf/{timeFrameId}")
+    public List<AppointmentDto> getAppsOutsideTf(@PathVariable Long timeFrameId) {
+        return aMapper.mapToAppointmentDtoList(checkForAppsOutsideTf(repository.findById(timeFrameId)
+                .orElseThrow(IllegalArgumentException::new)));
     } // we will need complete DB check - all TFs against Appointments
 
     public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {

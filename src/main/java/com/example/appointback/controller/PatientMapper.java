@@ -29,6 +29,10 @@ public class PatientMapper {
                 patient.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList()));
     }
 
+    public PatientDto mapToNewPatientDto(final Patient patient) {
+        return new PatientDto(patient.getId(), patient.getFirstName(), patient.getLastName());
+    }
+
     public List<PatientDto> mapToPatientDtoList(final List<Patient> patientList) {
         return patientList.stream().map(this::mapToPatientDto).collect(Collectors.toList());
     }

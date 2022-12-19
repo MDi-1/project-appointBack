@@ -3,10 +3,12 @@ package com.example.appointback.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 @NoArgsConstructor
@@ -32,9 +34,7 @@ public class Doctor {
     @Column(name = "POSITION")
     private String position;
 
-    @OneToMany(mappedBy = "doctor",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",
