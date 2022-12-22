@@ -1,5 +1,7 @@
 package com.example.appointback.controller;
 
+import com.example.appointback.entity.Appointment;
+import com.example.appointback.entity.Doctor;
 import com.example.appointback.entity.DoctorDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ public class DoctorController {
 
     private final DoctorMapper mapper;
     private final DoctorRepository repository;
+    private final AppointmentRepository appRepository;
 
     @GetMapping("/{doctorId}")
     public DoctorDto getDoctor(@PathVariable int doctorId) throws IllegalArgumentException {
@@ -37,6 +40,11 @@ public class DoctorController {
 
     @DeleteMapping("/{doctorId}")
     public void deleteDoctor(@PathVariable int doctorId) {
+        Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
+        List<Appointment> appointmentList = doc.getAppointments();
+        for (Appointment item : appointmentList) {
+
+        }
         repository.deleteById(doctorId);
     }
 }

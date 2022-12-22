@@ -3,8 +3,6 @@ package com.example.appointback.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,8 +21,8 @@ public class Doctor {
     private int id;
 
     @NotNull
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+    @Column(name = "NAME")
+    private String name;
 
     @NotNull
     @Column(name = "LAST_NAME")
@@ -34,7 +32,8 @@ public class Doctor {
     @Column(name = "POSITION")
     private String position;
 
-    @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor",
+            cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",
@@ -47,8 +46,8 @@ public class Doctor {
             fetch = FetchType.LAZY)
     private List<MedicalService> medicalServices = new ArrayList<>();
 
-    public Doctor(String firstName, String lastName, String position) {
-        this.firstName = firstName;
+    public Doctor(String name, String lastName, String position) {
+        this.name = name;
         this.lastName = lastName;
         this.position = position;
     }

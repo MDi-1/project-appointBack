@@ -12,16 +12,16 @@ import java.util.List;
 public class DoctorDto {
 
     private int id;
-    private String firstName;
+    private String name;
     private String lastName;
     private String position;
     private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
     private List<Integer> medServiceIds;
 
-    public DoctorDto(int id, String firstName, String lastName, String position) {
+    public DoctorDto(int id, String name, String lastName, String position) {
         this.id = id;
-        this.firstName = firstName;
+        this.name = name;
         this.lastName = lastName;
         this.position = position;
     }

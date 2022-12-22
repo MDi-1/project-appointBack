@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class DoctorMapper {
 
     public Doctor mapToDoctor(final DoctorDto doctorDto) {
-        return new Doctor(doctorDto.getFirstName(), doctorDto.getLastName(), doctorDto.getPosition());
+        return new Doctor(doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition());
     }
 
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
-        return new DoctorDto(doctor.getId(), doctor.getFirstName(), doctor.getLastName(), doctor.getPosition());
+        return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition());
     }
 
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
@@ -39,7 +39,7 @@ public class DoctorMapper {
                     .collect(Collectors.toList());
         } else  listOfServiceIds = new ArrayList<>();
 
-        return new DoctorDto(doctor.getId(), doctor.getFirstName(), doctor.getLastName(), doctor.getPosition(),
+        return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition(),
                 listOfTimeFrames, listOfAppIds, listOfServiceIds);
     }
 
