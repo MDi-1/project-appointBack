@@ -30,9 +30,8 @@ public class Patient {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @OneToMany(mappedBy = "patient",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Appointment.class, mappedBy = "patient",
+            cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
     public Patient(String firstName, String lastName) {

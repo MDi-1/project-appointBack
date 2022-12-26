@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,33 +12,18 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "DOCTORS")
-public class Doctor {
+@DiscriminatorValue("Doc")
+public class Doctor extends CalendarHolder{
 
-    @Id
-    @GeneratedValue
-    @Column(name = "ID", unique = true)
-    private int id;
-
-    @NotNull
-    @Column(name = "NAME")
-    private String name;
-
-    @NotNull
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @NotNull
     @Column(name = "POSITION")
     private String position;
 
     @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor",
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
-
-    @OneToMany(mappedBy = "doctor",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
-    private List<Appointment> appointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor",
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},

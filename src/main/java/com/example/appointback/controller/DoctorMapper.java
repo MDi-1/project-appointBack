@@ -26,19 +26,16 @@ public class DoctorMapper {
         if(doctor.getTimeFrames() != null) {
             listOfTimeFrames = doctor.getTimeFrames().stream().map(TimeFrame::getId).collect(Collectors.toList());
         } else listOfTimeFrames = new ArrayList<>();
-
         List<Long> listOfAppIds;
         if(doctor.getAppointments() != null) {
             listOfAppIds = doctor.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());
         } else listOfAppIds = new ArrayList<>();
-
         List<Integer> listOfServiceIds;
         if(doctor.getMedicalServices() != null) {listOfServiceIds = doctor.getMedicalServices()
                     .stream()
                     .map(MedicalService::getId)
                     .collect(Collectors.toList());
         } else  listOfServiceIds = new ArrayList<>();
-
         return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition(),
                 listOfTimeFrames, listOfAppIds, listOfServiceIds);
     }

@@ -37,7 +37,6 @@ public class Appointment {
     private Doctor doctor;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 

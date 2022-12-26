@@ -13,7 +13,6 @@ public class SchedulerDto {
     private int id;
     private String name;
     private List<Long> appointmentsIds;
-//fixme: use primitives as much as possible
 
     public SchedulerDto(int id, String name) {
         this.id = id;
