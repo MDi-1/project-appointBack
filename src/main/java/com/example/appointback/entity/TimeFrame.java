@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -42,14 +40,19 @@ public class TimeFrame {
     @Column(name = "TIME_END")
     private LocalTime timeEnd;
 
+    @NotNull
+    @Column(name = "STATUS")
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
-    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, Doctor doctor) {
+    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, String status, Doctor doctor) {
         this.timeframeDate = timeframeDate;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
+        this.status = status;
         this.doctor = doctor;
     }
 

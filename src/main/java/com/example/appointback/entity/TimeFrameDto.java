@@ -11,6 +11,7 @@ public class TimeFrameDto {
     private String timeFrameDate;
     private String timeStart;
     private String timeEnd;
+    private String status;
     private int doctorId;
 
     public void setTimeStart(String timeStart) {
@@ -24,6 +25,7 @@ public class TimeFrameDto {
     @Override
     public String toString() {
         return "TimeFrameDto{" + "id=" + id + ", timeFrameDate='" + timeFrameDate + '\'' +
-                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' + ", doctorId=" + doctorId + '}';
+                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' + ", status='" + status + '\'' +
+                ", doctorId=" + doctorId + '}';
     }
 }

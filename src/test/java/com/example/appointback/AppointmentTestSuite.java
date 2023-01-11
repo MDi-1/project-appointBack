@@ -25,6 +25,16 @@ public class AppointmentTestSuite {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+
+    @Test
+    public void testReadAppointment() {
+
+        Appointment app = appointmentRepository.findById(125L).orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertEquals(17, app.getPatient().getId());
+    }
+
     /*
     @Test
     public void testSaveToDB() {

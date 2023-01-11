@@ -37,8 +37,14 @@ public class TimeFrameController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto createTimeFrame(@RequestBody TimeFrameDto dto) {
-        if (dto.getTimeStart().equals("-")) dto.setTimeStart("08:00");
-        if (dto.getTimeEnd().equals("-")) dto.setTimeEnd("16:00");
+        if (dto.getTimeStart().equals("-") && dto.getTimeEnd().equals("-")) {
+            dto.setTimeStart("08:00");
+            dto.setTimeEnd("16:00");
+        }
+        if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
+            dto.setTimeStart("00:00");
+            dto.setTimeEnd("00:00");
+        }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         checkForAppsOutsideTf(tf);
         return mapper.mapToTimeFrameDto(repository.save(tf));
@@ -46,8 +52,14 @@ public class TimeFrameController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto updateTimeFrame(@RequestBody TimeFrameDto dto) {
-        if (dto.getTimeStart().equals("-")) dto.setTimeStart("08:00");
-        if (dto.getTimeEnd().equals("-")) dto.setTimeEnd("16:00");
+        if (dto.getTimeStart().equals("-") && dto.getTimeEnd().equals("-")) {
+            dto.setTimeStart("08:00");
+            dto.setTimeEnd("16:00");
+        }
+        if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
+            dto.setTimeStart("00:00");
+            dto.setTimeEnd("00:00");
+        }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         checkForAppsOutsideTf(tf);
         return mapper.mapToTimeFrameDto(repository.save(tf));
@@ -66,7 +78,8 @@ public class TimeFrameController {
             List<TimeFrame> tfList = repository.findTimeFrameByDoc(doc.getId());
             List<TimeFrame> newTfList = new ArrayList<>();
             for(int n = 0; n < 30; n++) {
-                TimeFrame sampleTf = new TimeFrame(today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), doc);
+                TimeFrame sampleTf = new TimeFrame(
+                        today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), "Present", doc);
                 boolean found = false;
                 for (TimeFrame singleTf : tfList) {
                     if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) {

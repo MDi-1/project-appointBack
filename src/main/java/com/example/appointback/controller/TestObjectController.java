@@ -52,20 +52,31 @@ public class TestObjectController {
         doctorRepository.save(doc1);
         doctorRepository.save(doc2);
         doctorRepository.save(doc3);
-        TimeFrame tf0 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(9, 0), LocalTime.of(15, 0), doc2);
-        TimeFrame tf1 = new TimeFrame(LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), doc1);
-        TimeFrame tf2 = new TimeFrame(LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), doc1);
-        TimeFrame tf3 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(10, 0), LocalTime.of(14, 0), doc1);
-        TimeFrame tfa = new TimeFrame(LocalDate.of(2022, 10, 9), LocalTime.of(10, 0), LocalTime.of(14, 0), doc1);
-        TimeFrame tf4 = new TimeFrame(LocalDate.of(2022, 6, 1), LocalTime.of(9, 0), LocalTime.of(15, 0), doc2);
-        TimeFrame tf5 = new TimeFrame(LocalDate.of(2022, 6, 6), LocalTime.of(10, 0), LocalTime.of(13, 0), doc2);
-        TimeFrame tf6 = new TimeFrame(LocalDate.of(2022, 5, 30), LocalTime.of(11, 0), LocalTime.of(14, 0), doc2);
-        TimeFrame tf7 = new TimeFrame(LocalDate.of(2022, 5, 30), LocalTime.of(12, 0), LocalTime.of(14, 0), doc3);
-        TimeFrame tf8 = new TimeFrame(LocalDate.of(2022, 10, 12), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
-        TimeFrame tf9 = new TimeFrame(LocalDate.of(2022, 11, 1), LocalTime.of(11, 0), LocalTime.of(14, 0), doc3);
-        TimeFrame tfn = new TimeFrame(LocalDate.now(), LocalTime.of(8, 0), LocalTime.of(16, 0), doc3);
+        TimeFrame tf0 = new TimeFrame(
+                LocalDate.of(2022, 10, 10), LocalTime.of(9, 0), LocalTime.of(15, 0), "Present", doc2);
+        TimeFrame tf1 = new TimeFrame(
+                LocalDate.of(2022, 10, 10), LocalTime.of(8, 0), LocalTime.of(16, 0), "Present", doc1);
+        TimeFrame tf2 = new TimeFrame(
+                LocalDate.of(2022, 10, 11), LocalTime.of(8, 0), LocalTime.of(15, 0), "Present", doc1);
+        TimeFrame tf3 = new TimeFrame(
+                LocalDate.of(2022, 10, 12), LocalTime.of(10, 0), LocalTime.of(14, 0), "Present", doc1);
+        TimeFrame tfa = new TimeFrame(
+                LocalDate.of(2022, 10, 9), LocalTime.of(10, 0), LocalTime.of(14, 0), "Present", doc1);
+        TimeFrame tf4 = new TimeFrame(
+                LocalDate.of(2022, 6, 1), LocalTime.of(9, 0), LocalTime.of(15, 0), "Present", doc2);
+        TimeFrame tf5 = new TimeFrame(
+                LocalDate.of(2022, 6, 6), LocalTime.of(10, 0), LocalTime.of(13, 0), "Present", doc2);
+        TimeFrame tf6 = new TimeFrame(
+                LocalDate.of(2022, 5, 30), LocalTime.of(11, 0), LocalTime.of(14, 0), "Present", doc2);
+        TimeFrame tf7 = new TimeFrame(
+                LocalDate.of(2022, 5, 30), LocalTime.of(12, 0), LocalTime.of(14, 0), "Present", doc3);
+        TimeFrame tf8 = new TimeFrame(
+                LocalDate.of(2022, 10, 12), LocalTime.of(11, 0), LocalTime.of(14, 0), "Present", doc3);
+        TimeFrame tf9 = new TimeFrame(
+                LocalDate.of(2022, 11, 1), LocalTime.of(11, 0), LocalTime.of(14, 0), "Present", doc3);
+        //TimeFrame tfn = new TimeFrame(LocalDate.now(), LocalTime.of(8, 0), LocalTime.of(16, 0), doc3);
         List<TimeFrame> list = new ArrayList<>(
-                Arrays.asList(tf0, tf1, tf2, tf3, tfa, tf4, tf5, tf6, tf7, tf8, tf9, tfn));
+                Arrays.asList(tf0, tf1, tf2, tf3, tfa, tf4, tf5, tf6, tf7, tf8, tf9 ));
         timeFrameRepository.saveAll(list);
         Collections.addAll(doc1.getTimeFrames(), tf1, tf2, tf3);
         Collections.addAll(doc2.getTimeFrames(), tf0, tf4, tf5, tf6);
