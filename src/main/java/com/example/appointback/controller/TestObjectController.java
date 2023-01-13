@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,7 +24,7 @@ public class TestObjectController {
     private final TestObjectMapper mapper;
 
     @GetMapping("/{testObjId}")
-    public TestObjectDto getTestObject(@PathVariable int testObjId) {
+    public TestObjectDto getTestObject(@PathVariable Long testObjId) {
         return mapper.mapToTestObjectDto(repository.findById(testObjId).orElseThrow(IllegalArgumentException::new));
     }
 

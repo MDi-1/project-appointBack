@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TestObjectDto {
-    private int id;
+    private Long id;
     private String name;
 }

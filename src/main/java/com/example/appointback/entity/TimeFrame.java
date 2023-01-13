@@ -26,7 +26,7 @@ public class TimeFrame {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private long id;
+    private Long id;
 
     @NotNull
     @Column(name = "T_DATE")

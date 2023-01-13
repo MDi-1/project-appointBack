@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class TimeFrameDto {
     
-    private long id;
+    private Long id;
     private String timeFrameDate;
     private String timeStart;
     private String timeEnd;
     private String status;
-    private int doctorId;
+    private Long doctorId;
 
     public void setTimeStart(String timeStart) {
         this.timeStart = timeStart;
@@ -20,6 +20,10 @@ public class TimeFrameDto {
 
     public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

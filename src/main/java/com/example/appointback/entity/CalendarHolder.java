@@ -18,7 +18,7 @@ public abstract class CalendarHolder {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    int id;
+    Long id;
 
     @NotNull
     @Column(name = "NAME")

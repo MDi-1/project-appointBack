@@ -11,12 +11,12 @@ import java.util.List;
 @Getter
 public class PatientDto {
 
-    private int id;
+    private Long id;
     private String firstName;
     private String lastName;
     private List<Long> appointmentsIds;
 
-    public PatientDto(int id, String firstName, String lastName) {
+    public PatientDto(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

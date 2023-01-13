@@ -12,8 +12,8 @@ public class AppointmentDto {
     private Long id;
     private String startDateTime;
     private Integer price;
-    private int doctorId;
-    private int patientId;
+    private Long doctorId;
+    private Long patientId;
 
     @Override
     public String toString() {

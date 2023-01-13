@@ -10,11 +10,11 @@ import java.util.List;
 @Getter
 public class SchedulerDto {
 
-    private int id;
+    private Long id;
     private String name;
     private List<Long> appointmentsIds;
 
-    public SchedulerDto(int id, String name) {
+    public SchedulerDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }

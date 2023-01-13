@@ -11,15 +11,15 @@ import java.util.List;
 @Getter
 public class DoctorDto {
 
-    private int id;
+    private Long id;
     private String name;
     private String lastName;
     private String position;
     private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
-    private List<Integer> medServiceIds;
+    private List<Long> medServiceIds;
 
-    public DoctorDto(int id, String name, String lastName, String position) {
+    public DoctorDto(Long id, String name, String lastName, String position) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

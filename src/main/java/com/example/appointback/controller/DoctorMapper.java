@@ -33,7 +33,7 @@ public class DoctorMapper {
         } else {
             listOfAppIds = new ArrayList<>();
         }
-        List<Integer> listOfServiceIds;
+        List<Long> listOfServiceIds;
         if (doctor.getMedicalServices() != null) {
             listOfServiceIds = doctor
                     .getMedicalServices()

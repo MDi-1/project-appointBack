@@ -16,7 +16,7 @@ public class PatientController {
     private final PatientRepository repository;
     
     @GetMapping("/{patientId}")
-    public PatientDto getPatient(@PathVariable int patientId) {
+    public PatientDto getPatient(@PathVariable Long patientId) {
         return mapper.mapToPatientDto(repository.findById(patientId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -36,7 +36,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{patientId}")
-    public void deletePatient(@PathVariable int patientId) {
+    public void deletePatient(@PathVariable Long patientId) {
         repository.deleteById(patientId);
     }
 }

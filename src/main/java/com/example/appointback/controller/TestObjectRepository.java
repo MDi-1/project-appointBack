@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface TestObjectRepository extends CrudRepository<TestObject, Integer> {
+public interface TestObjectRepository extends CrudRepository<TestObject, Long> {
 
     List<TestObject> findAll();
 

@@ -20,8 +20,9 @@ public class Patient {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private int id;
-
+    private Long id; // changed from int to Long; previously I thought there is separate id numbering for each entity
+                    // but Hibernate by default assigns id numbers from one "pool" for all entities! this "pool"
+                    // is hibernate_sequence table which has just one column "next_val" with one row.
     @NotNull
     @Column(name = "FIRST_NAME")
     private String firstName;

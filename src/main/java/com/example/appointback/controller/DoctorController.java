@@ -19,7 +19,7 @@ public class DoctorController {
     private final AppointmentRepository appRepository;
 
     @GetMapping("/{doctorId}")
-    public DoctorDto getDoctor(@PathVariable int doctorId) throws IllegalArgumentException {
+    public DoctorDto getDoctor(@PathVariable Long doctorId) throws IllegalArgumentException {
         return mapper.mapToDoctorDto(repository.findById(doctorId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -39,11 +39,11 @@ public class DoctorController {
     }
 
     @DeleteMapping("/{doctorId}")
-    public void deleteDoctor(@PathVariable int doctorId) {
+    public void deleteDoctor(@PathVariable Long doctorId) {
         Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
         List<Appointment> appointmentList = doc.getAppointments();
         for (Appointment item : appointmentList) {
-
+            // fixme
         }
         repository.deleteById(doctorId);
     }

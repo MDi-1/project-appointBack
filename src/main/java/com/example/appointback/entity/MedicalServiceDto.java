@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class MedicalServiceDto {
 
-    private int id;
+    private Long id;
     private String description;
-    private int doctorId;
+    private Long doctorId;
 }

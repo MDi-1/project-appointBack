@@ -13,5 +13,5 @@ public interface TimeFrameRepository extends CrudRepository<TimeFrame, Long> {
     List<TimeFrame> findAll();
 
     @Query
-    List<TimeFrame> findTimeFrameByDoc(@Param("ID")int docId);
+    List<TimeFrame> findTimeFrameByDoc(@Param("ID")Long docId);
 }

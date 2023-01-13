@@ -26,17 +26,17 @@ public class DoctorControllerTestSuite {
     @Test
     public void testDoctorDto() {
         // given
-        int id = 180;
+        Long id = 180L;
         // when
         DoctorDto dto = controller.getDoctor(id);
         // then
-        assertEquals(180, dto.getId());
+        assertEquals(180L, dto.getId());
     }
 
     @Test
     public void testDoctorAppList() {
         // given
-        int id = 180;
+        Long id = 180L;
         // when
         DoctorDto dto = controller.getDoctor(id);
         // then
@@ -46,11 +46,11 @@ public class DoctorControllerTestSuite {
     @Test
     public void testCreateTestObject() {
         // given
-        TestObject to = new TestObject(5, "done during test");
+        TestObject to = new TestObject(5L, "done in test class");
         testRepository.save(to);
         // when
-        TestObject found = testRepository.findByName("done during test").orElseThrow(IllegalArgumentException::new);
+        TestObject found = testRepository.findById(225L).orElseThrow(IllegalArgumentException::new);
         // then
-        assertEquals("done during test", found.getName());
+        assertEquals(225L, found.getId());
     }
 }

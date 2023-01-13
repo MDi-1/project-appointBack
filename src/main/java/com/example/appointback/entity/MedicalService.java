@@ -18,7 +18,7 @@ public class MedicalService {
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "DESCRIPTION")

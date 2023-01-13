@@ -16,7 +16,7 @@ public class MedServiceController {
     private final MedServiceRepository repository;
 
     @GetMapping("/{serviceId}")
-    public MedicalServiceDto getMedService(@PathVariable int serviceId) {
+    public MedicalServiceDto getMedService(@PathVariable Long serviceId) {
         return mapper.mapToMedServiceDto(repository.findById(serviceId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -36,7 +36,7 @@ public class MedServiceController {
     }
 
     @DeleteMapping("/{serviceId}")
-    public void deleteMedService(@PathVariable int serviceId) {
+    public void deleteMedService(@PathVariable Long serviceId) {
         repository.deleteById(serviceId);
     }
 }
