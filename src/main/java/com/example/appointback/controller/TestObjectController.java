@@ -96,7 +96,7 @@ public class TestObjectController {
         appointmentRepo.save(appt1);
         appointmentRepo.save(appt2);
         appointmentRepo.save(appt3);
-        MedicalService ms1 = new MedicalService("Laryngologist", doc1);
+        MedicalService ms1 = new MedicalService("Laryngologist", null);
         medServiceRepo.save(ms1);
     }
 

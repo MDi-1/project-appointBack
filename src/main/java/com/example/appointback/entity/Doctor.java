@@ -25,9 +25,12 @@ public class Doctor extends CalendarHolder{
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
-    @OneToMany(mappedBy = "doctor",
+    @ManyToMany(
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
+    @JoinTable(name = "JOIN_DOC_SERVICE",
+            joinColumns = {@JoinColumn(name = "DOCTOR_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "SERVICE_ID", referencedColumnName = "S_ID")})
     private List<MedicalService> medicalServices = new ArrayList<>();
 
     public Doctor(String name, String lastName, String position) {

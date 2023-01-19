@@ -21,28 +21,24 @@ public class DoctorMapper {
     }
 
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
+
         List<Long> listOfTimeFrames;
         if (doctor.getTimeFrames() != null) {
             listOfTimeFrames = doctor.getTimeFrames().stream().map(TimeFrame::getId).collect(Collectors.toList());
-        } else {
-            listOfTimeFrames = new ArrayList<>();
-        }
+        } else listOfTimeFrames = new ArrayList<>();
+
         List<Long> listOfAppIds;
         if (doctor.getAppointments() != null) {
             listOfAppIds = doctor.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());
-        } else {
-            listOfAppIds = new ArrayList<>();
-        }
-        List<Long> listOfServiceIds;
+        } else listOfAppIds = new ArrayList<>();
+
+        List<Long> listOfServIds;
         if (doctor.getMedicalServices() != null) {
-            listOfServiceIds = doctor
-                    .getMedicalServices()
-                    .stream()
-                    .map(MedicalService::getId)
-                    .collect(Collectors.toList());
-        } else  listOfServiceIds = new ArrayList<>();
+            listOfServIds =doctor.getMedicalServices().stream().map(MedicalService::getId).collect(Collectors.toList());
+        } else listOfServIds = new ArrayList<>();
+
         return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition(),
-                listOfTimeFrames, listOfAppIds, listOfServiceIds);
+                listOfTimeFrames, listOfAppIds, listOfServIds);
     }
 
     public List<DoctorDto> mapToDoctorDtoList(final List<Doctor> doctorList) {

@@ -1,5 +1,6 @@
 package com.example.appointback.controller;
 
+import com.example.appointback.entity.Doctor;
 import com.example.appointback.entity.MedicalService;
 import com.example.appointback.entity.MedicalServiceDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ public class MedServiceMapper {
     private DoctorRepository doctorRepository;
 
     public MedicalService mapToMedService(final MedicalServiceDto dto) {
-        return new MedicalService(dto.getId(), dto.getDescription(),
-                doctorRepository.findById(dto.getDoctorId()).orElseThrow(IllegalArgumentException::new));
+        return new MedicalService(dto.getServiceName(), dto.getDescription());
     }
 
     public MedicalServiceDto mapToMedServiceDto(final MedicalService service) {
-        return new MedicalServiceDto(service.getId(), service.getDescription(), service.getDoctor().getId());
+        return new MedicalServiceDto(service.getId(), service.getServiceName() ,service.getServiceName(),
+                service.getDoctors().stream().map(Doctor::getId).collect(Collectors.toList()));
     }
 
     public List<MedicalServiceDto> mapToMedServiceDtoList(final List<MedicalService> medicalServices) {

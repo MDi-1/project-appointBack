@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,19 +19,24 @@ public class MedicalService {
 
     @Id
     @GeneratedValue
-    @Column(name = "ID", unique = true)
+    @Column(name = "S_ID", unique = true)
     private Long id;
 
     @NotNull
+    @Column(name = "NAME")
+    private String serviceName;
+
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "DOCTOR_ID")
-    private Doctor doctor;
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY,
+            mappedBy = "medicalServices")
+    private List<Doctor> doctors = new ArrayList<>();
 
-    public MedicalService(String description, Doctor doctor) {
+    public MedicalService(String serviceName, String description) {
+        this.serviceName = serviceName;
         this.description = description;
-        this.doctor = doctor;
     }
 }
