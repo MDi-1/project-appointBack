@@ -20,7 +20,7 @@ public class MedServiceMapper {
     }
 
     public MedicalServiceDto mapToMedServiceDto(final MedicalService service) {
-        return new MedicalServiceDto(service.getId(), service.getServiceName() ,service.getServiceName(),
+        return new MedicalServiceDto(service.getId(), service.getServiceName() ,service.getDescription(),
                 service.getDoctors().stream().map(Doctor::getId).collect(Collectors.toList()));
     }
 
