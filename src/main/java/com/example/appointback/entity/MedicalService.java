@@ -1,9 +1,6 @@
 package com.example.appointback.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,8 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity(name = "SERVICES")
 public class MedicalService {
 
@@ -29,11 +25,11 @@ public class MedicalService {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @ManyToMany(
+    @ManyToMany(targetEntity = com.example.appointback.entity.Doctor.class,
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.LAZY,
             mappedBy = "medicalServices")
-    private List<Doctor> doctors = new ArrayList<>();
+    private List<Doctor> doctors;
 
     public MedicalService(String serviceName, String description) {
         this.serviceName = serviceName;

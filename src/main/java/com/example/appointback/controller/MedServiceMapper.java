@@ -6,6 +6,7 @@ import com.example.appointback.entity.MedicalServiceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,13 @@ public class MedServiceMapper {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    public MedicalService mapToMedService(final MedicalServiceDto dto) {
-        return new MedicalService(dto.getServiceName(), dto.getDescription());
+    public MedicalService mapToMedService(MedicalServiceDto dto) {
+        List<Doctor> list = new ArrayList<>();
+        for (Long id : dto.getDoctorIds()) {
+            Doctor d = doctorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+            list.add(d);
+        }
+        return new MedicalService(dto.getId(), dto.getServiceName(), dto.getDescription(), list);
     }
 
     public MedicalServiceDto mapToMedServiceDto(final MedicalService service) {

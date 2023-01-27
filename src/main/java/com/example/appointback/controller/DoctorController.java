@@ -20,6 +20,7 @@ public class DoctorController {
 
     @GetMapping("/{doctorId}")
     public DoctorDto getDoctor(@PathVariable Long doctorId) throws IllegalArgumentException {
+        System.out.println(repository.findById(doctorId));
         return mapper.mapToDoctorDto(repository.findById(doctorId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -30,12 +31,20 @@ public class DoctorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto createDoctor(@RequestBody DoctorDto dto) {
-        return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
+        Doctor doctor = repository.save(mapper.mapToDoctor(dto));
+        System.out.println(" ]] print [[ " + doctor);
+        DoctorDto dtoReturned = mapper.mapToNewDoctorDto(doctor);
+        System.out.println(" ]] print [[ " + dtoReturned);
+        return dtoReturned;
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
-        return mapper.mapToDoctorDto(repository.save(mapper.mapToDoctor(dto)));
+        Doctor doctor = repository.save(mapper.mapToDoctor(dto));
+        System.out.println(" ]] print [[ " + doctor);
+        DoctorDto dtoReturned = mapper.mapToNewDoctorDto(doctor);
+        System.out.println(" ]] print [[ " + dtoReturned);
+        return dtoReturned;
     }
 
     @DeleteMapping("/{doctorId}")
