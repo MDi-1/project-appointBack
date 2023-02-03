@@ -36,7 +36,8 @@ public class Appointment {
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
-    public Appointment(LocalDateTime startDateTime, int price, Doctor doctor, Patient patient) {
+    public Appointment (LocalDateTime startDateTime, int price, Doctor doctor,
+                       Patient patient) {
         this.startDateTime = startDateTime;
         this.price = price;
         this.doctor = doctor;
@@ -48,7 +49,8 @@ public class Appointment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Appointment that = (Appointment) o;
-        return Objects.equals(startDateTime, that.startDateTime) && Objects.equals(doctor, that.doctor);
+        return Objects.equals(startDateTime, that.startDateTime) &&
+                Objects.equals(doctor, that.doctor);
     }
 
     @Override

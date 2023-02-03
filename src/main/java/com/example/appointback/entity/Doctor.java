@@ -51,12 +51,16 @@ public class Doctor extends CalendarHolder{
 
     @Override
     public String toString() {
+        int msListSize;
+        if (medicalServices == null) msListSize = -1;
+        else msListSize = medicalServices.size();
         return "Doctor{" + "id=" + id +
                 ", name='" + name + '\'' +
                 ", appointments=" + appointments +
                 ", lastName='" + lastName + '\'' +
                 ", position='" + position + '\'' +
                 ", timeFrames=" + timeFrames +
+                ", msList=" + msListSize +
                 //", medicalServices=" + medicalServices +    // <== don't print this!
                 // printing list of medicalServices will result in back and forth references doctor to medicalService,
                 // then to doctor, then to medicalService, ...and eventually we get StackOverflowError; thus be careful

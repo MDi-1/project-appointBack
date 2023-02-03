@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,7 +25,8 @@ public class MedicalService {
     private String description;
 
     @ManyToMany(targetEntity = com.example.appointback.entity.Doctor.class,
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+            cascade = { CascadeType.PERSIST, CascadeType.DETACH,
+                                     CascadeType.MERGE, CascadeType.REFRESH },
             fetch = FetchType.LAZY,
             mappedBy = "medicalServices")
     private List<Doctor> doctors;

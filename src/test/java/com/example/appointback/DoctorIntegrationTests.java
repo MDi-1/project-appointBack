@@ -2,12 +2,7 @@ package com.example.appointback;
 
 import com.example.appointback.controller.DoctorController;
 
-import com.example.appointback.controller.DoctorRepository;
-import com.example.appointback.controller.TestObjectRepository;
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.DoctorDto;
-import com.example.appointback.entity.TestObject;
-import com.example.appointback.entity.TimeFrame;
+import com.example.appointback.entity.*;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -19,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
 @SpringBootTest
@@ -29,12 +23,6 @@ public class DoctorIntegrationTests {
     @Autowired
     private DoctorController controller;
 
-    @Autowired
-    private DoctorRepository repository;
-
-    @Autowired
-    private TestObjectRepository testRepository;
-
     @Test
     public void doctorControllerTest() {
         // given
@@ -42,15 +30,17 @@ public class DoctorIntegrationTests {
         LocalDate date = LocalDate.of(2023, 4, 15);
         LocalTime timeStart = LocalTime.of(8, 0);
         LocalTime timeEnd = LocalTime.of(15, 0);
-        TimeFrame timeFrame = new TimeFrame(date, timeStart, timeEnd, "Present", doctor);
+        TimeFrame timeFrame =
+                new TimeFrame ( date, timeStart, timeEnd, "Present", doctor );
 
 
 
-        DoctorDto docDto = new DoctorDto(null, "docName", "docLastname", "Board");
-
-        controller.createDoctor(docDto);
+        DoctorDto docDto =new DoctorDto(null,"docName","docLastname","Board");
+        controller.createDoctor(
+                      new DoctorDto(null, "docName", "docLastname", "Board"));
         // when
-        DoctorDto dto = controller.getDoctors().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+        DoctorDto dto = controller.getDoctors().stream().findFirst()
+                                  .orElseThrow(IllegalArgumentException::new);
         // then
         assertEquals(1L, dto.getId());
     }

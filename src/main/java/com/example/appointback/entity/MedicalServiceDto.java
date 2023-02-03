@@ -23,7 +23,8 @@ public class MedicalServiceDto {
 
     @Override
     public String toString() {
-        return "MedicalServiceDto:(" + "id=" + id + ", serviceName='" + serviceName + '\'' +
-                ", description='" + description + '\'' + ", doctorIds=" + doctorIds + ')';
+        return " MedicalServiceDto: ( " + " id=" + id + ", serviceName ='" +
+                 serviceName + '\'' + ", description='" + description + '\'' +
+                ", doctorIds=" + doctorIds + ')';
     }
 }

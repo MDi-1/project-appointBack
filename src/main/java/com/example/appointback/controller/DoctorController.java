@@ -31,20 +31,13 @@ public class DoctorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto createDoctor(@RequestBody DoctorDto dto) {
-        Doctor doctor = repository.save(mapper.mapToDoctor(dto));
-        System.out.println(" ]] print [[ " + doctor);
-        DoctorDto dtoReturned = mapper.mapToNewDoctorDto(doctor);
-        System.out.println(" ]] print [[ " + dtoReturned);
-        return dtoReturned;
+        System.out.println("  ]] execute toString() of a Dto: [[  -> " + dto);
+        return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
-        Doctor doctor = repository.save(mapper.mapToDoctor(dto));
-        System.out.println(" ]] print [[ " + doctor);
-        DoctorDto dtoReturned = mapper.mapToNewDoctorDto(doctor);
-        System.out.println(" ]] print [[ " + dtoReturned);
-        return dtoReturned;
+        return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }
 
     @DeleteMapping("/{doctorId}")

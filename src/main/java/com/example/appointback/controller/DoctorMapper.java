@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +18,30 @@ public class DoctorMapper {
 
     public Doctor mapToDoctor(DoctorDto dto) {
 
+        List<Appointment> appointments;
+        if (dto.getAppointmentIds() != null) {
+            appointments = dto.getAppointmentIds().stream().map(aLong ->
+                            appointmentRepository.findById(dto.getId())
+                            .orElseThrow(IllegalArgumentException::new)
+                    ).collect(Collectors.toList());}
+        else { appointments = null; }
+
+        List<TimeFrame> timeFrames;
+        if (dto.getTimeFrameIds() != null) {
+            timeFrames = dto.getTimeFrameIds().stream().map(aLong ->
+                    timeFrameRepository.findById(dto.getId())
+                            .orElseThrow(IllegalArgumentException::new)
+            ).collect(Collectors.toList());}
+        else { timeFrames = null; }
+
+        List<MedicalService> msList;
+        if (dto.getMedServiceIds() != null) {
+            msList = dto.getMedServiceIds().stream().map(aLong ->
+                    medServiceRepository.findById(dto.getId())
+                            .orElseThrow(IllegalArgumentException::new)
+            ).collect(Collectors.toList());}
+        else { msList = null; }
+        /*
         List<Appointment> appointments = new ArrayList<>();
         for (Long appId : dto.getAppointmentIds()) {
             appointments.add(appointmentRepository.findById(appId).orElseThrow(IllegalArgumentException::new));
@@ -31,8 +54,10 @@ public class DoctorMapper {
         for (Long msId : dto.getMedServiceIds()) {
             mServices.add(medServiceRepository.findById(msId).orElseThrow(IllegalArgumentException::new));
         }
+         */
         return new Doctor(
-                dto.getId(), dto.getName(), dto.getLastName(), dto.getPosition(), appointments, timeFrames, mServices);
+                dto.getId(),dto.getName(),dto.getLastName(),dto.getPosition(),
+                appointments, timeFrames, msList);
     }
 
     public Doctor mapToNewDoctor(final DoctorDto doctorDto) {
@@ -40,6 +65,7 @@ public class DoctorMapper {
     }
 
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
+        System.out.println("  ]] execute toString() of a doctor: [[  -> " + doctor); // 2B deleted
         return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition());
     }
 

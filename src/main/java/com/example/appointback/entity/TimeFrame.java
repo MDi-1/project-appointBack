@@ -12,9 +12,9 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 @NamedNativeQuery(
-        name = "TimeFrame.findTimeFrameByDoc",
-        query = "SELECT * FROM timeframes WHERE doctor_id = :ID ORDER BY t_date",
-        resultClass = TimeFrame.class
+    name = "TimeFrame.findTimeFrameByDoc",
+    query = "SELECT * FROM timeframes WHERE doctor_id = :ID ORDER BY t_date" ,
+    resultClass = TimeFrame.class
 )
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,7 +48,8 @@ public class TimeFrame {
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
-    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart, LocalTime timeEnd, String status, Doctor doctor) {
+    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart,
+                     LocalTime timeEnd, String status, Doctor doctor) {
         this.timeframeDate = timeframeDate;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
@@ -61,7 +62,8 @@ public class TimeFrame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TimeFrame timeFrame = (TimeFrame) o;
-        return Objects.equals(timeframeDate, timeFrame.timeframeDate) && Objects.equals(doctor, timeFrame.doctor);
+        return Objects.equals(timeframeDate, timeFrame.timeframeDate) &&
+                Objects.equals(doctor, timeFrame.doctor);
     }
 
     @Override

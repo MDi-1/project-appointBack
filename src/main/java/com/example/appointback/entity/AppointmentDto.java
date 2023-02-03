@@ -17,7 +17,8 @@ public class AppointmentDto {
 
     @Override
     public String toString() {
-        return "AppointmentDto{" + "id=" + id + ", startDateTime='" + startDateTime + '\'' + ", price=" + price +
-                ", doctorId=" + doctorId + ", patientId=" + patientId + '}';
+        return " AppointmentDto= (" + " id=" + id + ", startDateTime='" +
+                startDateTime + '\'' + ", price=" + price + ", doctorId=" +
+                doctorId + ", patientId=" + patientId + ')';
     }
 }
