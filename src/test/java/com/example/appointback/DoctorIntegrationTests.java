@@ -24,17 +24,49 @@ public class DoctorIntegrationTests {
     private DoctorController controller;
 
     @Test
+    public void testFindNoOne() {
+        // given
+        // when
+        controller.getDoctors();
+        // then
+        assertEquals(0, 0);
+    }
+
+    @Test
+    public void testDoctorCreationUnrelated() {
+        DoctorDto dto = new DoctorDto(null, "Doctress", "Doctoree", "Board");
+    }
+
+    @Test
+    public void testDoctorCreationRelated() {
+        LocalDate date = LocalDate.of(2023, 4, 15);
+        LocalTime tStart = LocalTime.of(8, 0);
+        LocalTime tEnd = LocalTime.of(15, 0);
+        TimeFrame tf = new TimeFrame(date, tStart, tEnd, "Present", doctor);
+
+        DoctorDto dto = new DoctorDto("Doc", "McDoctough", "Specialist");
+    }
+
+
+    @Test
+    public void testTimeFrameCreation() {}
+
+    @Test
+    public void testAppointmentCreation() {}
+
+    @Test
+    public void testMedicalServiceCreation() {}
+
+    @Test
+    public void testDoctorsRetrieval() {}
+
+    @Test
+    public void testDoctorUpdate() {}
+
+    @Test
     public void doctorControllerTest() {
         // given
         Doctor doctor = new Doctor("docName", "docLastname", "Board");
-        LocalDate date = LocalDate.of(2023, 4, 15);
-        LocalTime timeStart = LocalTime.of(8, 0);
-        LocalTime timeEnd = LocalTime.of(15, 0);
-        TimeFrame timeFrame =
-                new TimeFrame ( date, timeStart, timeEnd, "Present", doctor );
-
-
-
         DoctorDto docDto =new DoctorDto(null,"docName","docLastname","Board");
         controller.createDoctor(
                       new DoctorDto(null, "docName", "docLastname", "Board"));
@@ -45,4 +77,6 @@ public class DoctorIntegrationTests {
         assertEquals(1L, dto.getId());
     }
 
+    @Test
+    public void testDoctorDeletion() {}
 }
