@@ -25,4 +25,17 @@ public class DoctorDto {
         this.lastName = lastName;
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        return "DoctorDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", position='" + position + '\'' +
+                ", timeFrameIds=" + timeFrameIds +
+                ", appointmentIds=" + appointmentIds +
+                ", medServiceIds=" + medServiceIds +
+                '}';
+    }
 }

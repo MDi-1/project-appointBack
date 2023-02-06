@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 /**
- * xyz
+ * TestObject is an entity to try out variety of functionalities in this
+ * project, since "Project Appoint" was in the past for the author the very
+ * first application with this level of relationship complexity to learn
+ * skills in backend and web app development.
  */
 @AllArgsConstructor
 @NoArgsConstructor

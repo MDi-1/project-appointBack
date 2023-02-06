@@ -3,9 +3,7 @@ package com.example.appointback;
 import com.example.appointback.controller.DoctorController;
 
 import com.example.appointback.entity.*;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +32,15 @@ public class DoctorIntegrationTests {
 
     @Test
     public void testDoctorCreationUnrelated() {
+        // given
         DoctorDto dto = new DoctorDto(null, "Doctress", "Doctoree", "Board");
+        // when
+        DoctorDto output = controller.createDoctor(dto);
+        // then
+        assertEquals("Doctress", output.getName());
+
+        System.out.println(" ]] list of doctors as following: ]] " +
+                controller.getDoctors());
     }
 
     @Test
@@ -42,9 +48,9 @@ public class DoctorIntegrationTests {
         LocalDate date = LocalDate.of(2023, 4, 15);
         LocalTime tStart = LocalTime.of(8, 0);
         LocalTime tEnd = LocalTime.of(15, 0);
-        TimeFrame tf = new TimeFrame(date, tStart, tEnd, "Present", doctor);
+        //TimeFrame tf = new TimeFrame(date, tStart, tEnd, "Present", doctor);
 
-        DoctorDto dto = new DoctorDto("Doc", "McDoctough", "Specialist");
+        //DoctorDto dto = new DoctorDto("Doc", "McDoctough", "Specialist");
     }
 
 
@@ -75,8 +81,15 @@ public class DoctorIntegrationTests {
                                   .orElseThrow(IllegalArgumentException::new);
         // then
         assertEquals(1L, dto.getId());
+
+        System.out.println(" ]] list of doctors as following: ]] " +
+                controller.getDoctors());
     }
 
     @Test
     public void testDoctorDeletion() {}
+
+    @Test
+    public void x_reviseDB() {
+    }
 }
