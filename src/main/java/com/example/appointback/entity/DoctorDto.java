@@ -28,14 +28,10 @@ public class DoctorDto {
 
     @Override
     public String toString() {
-        return "DoctorDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", position='" + position + '\'' +
-                ", timeFrameIds=" + timeFrameIds +
+        return "DoctorDto{" + "id=" + id + ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' + ", position='" + position +
+                '\'' + ", timeFrameIds=" + timeFrameIds +
                 ", appointmentIds=" + appointmentIds +
-                ", medServiceIds=" + medServiceIds +
-                '}';
+                ", medServiceIds=" + medServiceIds + '}';
     }
 }

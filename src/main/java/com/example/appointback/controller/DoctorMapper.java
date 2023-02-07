@@ -17,7 +17,7 @@ public class DoctorMapper {
     private MedServiceRepository medServiceRepository;
 
     public Doctor mapToDoctor(DoctorDto dto) {
-
+        System.out.println(" >>>>> Doc dto print <<< " + dto);
         List<Appointment> appointments;
         if (dto.getAppointmentIds() != null) {
             appointments = dto.getAppointmentIds().stream().map(aLong ->

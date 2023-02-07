@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -104,6 +105,11 @@ public class TimeFrameController {
 
     public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {
         List<Appointment> appOutsideList = new ArrayList<>();
+
+        if (tf.getDoctor().getAppointments() == null || tf.getDoctor().getAppointments().size() == 0) {
+            System.out.println(" Doctor: " + tf.getDoctor().getName() + " has no appointments");
+            return Collections.emptyList();
+        }
         for (Appointment item : tf.getDoctor().getAppointments()) {
             LocalDate aDate = LocalDate.from(item.getStartDateTime());
             LocalTime aTime = LocalTime.from(item.getStartDateTime());
