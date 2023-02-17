@@ -30,14 +30,14 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
-    private Doctor doctor;
+    private CalendarHolder doctor;
 
     @ManyToOne
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
-    public Appointment (LocalDateTime startDateTime, int price, Doctor doctor,
-                       Patient patient) {
+    public Appointment (LocalDateTime startDateTime, int price,
+                        CalendarHolder doctor, Patient patient) {
         this.startDateTime = startDateTime;
         this.price = price;
         this.doctor = doctor;
@@ -56,5 +56,16 @@ public class Appointment {
     @Override
     public int hashCode() {
         return Objects.hash(startDateTime, doctor);
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", startDateTime=" + startDateTime +
+                ", price=" + price +
+                ", doctor=" + doctor +
+                ", patient=" + patient +
+                '}';
     }
 }

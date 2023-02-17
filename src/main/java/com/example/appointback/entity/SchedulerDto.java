@@ -12,7 +12,7 @@ public class SchedulerDto {
 
     private Long id;
     private String name;
-    private List<Long> appointmentsIds;
+    private List<Long> appointmentIds;
 
     public SchedulerDto(Long id, String name) {
         this.id = id;

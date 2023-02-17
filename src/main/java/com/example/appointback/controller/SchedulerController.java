@@ -20,6 +20,11 @@ public class SchedulerController {
         return mapper.mapToSchedulerDto(repository.findById(schedulerId).orElseThrow(IllegalArgumentException::new));
     }
 
+    @GetMapping("/getOne/{name}")
+    public SchedulerDto getSchedulerByName(@PathVariable String name) {
+        return mapper.mapToSchedulerDto(repository.findByName(name));
+    }
+
     @GetMapping("/getAll")
     public List<SchedulerDto> getSchedulers() {
         return mapper.mapToSchedulerDtoList(repository.findAll());

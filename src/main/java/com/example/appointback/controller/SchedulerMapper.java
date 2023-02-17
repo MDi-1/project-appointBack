@@ -14,8 +14,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SchedulerMapper {
 
+    private AppointmentRepository appointmentRepository;
+
     public Scheduler mapToScheduler(final SchedulerDto schedulerDto) {
-        return new Scheduler(schedulerDto.getName());
+        List<Appointment> appointments;
+        if (schedulerDto.getAppointmentIds() != null) {
+            appointments = schedulerDto.getAppointmentIds().stream().map(aLong -> appointmentRepository.findById(aLong)
+                    .orElseThrow(IllegalArgumentException::new)).collect(Collectors.toList());
+        } else { appointments = null; }
+        return new Scheduler(schedulerDto.getId(), schedulerDto.getName(), appointments);
     }
 
     public SchedulerDto mapToSchedulerNewDto(final Scheduler scheduler) {

@@ -19,8 +19,8 @@ public class MedServiceMapper {
     public MedicalService mapToMedService(MedicalServiceDto dto) {
         List<Doctor> list = new ArrayList<>();
         for (Long id : dto.getDoctorIds()) {
-            Doctor d = doctorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-            list.add(d);
+            Doctor doc = doctorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+            list.add(doc);
         }
         return new MedicalService(dto.getId(), dto.getServiceName(), dto.getDescription(), list);
     }

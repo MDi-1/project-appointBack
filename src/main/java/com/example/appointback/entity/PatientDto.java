@@ -21,4 +21,10 @@ public class PatientDto {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    @Override
+    public String toString() {
+        return "PatientDto{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' +
+                ", appointmentsIds=" + appointmentsIds + '}';
+    }
 }

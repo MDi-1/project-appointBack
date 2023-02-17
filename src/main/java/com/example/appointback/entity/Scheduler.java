@@ -2,18 +2,28 @@ package com.example.appointback.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity(name = "SCHEDULERS")
 @DiscriminatorValue("Sched")
 public class Scheduler extends CalendarHolder {
 
     public Scheduler(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Scheduler{" + "id=" + id + ", name='" + name + '\'' +
+                ", appointments=" + appointments + '}';
+    }
+
+    public Scheduler(Long id, @NotNull String name, List<Appointment> appointments) {
+        super(id, name, appointments);
     }
 }

@@ -9,4 +9,6 @@ import java.util.List;
 public interface SchedulerRepository extends CrudRepository<Scheduler, Long> {
 
     List<Scheduler> findAll();
+
+    Scheduler findByName(String name);
 }

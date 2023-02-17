@@ -18,6 +18,7 @@ import java.util.List;
 public class Patient {
 
     @Id
+    @NotNull
     @GeneratedValue
     @Column(name = "ID", unique = true)
     private Long id; // changed from int to Long; previously I thought there is separate id numbering for each entity

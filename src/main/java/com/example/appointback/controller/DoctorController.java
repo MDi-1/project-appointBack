@@ -3,6 +3,7 @@ package com.example.appointback.controller;
 import com.example.appointback.entity.Appointment;
 import com.example.appointback.entity.Doctor;
 import com.example.appointback.entity.DoctorDto;
+import com.example.appointback.entity.Scheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,10 @@ public class DoctorController {
     private final DoctorMapper mapper;
     private final DoctorRepository repository;
     private final AppointmentRepository appRepository;
+    private final SchedulerRepository schedulerRepository;
 
     @GetMapping("/{doctorId}")
-    public DoctorDto getDoctor(@PathVariable Long doctorId) throws IllegalArgumentException {
-        System.out.println(repository.findById(doctorId));
+    public DoctorDto getDoctor(@PathVariable Long doctorId) {
         return mapper.mapToDoctorDto(repository.findById(doctorId).orElseThrow(IllegalArgumentException::new));
     }
 
@@ -31,22 +32,28 @@ public class DoctorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto createDoctor(@RequestBody DoctorDto dto) {
-        System.out.println("  ]] execute toString() of a Dto: [[  -> " + dto);
         return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
-        return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
+        return mapper.mapToDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }
 
     @DeleteMapping("/{doctorId}")
-    public void deleteDoctor(@PathVariable Long doctorId) {
+    public String deleteDoctor(@PathVariable Long doctorId) {
         Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
-        List<Appointment> appointmentList = doc.getAppointments();
-        for (Appointment item : appointmentList) {
-            // fixme
+        Scheduler s = schedulerRepository.findByName("Default_Scheduler");
+        if (doc.getAppointments() != null  || doc.getAppointments().size() > 0 || s == null) {
+            System.out.println(doc + " \n " + s);
+            for (Appointment app : doc.getAppointments()) {
+                app.setDoctor(s);
+                appRepository.save(app);
+            }
+            repository.deleteById(doctorId);
+            return null;
+        } else {
+            return "---- Project Appoint application ---- Unable to reassign doctor's appointments.";
         }
-        repository.deleteById(doctorId);
     }
 }

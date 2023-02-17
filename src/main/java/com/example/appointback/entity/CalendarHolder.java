@@ -13,13 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CALENDAR_TYPE")
 public abstract class CalendarHolder {
 
     @Id
+    @NotNull
     @GeneratedValue
     @Column(name = "ID", unique = true)
     Long id;

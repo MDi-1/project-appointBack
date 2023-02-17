@@ -1,18 +1,16 @@
 package com.example.appointback;
 
 import com.example.appointback.controller.*;
-
 import com.example.appointback.entity.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -27,15 +25,10 @@ public class DoctorIntegrationTests {
     private AppointmentController appController;
     @Autowired
     private MedServiceController msController;
-
-    // tmp
-
     @Autowired
-    private PatientController pc;
+    private PatientController patientController;
     @Autowired
-    private SchedulerController sc;
-    @Autowired
-    private TestObjectController tc;
+    private SchedulerController schedulerController;
 
     @Test
     public void testFindNoOne() {
@@ -58,74 +51,64 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorCreationRelated() {
         // given
-        DoctorDto dto = new DoctorDto(
-                2L, "Doc", "McDoctough", "Specialist", null, null, null);
+        DoctorDto dto = new DoctorDto(null, "Doc", "McDoctough", "Specialist", null, null, null);
         // when
         DoctorDto output = doctorController.createDoctor(dto);
         // then
-        assertEquals(2L, output.getId());
+        assertEquals("Doc", output.getName());
     }
-
-    // public void testTimeFrameCreation() {}
-
-    // public void testAppointmentCreation() {}
-
-    // public void testMedicalServiceCreation() {}
-
-    // public void testDoctorsRetrieval() {}
 
     @Test
     public void testDoctorUpdate() {
         // given
-        DoctorDto docInit = new DoctorDto(3L, "", "", "Specialist");
-        TimeFrameDto tfDto =new TimeFrameDto(
-                4L, "2023-03-03", "08:00", "16:00", "Present", 4L);
-        AppointmentDto appDto = new AppointmentDto(
-                7L, "2023-03-03T09:00", 160, 4L, 5L);
-        MedicalServiceDto msDto = new MedicalServiceDto(
-                8L,"Laryngologist", null, new ArrayList<>(Arrays.asList(4L)));
-        List<Long> tfList = new ArrayList<>(Arrays.asList(tfDto.getId()));
-        List<Long> appList = new ArrayList<>(Arrays.asList(appDto.getId()));
-        List<Long> msList = new ArrayList<>(Arrays.asList(msDto.getId()));
-        DoctorDto dDto = new DoctorDto(
-                4L, "Doc","McDoctough","Specialist", tfList, appList, msList);
-        PatientDto pDto = new PatientDto(5L, "Pat", "Phatient", appList);
-        // when
-        DoctorDto dOut = doctorController.createDoctor(docInit);
-        System.out.println(" ]] doctor  written to db [[ " + dOut);
-        PatientDto patOut = pc.createPatient(pDto);
-        System.out.println(" ]] patient written to db [[ " + patOut);
-        TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        PatientDto pOut = patientController.createPatient(new PatientDto(null, "Pat", "Phatient", null));
+        AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, dOut.getId(), pOut.getId());
         AppointmentDto aOut = appController.createAppointment(appDto);
-        System.out.println(" ]] appoint written to db [[ " + aOut);
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
+        TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
+        MedicalServiceDto msDto = new MedicalServiceDto(
+                null,"Laryngologist", null, new ArrayList<>(Collections.singletonList(dOut.getId())));
         MedicalServiceDto msOut = msController.createMedService(msDto);
-        System.out.println(" ]] a list of apps: [[\n" +
-                appController.getAllAppointments());
-        DoctorDto docResult = doctorController.updateDoctor(dDto);
-
-        System.out.println(" ]] all objects: [[ \n" +
-                tfController.getTimeFrames() + "\n" +
-                appController.getAllAppointments() + "\n" +
-                msController.getMedServices() + "\n" + pc.getPatients() +
-                "\n" + sc.getSchedulers()  + "\n" + tc.getTestObjects());
-        // then
-        assertEquals(4L, docResult.getId());
-    }
-
-    @Test
-    public void doctorControllerTest() {
-        // given
-        Doctor doctor = new Doctor("docName", "docLastname", "Board");
-        DoctorDto docDto =new DoctorDto(null,"docName","docLastname","Board");
-        doctorController.createDoctor(
-                      new DoctorDto(null, "docName", "docLastname", "Board"));
         // when
-        DoctorDto dto = doctorController.getDoctors().stream().findFirst()
-                                  .orElseThrow(IllegalArgumentException::new);
+        List<Long> appList = new ArrayList<>(Collections.singletonList(aOut.getId()));
+        List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
+        List<Long> msList = new ArrayList<>(Collections.singletonList(msOut.getId()));
+        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, appList, msList);
+        DoctorDto docResult = doctorController.updateDoctor(dDto);
+        System.out.println("\n" + appController.getAllAppointments() + "\n" + doctorController.getDoctors() + "\n"); //fixme
         // then
-        assertEquals(1L, dto.getId());
+        assertEquals("McDoctough", docResult.getLastName());
     }
 
     @Test
-    public void testDoctorDeletion() {}
+    public void testListRetrieval() {
+        // given, when
+        doctorController.createDoctor(new DoctorDto());
+        // then
+        assertThrows(ConstraintViolationException.class,
+                () -> doctorController.getDoctors().stream().findFirst().orElseThrow(IllegalArgumentException::new),
+                "anticipated exception wasn't thrown");
+    }
+
+    @Test
+    public void testRemoveDoctor() {
+        // given
+        DoctorDto doctorDto = new DoctorDto(null, "x", "X", "Manager");
+        PatientDto patientDto = new PatientDto(null, "p", "P");
+        SchedulerDto schedulerDto = new SchedulerDto(null, "Default Scheduler");
+        // when
+        Long doctorId = doctorController.createDoctor(doctorDto).getId();
+        Long patientId = patientController.createPatient(patientDto).getId();
+        Long schedulerId = schedulerController.createScheduler(schedulerDto).getId();
+        AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, doctorId, patientId);
+        Long appId = appController.createAppointment(appDto).getId();
+        DoctorDto updatedDoctor = new DoctorDto(doctorId,"x","X","Manager",null,Collections.singletonList(appId),null);
+        doctorController.updateDoctor(updatedDoctor);
+        Long foundDoctorId = doctorController.getDoctors().stream().findAny().orElse(null).getId();
+        String txtOut = doctorController.deleteDoctor(foundDoctorId);
+        System.out.println(txtOut);
+        // then
+        assertEquals(0, doctorController.getDoctors().size());
+    }
 }
