@@ -76,7 +76,6 @@ public class DoctorIntegrationTests {
         List<Long> msList = new ArrayList<>(Collections.singletonList(msOut.getId()));
         DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, appList, msList);
         DoctorDto docResult = doctorController.updateDoctor(dDto);
-        System.out.println("\n" + appController.getAllAppointments() + "\n" + doctorController.getDoctors() + "\n"); //fixme
         // then
         assertEquals("McDoctough", docResult.getLastName());
     }
