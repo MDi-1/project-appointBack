@@ -31,16 +31,28 @@ public class TimeFrameIntegrationTests {
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
         // when
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
-        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, null, null);
-        DoctorDto docResult = doctorController.updateDoctor(dDto);
-        TimeFrameDto result = tfController.getTimeFramesByDoctor(
-                dOut.getTimeFrameIds().stream().findFirst().orElseThrow(IllegalArgumentException::new));
+        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", tfList, null, null);
+        DoctorDto dOut2 = doctorController.updateDoctor(dDto);
+        List<TimeFrameDto> resultList = tfController.getTimeFramesByDoctor(dOut2.getId());
         // then
-        assertEquals("McDoctough", docResult.getLastName());
+        assertEquals(1, resultList.size());
     }
 
     @Test
-    public void testTfUpdate() {}
+    public void testTfUpdate() {
+        // given
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
+        TimeFrameDto tf = tfController.createTimeFrame(tfDto);
+        // when
+        List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
+        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, null, null);
+        DoctorDto dOut2 = doctorController.updateDoctor(dDto);
+        TimeFrameDto testInput = new TimeFrameDto(tf.getId(), "2023-03-04", "6:00", "9:00", "Present", dOut2.getId());
+        TimeFrameDto result = tfController.updateTimeFrame(testInput);
+        // then
+        assertEquals("2023-03-04", result.getTimeFrameDate());
+    }
 
     @Test
     public void testTfDelete() {}
