@@ -3,7 +3,6 @@ package com.example.appointback;
 import com.example.appointback.controller.AppointmentController;
 import com.example.appointback.controller.DoctorController;
 import com.example.appointback.controller.PatientController;
-import com.example.appointback.controller.PatientRepository;
 import com.example.appointback.entity.AppointmentDto;
 import com.example.appointback.entity.DoctorDto;
 import com.example.appointback.entity.PatientDto;
@@ -50,11 +49,9 @@ public class PatientIntegrationTests {
         AppointmentDto a = appointmentController.createAppointment(appDto);
         System.out.println(" ]]] got app list: " + appointmentController.getAllAppointments());
         // when
-        PatientDto patientRetrieved = patientController.getPatient(p.getId());
-        System.out.println(" ]]] patientRetrieved: " + patientRetrieved);
-        PatientDto updatedDto = new PatientDto(
-                patientRetrieved.getId(), "pat", "Pat", Collections.singletonList(a.getId()));
+        PatientDto updatedDto = new PatientDto(p.getId(), "pat", "Pat", Collections.singletonList(a.getId()));
         PatientDto result = patientController.updatePatient(updatedDto);
+        patientController.deletePatient(p.getId());
         System.out.println(" ]]] result: " + result);
         System.out.println(" >>>> patients:\n" + patientController.getPatients());
         System.out.println(" >>>> appointments:\n" + appointmentController.getAllAppointments());
@@ -84,10 +81,10 @@ public class PatientIntegrationTests {
         // given
         PatientDto pat = patientController.createPatient(new PatientDto(null, "abc", "xyz"));
         DoctorDto doc = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", "Specialist"));
-        AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, doc.getId(), pat.getId());
-        appointmentController.createAppointment(appDto);
+        AppointmentDto aIn = new AppointmentDto(null, "2023-03-03T09:00", 160, doc.getId(), pat.getId());
+        AppointmentDto aOut = appointmentController.createAppointment(aIn);
         // when
-        PatientDto updatedDto = new PatientDto(null, "pat", "Pat", Collections.singletonList(appDto.getId()));
+        PatientDto updatedDto = new PatientDto(pat.getId(), "pat", "Pat", Collections.singletonList(aOut.getId()));
         PatientDto result = patientController.updatePatient(updatedDto);
         // then
         assertEquals("pat", result.getFirstName());

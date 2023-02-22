@@ -35,7 +35,7 @@ public class DoctorController {
         return mapper.mapToNewDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DoctorDto updateDoctor(@RequestBody DoctorDto dto) {
         return mapper.mapToDoctorDto(repository.save(mapper.mapToDoctor(dto)));
     }

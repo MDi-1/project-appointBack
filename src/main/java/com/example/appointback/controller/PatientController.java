@@ -25,7 +25,7 @@ public class PatientController {
         return mapper.mapToPatientDtoList(repository.findAll());
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public PatientDto createPatient(@RequestBody PatientDto dto) {
         return mapper.mapToNewPatientDto(repository.save(mapper.mapToPatient(dto)));
     }

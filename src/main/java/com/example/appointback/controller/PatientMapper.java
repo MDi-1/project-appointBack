@@ -14,8 +14,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PatientMapper {
 
+    private AppointmentRepository appointmentRepository;
+
     public Patient mapToPatient(final PatientDto patientDto) {
-        return new Patient(patientDto.getFirstName(), patientDto.getLastName());
+        List<Appointment> appList;
+        if (patientDto.getAppointmentsIds() != null) {
+            appList = patientDto.getAppointmentsIds().stream().map(aLong -> appointmentRepository.findById(aLong)
+                    .orElseThrow(IllegalArgumentException::new)).collect(Collectors.toList());
+        } else { appList = null; }
+        return new Patient(patientDto.getId(), patientDto.getFirstName(), patientDto.getLastName(), appList);
     }
 
     public PatientDto mapToPatientDto(final Patient patient) {
