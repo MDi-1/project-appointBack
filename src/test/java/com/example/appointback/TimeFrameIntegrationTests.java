@@ -46,7 +46,7 @@ public class TimeFrameIntegrationTests {
         TimeFrameDto tf = tfController.createTimeFrame(tfDto);
         // when
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
-        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, null, null);
+        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", tfList, null, null);
         DoctorDto dOut2 = doctorController.updateDoctor(dDto);
         TimeFrameDto testInput = new TimeFrameDto(tf.getId(), "2023-03-04", "6:00", "9:00", "Present", dOut2.getId());
         TimeFrameDto result = tfController.updateTimeFrame(testInput);
@@ -55,5 +55,21 @@ public class TimeFrameIntegrationTests {
     }
 
     @Test
-    public void testTfDelete() {}
+    public void testTfDelete() {
+        // given
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
+        TimeFrameDto tf = tfController.createTimeFrame(tfDto);
+        System.out.println(" >>>>>>>>>>>>> tf : " + tfController.getTimeFrames());
+        // when
+        List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
+        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, null, null);
+        doctorController.updateDoctor(dDto);
+        System.out.println(" >>>>>>>>>>>>> tfs: " + tfController.getTimeFrames());
+        tfController.deleteTimeFrame(2L);
+        System.out.println(" >>>>>>>>>>>>> tfs: " + tfController.getTimeFrames());
+        // then
+        assertEquals(0, tfController.getTimeFrames().size());
+        assertEquals("Doc", doctorController.getDoctor(dOut.getId()).getName());
     }
+}
