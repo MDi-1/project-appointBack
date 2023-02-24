@@ -69,6 +69,7 @@ public class TimeFrameController {
 
     @DeleteMapping("/{timeFrameId}")
     public void deleteTimeFrame(@PathVariable Long timeFrameId) {
+        System.out.println(" >>>> repo got tfId= " + timeFrameId);
         repository.deleteById(timeFrameId);
     }
 

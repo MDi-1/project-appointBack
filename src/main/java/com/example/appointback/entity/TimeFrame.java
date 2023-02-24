@@ -70,4 +70,11 @@ public class TimeFrame {
     public int hashCode() {
         return Objects.hash(timeframeDate, doctor);
     }
+
+    @Override
+    public String toString() {
+        return "TimeFrame{" + "id=" + id + ", timeframeDate=" + timeframeDate +
+                ", timeStart=" + timeStart + ", timeEnd=" + timeEnd +
+                ", status='" + status + '\'' + ", doctor= dont show" + '}';
+    }
 }

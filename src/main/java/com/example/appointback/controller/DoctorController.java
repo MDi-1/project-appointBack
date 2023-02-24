@@ -44,8 +44,13 @@ public class DoctorController {
     public String deleteDoctor(@PathVariable Long doctorId) {
         Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
         Scheduler s = schedulerRepository.findByName("Default_Scheduler");
-        if (doc.getAppointments() != null  || doc.getAppointments().size() > 0 || s == null) {
-            System.out.println(doc + " \n " + s);
+        if (doc.getAppointments() == null  || doc.getAppointments().size() < 1 ) {
+            System.out.println("\"---- Project Appoint application ---- doctor had not any appointment");
+            repository.deleteById(doctorId);
+            return null;
+        }
+        if (s != null) {
+            System.out.println("---- Project Appoint application ---- reassigning from - to:\n" + doc + " \n " + s);
             for (Appointment app : doc.getAppointments()) {
                 app.setDoctor(s);
                 appRepository.save(app);

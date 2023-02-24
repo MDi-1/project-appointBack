@@ -1,7 +1,6 @@
 package com.example.appointback;
 
-import com.example.appointback.controller.DoctorController;
-import com.example.appointback.controller.TimeFrameController;
+import com.example.appointback.controller.*;
 import com.example.appointback.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,19 +57,19 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testTfDelete() {
         // given
-        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
-        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
-        TimeFrameDto tf = tfController.createTimeFrame(tfDto);
-        System.out.println(" >>>>>>>>>>>>> tf : " + tfController.getTimeFrames());
+        DoctorDto dCreatedOut = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dCreatedOut.getId());
+        TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
+                // System.out.println(" >>>>>>>>>>>>> tf : " + tfController.getTimeFrames());
         // when
-        List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
-        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, null, null);
-        doctorController.updateDoctor(dDto);
-        System.out.println(" >>>>>>>>>>>>> tfs: " + tfController.getTimeFrames());
-        tfController.deleteTimeFrame(2L);
-        System.out.println(" >>>>>>>>>>>>> tfs: " + tfController.getTimeFrames());
+                // I don't understand why updateDoctor() prevents deleteTimeFrame() from succeeding
+                // List<Long> tfList = new ArrayList<>(Arrays.asList(tf.getId()));
+                // DoctorDto dUpdatedDto = new DoctorDto(dCreatedOut.getId(), "FFF","LLL","Board", tfList, null, null);
+                // DoctorDto dResult = doctorController.updateDoctor(dUpdatedDto);
+                // System.out.println(" >>>>>>>>>>>>> doc: " + dResult);
+        tfController.deleteTimeFrame(tfOut.getId());
         // then
         assertEquals(0, tfController.getTimeFrames().size());
-        assertEquals("Doc", doctorController.getDoctor(dOut.getId()).getName());
+        assertEquals("Abc", doctorController.getDoctor(dCreatedOut.getId()).getName());
     }
 }

@@ -95,7 +95,7 @@ public class DoctorIntegrationTests {
         // given
         DoctorDto doctorDto = new DoctorDto(null, "x", "X", "Manager");
         PatientDto patientDto = new PatientDto(null, "p", "P");
-        SchedulerDto schedulerDto = new SchedulerDto(null, "Default Scheduler");
+        SchedulerDto schedulerDto = new SchedulerDto(null, "Default_Scheduler");
         // when
         Long doctorId = doctorController.createDoctor(doctorDto).getId();
         Long patientId = patientController.createPatient(patientDto).getId();
