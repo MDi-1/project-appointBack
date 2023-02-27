@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,6 +23,8 @@ public class TimeFrameIntegrationTests {
     private DoctorController doctorController;
     @Autowired
     private TimeFrameController tfController;
+    @Autowired
+    private TimeFrameRepository tfRepository;
 
     @Test
     public void testTfCreate() {
@@ -57,8 +60,8 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testTfDelete() {
         // given
-        DoctorDto dCreatedOut = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
-        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dCreatedOut.getId());
+        DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", d.getId());
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
                 // System.out.println(" >>>>>>>>>>>>> tf : " + tfController.getTimeFrames());
         // when
@@ -70,6 +73,28 @@ public class TimeFrameIntegrationTests {
         tfController.deleteTimeFrame(tfOut.getId());
         // then
         assertEquals(0, tfController.getTimeFrames().size());
-        assertEquals("Abc", doctorController.getDoctor(dCreatedOut.getId()).getName());
+        assertEquals("Abc", doctorController.getDoctor(d.getId()).getName());
+    }
+
+    @Test
+    public void testAutoCreation() {
+        // given
+        DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        String currentDate = LocalDate.now().plusWeeks(1L).toString();
+        TimeFrameDto tfDto = new TimeFrameDto(null, currentDate, "08:00", "16:00", "Present", d.getId());
+        TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
+        // when
+        tfController.autoCreateTimeFrames();
+        List<TimeFrame> tfList = tfRepository.findTimeFrameByDoc(d.getId());
+        LocalDate now = LocalDate.now();
+/*
+        List<TimeFrame> filteredList = tfList.stream()
+                .filter(e -> (e.getTimeframeDate().equals(now) || e.getTimeframeDate().isAfter(now)))
+                .collect(Collectors.toList());
+*/
+        long count = tfList.stream()
+                .filter(e -> (e.getTimeframeDate().equals(now) || e.getTimeframeDate().isAfter(now))).count();
+        // then
+        assertEquals(30, count);
     }
 }

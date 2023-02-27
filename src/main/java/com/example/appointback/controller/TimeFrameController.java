@@ -45,6 +45,7 @@ public class TimeFrameController {
         if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
             dto.setTimeStart("00:00");
             dto.setTimeEnd("00:00");
+            dto.setStatus("Day_Off");
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         checkForAppsOutsideTf(tf);
