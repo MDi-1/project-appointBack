@@ -64,13 +64,16 @@ public class TimeFrameController {
             dto.setStatus("Day_Off");
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
-        checkForAppsOutsideTf(tf);
+        List<Appointment> aList = checkForAppsOutsideTf(tf);
+        if (aList.size() > 0) {
+            System.out.println("---- Project Appoint application ---- appointments are outside doctor's timeframe");
+        }
         return mapper.mapToTimeFrameDto(repository.save(tf));
     }
 
     @DeleteMapping("/{timeFrameId}")
     public void deleteTimeFrame(@PathVariable Long timeFrameId) {
-        System.out.println(" >>>> repo got tfId= " + timeFrameId);
+        System.out.println(" >>>> deleteTimeFrame - repo got tfId= " + timeFrameId);
         repository.deleteById(timeFrameId);
     }
 
