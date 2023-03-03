@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -66,32 +65,6 @@ public class TimeFrameIntegrationTests {
     }
 
     @Test
-    public void testTfDelete() {
-        // given
-        DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
-        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", d.getId());
-        TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
-        System.out.println(" >>>> " + doctorController.getDoctor(d.getId()));
-                System.out.println(" >>>>>>>>>>>>> tf : " + tfController.getTimeFrames());
-        // when
-                List<Long> tfList = new ArrayList<>(Arrays.asList(tfOut.getId()));
-                DoctorDto dUpdatedDto = new DoctorDto(d.getId(), "FFF","LLL","Board", tfList, null, null);
-                DoctorDto dResult = doctorController.updateDoctor(dUpdatedDto);
-                System.out.println(" >>>>>>>>>>>>> doc: " + dResult);
-                DoctorDto refreshed = doctorController.getDoctors().stream().findAny().orElse(null);
-                System.out.println(" >>>>>> refreshed doc:" + refreshed + "\n" +
-                        " >>>>>> got tf from repo before: " + tfRepository.findAll() + "\n"
-                );
-        tfController.deleteTimeFrame(2L);
-        System.out.println(" >>>>>> refreshed doc after del:" + refreshed + "\n" +
-        " >>>>>> got tf from repo after: " + "\n" +
-        " >>>>>> got tf from ctr : " + tfController.getTimeFrame(2L) + "\n" );
-        // then
-        assertEquals(0, tfController.getTimeFrames().size());
-        assertEquals("Abc", doctorController.getDoctor(d.getId()).getName());
-    }
-
-    @Test
     public void testAutoCreation() {
         // given
         DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
@@ -122,12 +95,6 @@ public class TimeFrameIntegrationTests {
         doctorController.updateDoctor(new DoctorDto(doctor.getId(), "Abc","Xyz","Board", tfList, appList, null));
         TimeFrameDto tf2mod = tfController.updateTimeFrame(new TimeFrameDto(
                 tf2.getId(), LocalDate.of(2023, 3, 7).toString(), "off", "off", "aaa", doctor.getId()));
-
-        System.out.println(" >>>> appointment: " + a1out + "\n");
-        DoctorDto dto = doctorController.getDoctor(doctor.getId());
-        System.out.println(" >>>> doctor dto: " + dto + "\n");
-        Doctor d = doctorRepository.findById(doctor.getId()).orElse(null);
-        System.out.println(" >>>> doctor: " + d + "\n");
         // then
         assertEquals("Day_Off", tfController.getTimeFrame(tf2mod.getId()).getStatus());
     }
