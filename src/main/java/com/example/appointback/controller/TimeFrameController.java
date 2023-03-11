@@ -78,8 +78,7 @@ public class TimeFrameController {
     }
 
     @PostMapping("/autoCreateTfList")
-    public boolean autoCreateTimeFrames() {
-        LocalDate today = LocalDate.now();
+    public boolean autoCreateTimeFrames(LocalDate today) {
         List<Doctor> doctorList = docRepository.findAll();
         for(Doctor doc : doctorList) {
             List<TimeFrame> tfList = repository.findTimeFrameByDoc(doc.getId());

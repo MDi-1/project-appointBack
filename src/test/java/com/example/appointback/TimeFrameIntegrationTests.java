@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class TimeFrameIntegrationTests {
         TimeFrameDto tfDto = new TimeFrameDto(null, currentDate, "08:00", "16:00", "Present", doctor.getId());
         tfController.createTimeFrame(tfDto);
         // when
-        tfController.autoCreateTimeFrames();
+        tfController.autoCreateTimeFrames(LocalDate.now());
         long count = tfRepository.findTimeFrameByDoc(doctor.getId()).size();
         // then
         assertEquals(30, count);

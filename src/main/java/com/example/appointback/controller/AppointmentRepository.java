@@ -10,5 +10,5 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
 
     List<Appointment> findAll();
 
-    Appointment findByPrice(int price);
+    List<Appointment> findByPrice(int price);
 }
