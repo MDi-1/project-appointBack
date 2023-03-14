@@ -2,6 +2,7 @@ package com.example.appointback.controller;
 
 import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +28,9 @@ public class MaintenanceController {
     private final AppointmentMapper appMapper;
     private final TimeFrameMapper tfMapper;
 
+    @Scheduled(cron = "0 0 10 * * *")
     @GetMapping("/dDbCheck") // abbreviation: "duplicate database check"
-    public int dDbCheck() {
+    public int dDbCheck() { // something is wrong with it, I think. (but scheduler works) fixme
         Set<Appointment> appCheckSet = new HashSet<>();
         List<AppointmentDto> appExcessList = new ArrayList<>();
         for (Appointment appointment : appRepository.findAll()) {
@@ -39,6 +41,7 @@ public class MaintenanceController {
         for (TimeFrame timeFrame : timeFrameRepository.findAll()) {
             if (!tfCheckSet.add(timeFrame)) tfExcessList.add(tfMapper.mapToTimeFrameDto(timeFrame));
         }
+        System.out.println("---- Project Appoint application; duplicate objects in db: ----\n");
         for (AppointmentDto appItem : appExcessList) System.out.println(appItem);
         for (TimeFrameDto tfItem : tfExcessList) System.out.println(tfItem);
         return appExcessList.size() + tfExcessList.size();
