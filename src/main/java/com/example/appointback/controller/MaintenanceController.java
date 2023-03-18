@@ -53,6 +53,7 @@ public class MaintenanceController {
         Doctor doc2 = new Doctor("Alison", "Green", "Manager");
         Doctor doc3 = new Doctor("Doc", "Marshall", "Board");
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
+        schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
         doctorRepository.save(doc1);
         doctorRepository.save(doc2);
         doctorRepository.save(doc3);
