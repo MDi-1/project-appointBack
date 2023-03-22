@@ -4,7 +4,6 @@ import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -109,7 +108,6 @@ public class TimeFrameController {
 
     public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {
         List<Appointment> appOutsideList = new ArrayList<>();
-
         if (tf.getDoctor().getAppointments() == null || tf.getDoctor().getAppointments().size() == 0) {
             System.out.println(" Doctor: " + tf.getDoctor().getName() + " has no appointments");
             return Collections.emptyList();
