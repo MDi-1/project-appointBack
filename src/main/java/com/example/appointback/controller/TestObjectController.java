@@ -1,14 +1,11 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.*;
-import com.example.appointback.external.CalendarQuickstart;
+import com.example.appointback.entity.TestObjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.*;
 
 @RestController
 @RequestMapping("/v1/test")
@@ -36,10 +33,5 @@ public class TestObjectController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TestObjectDto updateTestObject(@RequestBody TestObjectDto dto) {
         return mapper.mapToTestObjectDto(repository.save(mapper.mapToTestObject(dto)));
-    }
-
-    @GetMapping("/getEv")
-    public void goApiCall() throws GeneralSecurityException, IOException {
-        CalendarQuickstart.getEvents();
     }
 }
