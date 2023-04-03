@@ -14,6 +14,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.FileNotFoundException;
@@ -28,6 +29,8 @@ public class CalendarQuickstart {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final String CALENDAR_ID =
+            "2706375a9773699d531196c38eb990dcb1758a077c560523a080da81d475bd2f@group.calendar.google.com";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         InputStream in = CalendarQuickstart.class.getResourceAsStream("/credentials.json");
@@ -47,7 +50,7 @@ public class CalendarQuickstart {
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("proj-appoint 0").build();
         Events events = service.events()
-                .list("b0edc6c9fa45891b07f3d3780a17703a47f6516a4a378a6ff97e5d6df966a845@group.calendar.google.com")
+                .list("")
                 .setMaxResults(10)
                 .setTimeMin(new DateTime(System.currentTimeMillis()))
                 .setOrderBy("startTime")
@@ -63,5 +66,18 @@ public class CalendarQuickstart {
                 System.out.printf("%s (%s)\n", event.getSummary(), start);
             }
         }
+        Event event = new Event()
+                .setSummary("Test Event")
+                .setDescription("This is a test event");
+        DateTime startDateTime = new DateTime("2023-04-04T10:00:00+02:00");
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("Europe/Warsaw");
+        event.setStart(start);
+        DateTime endDateTime = new DateTime("2023-04-04T12:00:00+02:00");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("Europe/Warsaw");
+        event.setEnd(end);
     }
 }

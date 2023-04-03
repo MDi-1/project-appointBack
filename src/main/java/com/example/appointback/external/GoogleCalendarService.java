@@ -59,10 +59,9 @@ public class GoogleCalendarService {
         System.out.printf("Event created: %s\n", event.getHtmlLink());
     }
 
-    public static void main(String... args) throws IOException {
+    public static void unusedFunction(String... args) throws IOException {
         Event event = new Event()
                 .setSummary("Test Event")
-                .setLocation("Warsaw, Poland")
                 .setDescription("This is a test event");
         DateTime startDateTime = new DateTime("2023-04-01T10:00:00+02:00");
         EventDateTime start = new EventDateTime()
