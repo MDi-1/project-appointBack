@@ -50,7 +50,7 @@ public class CalendarQuickstart {
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("proj-appoint 0").build();
         Events events = service.events()
-                .list("")
+                .list(CALENDAR_ID)
                 .setMaxResults(10)
                 .setTimeMin(new DateTime(System.currentTimeMillis()))
                 .setOrderBy("startTime")

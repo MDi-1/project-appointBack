@@ -28,7 +28,7 @@ public class PatientController {
         return mapper.mapToPatientDtoList(repository.findAll());
     }
 
-    @DeleteMapping("/getEv")
+    @GetMapping("/getEv")
     public void goApiCall() throws GeneralSecurityException, IOException {
         CalendarQuickstart.getEvents();
     }
