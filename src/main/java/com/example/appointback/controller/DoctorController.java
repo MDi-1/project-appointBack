@@ -4,10 +4,13 @@ import com.example.appointback.entity.Appointment;
 import com.example.appointback.entity.Doctor;
 import com.example.appointback.entity.DoctorDto;
 import com.example.appointback.entity.Scheduler;
+import com.example.appointback.external.GoCalClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @RestController
@@ -60,5 +63,19 @@ public class DoctorController {
         } else {
             return "---- Project Appoint application ---- Unable to reassign doctor's appointments.";
         }
+    }
+
+    @GetMapping("/getEv")
+    public void goApiGet() throws GeneralSecurityException, IOException {
+        GoCalClient.getEvents();
+    }
+
+    @GetMapping("/createEv")
+    public void goApiPost() throws GeneralSecurityException, IOException {
+        GoCalClient.postEvent();
+    }
+    @GetMapping("/deleteEv")
+    public void goApiDel() throws GeneralSecurityException, IOException {
+
     }
 }

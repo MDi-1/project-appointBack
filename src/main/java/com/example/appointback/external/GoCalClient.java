@@ -25,15 +25,15 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class CalendarQuickstart {
+public class GoCalClient {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CALENDAR_ID =
             "2706375a9773699d531196c38eb990dcb1758a077c560523a080da81d475bd2f@group.calendar.google.com";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        InputStream in = CalendarQuickstart.class.getResourceAsStream("/credentials.json");
+        InputStream in = GoCalClient.class.getResourceAsStream("/credentials.json");
         if (in == null) throw new FileNotFoundException("Resource not found: " + "/credentials.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
@@ -45,11 +45,15 @@ public class CalendarQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public static void getEvents(String... args) throws IOException, GeneralSecurityException {
+    private static Calendar getCalendarService() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("proj-appoint 0").build();
-        Events events = service.events()
+    }
+
+    public static void getEvents() throws IOException, GeneralSecurityException {
+        Calendar service = getCalendarService();
+        Events events = getCalendarService().events()
                 .list(CALENDAR_ID)
                 .setMaxResults(10)
                 .setTimeMin(new DateTime(System.currentTimeMillis()))
@@ -66,18 +70,22 @@ public class CalendarQuickstart {
                 System.out.printf("%s (%s)\n", event.getSummary(), start);
             }
         }
+    }
+
+    public static void postEvent() throws IOException, GeneralSecurityException {
         Event event = new Event()
                 .setSummary("Test Event")
                 .setDescription("This is a test event");
-        DateTime startDateTime = new DateTime("2023-04-04T10:00:00+02:00");
+        DateTime startDateTime = new DateTime("2023-04-06T10:00:00+02:00");
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone("Europe/Warsaw");
         event.setStart(start);
-        DateTime endDateTime = new DateTime("2023-04-04T12:00:00+02:00");
+        DateTime endDateTime = new DateTime("2023-04-06T12:00:00+02:00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Warsaw");
         event.setEnd(end);
+        getCalendarService().events().insert(CALENDAR_ID, event).execute();
     }
 }
