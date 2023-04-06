@@ -15,6 +15,7 @@ public class DoctorDto {
     private String name;
     private String lastName;
     private String position;
+    private boolean goCalendarSync;
     private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
     private List<Long> medServiceIds;

@@ -22,6 +22,9 @@ public class Doctor extends CalendarHolder{
     @Column(name = "POSITION")
     private String position;
 
+    @Column(name = "GO_CALENDAR_SYNC")
+    private boolean goCalendarSync;
+
     @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor",
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
@@ -40,11 +43,12 @@ public class Doctor extends CalendarHolder{
         this.position = position;
     }
 
-    public Doctor(Long id, @NotNull String name, String lastName, String position,
+    public Doctor(Long id, @NotNull String name, String lastName, String position, boolean goCalendarSync,
                   List<Appointment> appointments, List<TimeFrame> timeFrames, List<MedicalService> medicalServices) {
         super(id, name, appointments);
         this.lastName = lastName;
         this.position = position;
+        this.goCalendarSync = goCalendarSync;
         this.timeFrames = timeFrames;
         this.medicalServices = medicalServices;
     }
@@ -60,6 +64,7 @@ public class Doctor extends CalendarHolder{
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", position='" + position + '\'' +
+                ", goCalendarSync='" + goCalendarSync + '\'' +
                 ", appList size= " + appListSize +
                 ", timeFrames=" + timeFrames +
                 ", msList size= " + msListSize +
