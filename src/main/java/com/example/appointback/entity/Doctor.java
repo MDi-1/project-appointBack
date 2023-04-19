@@ -37,10 +37,11 @@ public class Doctor extends CalendarHolder{
             inverseJoinColumns = {@JoinColumn(name = "SERVICE_ID", referencedColumnName = "S_ID")})
     private List<MedicalService> medicalServices;
 
-    public Doctor(String name, String lastName, String position) {
+    public Doctor(String name, String lastName, String position, boolean goCalendarSync) {
         this.name = name;
         this.lastName = lastName;
         this.position = position;
+        this.goCalendarSync = goCalendarSync;
     }
 
     public Doctor(Long id, @NotNull String name, String lastName, String position, boolean goCalendarSync,

@@ -49,15 +49,15 @@ public class MaintenanceController {
 
     @PostMapping("/sampleDataFeed")
     public void sampleDataFeed() {
-        Doctor doc1 = new Doctor("Dough", "Smith", "Specialist");
-        Doctor doc2 = new Doctor("Alison", "Green", "Manager");
-        Doctor doc3 = new Doctor("Doc", "Marshall", "Board");
+        Doctor doc1 = new Doctor("Dough", "Smith", "Specialist", false);
+        Doctor doc2 = new Doctor("Alison", "Green", "Manager", false);
+        Doctor doc3 = new Doctor("Doc", "Marshall", "Board", false);
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
         schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
         doctorRepository.save(doc1);
         doctorRepository.save(doc2);
         doctorRepository.save(doc3);
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2022, 9, 15); // for deployment "today"to be changed into this: LocalDate.now();
         TimeFrame tf0 = new TimeFrame(today.plusDays(30L), LocalTime.of(9 , 0), LocalTime.of(15, 0), "Present", doc1);
         TimeFrame tf1 = new TimeFrame(today.plusDays(31L), LocalTime.of(9 , 0), LocalTime.of(16, 0), "Present", doc1);
         TimeFrame tf2 = new TimeFrame(today.plusDays(32L), LocalTime.of(9 , 0), LocalTime.of(15, 0), "Present", doc1);

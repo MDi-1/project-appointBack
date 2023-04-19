@@ -39,11 +39,13 @@ public class DoctorMapper {
     }
 
     public Doctor mapToNewDoctor(final DoctorDto doctorDto) {
-        return new Doctor(doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition());
+        return new Doctor(
+                doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition(), doctorDto.isGoCalendarSync());
     }
 
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
-        return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition());
+        return new DoctorDto(
+                doctor.getId(),doctor.getName(),doctor.getLastName(),doctor.getPosition(),doctor.isGoCalendarSync());
     }
 
     public DoctorDto mapToDoctorDto(final Doctor doctor) {

@@ -1,5 +1,6 @@
 package com.example.appointback.external;
 
+import com.example.appointback.controller.CoreConfiguration;
 import com.example.appointback.controller.TimeFrameRepository;
 import com.example.appointback.entity.TimeFrame;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class HolidayController {
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
-        if (date.isAfter(LocalDate.now().plusDays(29L))) return;
+        if (date.isAfter(CoreConfiguration.getStartingDate().plusDays(29L))) return;
         for (int i = 0; i < 30; i ++) {
             HolidayDto dto = makeHolidayApiRequest(date.plusDays(i));
             if (dto != null) repository.save(new HolidayDao(null, dto.getName(), date.plusDays(i)));
@@ -61,7 +62,7 @@ public class HolidayController {
 
     private LocalDate getPresentDate() {
         System.out.println("---- Project Appoint app; .orElse() call performed #3 - getPresentDate()");
-        return LocalDate.now();
+        return CoreConfiguration.getStartingDate();
     }
     // (i) purpose of 2 prints above is to see if .orElse argument is checked in a stream, even if stream finds
     // desired item. It turns out that these two consecutive calls (findLastHolidayDate() and getPresentDate() )

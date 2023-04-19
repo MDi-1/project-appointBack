@@ -41,7 +41,7 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorCreationUnrelated() {
         // given
-        DoctorDto dto = new DoctorDto(null, "Doctress", "Doctoree", "Board");
+        DoctorDto dto = new DoctorDto(null, "Doctress", "Doctoree", "Board", false);
         // when
         DoctorDto output = doctorController.createDoctor(dto);
         // then
@@ -51,7 +51,7 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorCreationRelated() {
         // given
-        DoctorDto dto = new DoctorDto(null, "Doc", "McDoctough", "Specialist", null, null, null);
+        DoctorDto dto = new DoctorDto(null, "Doc", "McDoctough", "Specialist", true, null, null, null);
         // when
         DoctorDto output = doctorController.createDoctor(dto);
         // then
@@ -61,7 +61,7 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorUpdate() {
         // given
-        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist", false));
         PatientDto pOut = patientController.createPatient(new PatientDto(null, "Pat", "Phatient", null));
         AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, dOut.getId(), pOut.getId());
         AppointmentDto aOut = appController.createAppointment(appDto);
@@ -74,7 +74,7 @@ public class DoctorIntegrationTests {
         List<Long> appList = new ArrayList<>(Collections.singletonList(aOut.getId()));
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
         List<Long> msList = new ArrayList<>(Collections.singletonList(msOut.getId()));
-        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", tfList, appList, msList);
+        DoctorDto dDto = new DoctorDto(null, "Doc","McDoctough","Specialist", false, tfList, appList, msList);
         DoctorDto docResult = doctorController.updateDoctor(dDto);
         // then
         assertEquals("McDoctough", docResult.getLastName());
@@ -93,7 +93,7 @@ public class DoctorIntegrationTests {
     @Test
     public void testRemoveDoctor() {
         // given
-        DoctorDto doctorDto = new DoctorDto(null, "x", "X", "Manager");
+        DoctorDto doctorDto = new DoctorDto(null, "x", "X", "Manager", false);
         PatientDto patientDto = new PatientDto(null, "p", "P");
         SchedulerDto schedulerDto = new SchedulerDto(null, "Default_Scheduler");
         // when
@@ -102,7 +102,8 @@ public class DoctorIntegrationTests {
         Long schedulerId = schedulerController.createScheduler(schedulerDto).getId();
         AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, doctorId, patientId);
         Long appId = appController.createAppointment(appDto).getId();
-        DoctorDto updatedDoctor = new DoctorDto(doctorId,"x","X","Manager",null,Collections.singletonList(appId),null);
+        DoctorDto updatedDoctor = new DoctorDto(
+                doctorId, "Abc", "Xyz", "Manager", false, null, Collections.singletonList(appId), null);
         doctorController.updateDoctor(updatedDoctor);
         Long foundDoctorId = doctorController.getDoctors().stream().findAny().orElse(null).getId();
         String txtOut = doctorController.deleteDoctor(foundDoctorId);

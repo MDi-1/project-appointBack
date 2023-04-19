@@ -35,12 +35,12 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testTfCreate() {
         // given
-        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist", false));
         TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
         // when
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
-        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", tfList, null, null);
+        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", false, tfList, null, null);
         DoctorDto dOut2 = doctorController.updateDoctor(dDto);
         List<TimeFrameDto> resultList = tfController.getTimeFramesByDoctor(dOut2.getId());
         // then
@@ -50,12 +50,12 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testTfUpdate() {
         // given
-        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist"));
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist", false));
         TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
         TimeFrameDto tf = tfController.createTimeFrame(tfDto);
         // when
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
-        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", tfList, null, null);
+        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","McDoctough","Specialist", false, tfList, null, null);
         DoctorDto dOut2 = doctorController.updateDoctor(dDto);
         TimeFrameDto testInput = new TimeFrameDto(tf.getId(), "2023-03-04", "6:00", "9:00", "Present", dOut2.getId());
         TimeFrameDto result = tfController.updateTimeFrame(testInput);
@@ -66,7 +66,7 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testAutoCreation() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
         String currentDate = LocalDate.now().plusWeeks(1L).toString();
         TimeFrameDto tfDto = new TimeFrameDto(null, currentDate, "08:00", "16:00", "Present", doctor.getId());
         tfController.createTimeFrame(tfDto);
@@ -80,7 +80,7 @@ public class TimeFrameIntegrationTests {
     @Test
     public void testAppointmentDropout() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
         PatientDto pat = patientController.createPatient(new PatientDto(null, "Aaa", "Bbb"));
         TimeFrameDto tf1 = tfController.createTimeFrame(new TimeFrameDto(
                         null, LocalDate.of(2023, 3, 6).toString(), "-", "-", "Present", doctor.getId()));
@@ -91,7 +91,7 @@ public class TimeFrameIntegrationTests {
                 null, LocalDateTime.of(2023, 3, 7, 10, 0).toString(), 160, doctor.getId(), pat.getId()));
         List<Long> tfList = new ArrayList<>(Arrays.asList(tf1.getId(), tf2.getId()));
         List<Long> appList = new ArrayList<>(Collections.singletonList(a1out.getId()));
-        doctorController.updateDoctor(new DoctorDto(doctor.getId(), "Abc","Xyz","Board", tfList, appList, null));
+        doctorController.updateDoctor(new DoctorDto(doctor.getId(),"Abc","Xyz","Board",false,tfList,appList,null));
         TimeFrameDto tf2mod = tfController.updateTimeFrame(new TimeFrameDto(
                 tf2.getId(), LocalDate.of(2023, 3, 7).toString(), "off", "off", "aaa", doctor.getId()));
         // then

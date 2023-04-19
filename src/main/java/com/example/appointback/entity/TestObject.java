@@ -28,4 +28,8 @@ public class TestObject {
     @NotNull
     @Column(name = "NAME")
     private String name;
+
+    @NotNull
+    @Column(name = "TRUE_OR_FALSE")
+    private boolean trueOrFalse;
 }

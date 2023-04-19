@@ -1,5 +1,6 @@
 package com.example.appointback.controller;
 
+import com.example.appointback.entity.TestObject;
 import com.example.appointback.entity.TestObjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,7 +23,9 @@ public class TestObjectController {
 
     @GetMapping("/getAll")
     public List<TestObjectDto> getTestObjects() {
-        return mapper.mapToTestObjectDtoList(repository.findAll());
+        List<TestObject> testObjects = repository.findAll();
+        List<TestObjectDto> dtos = mapper.mapToTestObjectDtoList(testObjects);
+        return dtos;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
