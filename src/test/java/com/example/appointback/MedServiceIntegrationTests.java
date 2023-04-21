@@ -28,7 +28,7 @@ public class MedServiceIntegrationTests {
     @Test
     public void testMsCreate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
         msController.createMedService(new MedicalServiceDto(null, "MS", "des", docList));
         // when
@@ -41,7 +41,7 @@ public class MedServiceIntegrationTests {
     @Test
     public void testMsUpdate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist"));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
         MedicalServiceDto m1 = msController.createMedService(new MedicalServiceDto(null, "s", "S", new ArrayList<>()));
         MedicalServiceDto m2 = msController.updateMedService(new MedicalServiceDto(m1.getId(), "s2", "desc", docList));

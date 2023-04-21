@@ -34,15 +34,18 @@ public class DoctorMapper {
             msList = dto.getMedServiceIds().stream().map(aLong -> medServiceRepository.findById(aLong)
                             .orElseThrow(IllegalArgumentException::new)).collect(Collectors.toList());
         } else { msList = null; }
-        return new Doctor(dto.getId(),dto.getName(),dto.getLastName(),dto.getPosition(),appointments,timeFrames,msList);
+        return new Doctor(dto.getId(), dto.getName(), dto.getLastName(), dto.getPosition(), dto.isGoCalendarSync(),
+                appointments, timeFrames, msList);
     }
 
     public Doctor mapToNewDoctor(final DoctorDto doctorDto) {
-        return new Doctor(doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition());
+        return new Doctor(
+                doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition(), doctorDto.isGoCalendarSync());
     }
 
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
-        return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition());
+        return new DoctorDto(
+                doctor.getId(),doctor.getName(),doctor.getLastName(),doctor.getPosition(),doctor.isGoCalendarSync());
     }
 
     public DoctorDto mapToDoctorDto(final Doctor doctor) {
@@ -63,7 +66,7 @@ public class DoctorMapper {
         } else listOfServIds = new ArrayList<>();
 
         return new DoctorDto(doctor.getId(), doctor.getName(), doctor.getLastName(), doctor.getPosition(),
-                listOfTimeFrames, listOfAppIds, listOfServIds);
+                doctor.isGoCalendarSync(), listOfTimeFrames, listOfAppIds, listOfServIds);
     }
 
     public List<DoctorDto> mapToDoctorDtoList(final List<Doctor> doctorList) {

@@ -30,8 +30,8 @@ public class DoctorControllerTestSuite {
     @Test
     public void testCreateDoctor() throws Exception {
         // given
-        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board");
-        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board");
+        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board", false);
+        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board", false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoIn);
         // when
@@ -51,8 +51,8 @@ public class DoctorControllerTestSuite {
     @Test
     public void testUpdateDoctor() throws Exception {
         // given
-        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board");
-        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board");
+        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board", false);
+        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board", false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoIn);
         // when

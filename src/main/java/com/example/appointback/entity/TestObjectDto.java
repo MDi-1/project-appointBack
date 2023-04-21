@@ -8,4 +8,5 @@ import lombok.Getter;
 public class TestObjectDto {
     private Long id;
     private String name;
+    private boolean trueOrFalse;
 }
