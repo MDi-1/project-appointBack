@@ -47,7 +47,7 @@ public class GoCalendarClient {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private static Calendar getCalendarService() throws GeneralSecurityException, IOException {
+    public static Calendar getCalendarService() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("proj-appoint 0").build();

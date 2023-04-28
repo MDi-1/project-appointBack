@@ -31,4 +31,9 @@ public abstract class CalendarHolder {
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     List<Appointment> appointments = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "CalendarHolder{" + "id=" + id + ", name='" + name + '\'' + ", appointments=" + appointments + '}';
+    }
 }

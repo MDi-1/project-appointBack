@@ -17,13 +17,13 @@ public class Scheduler extends CalendarHolder {
         this.name = name;
     }
 
+    public Scheduler(Long id, @NotNull String name, List<Appointment> appointments) {
+        super(id, name, appointments);
+    }
+
     @Override
     public String toString() {
         return "Scheduler{" + "id=" + id + ", name='" + name + '\'' +
                 ", appointments=" + appointments + '}';
-    }
-
-    public Scheduler(Long id, @NotNull String name, List<Appointment> appointments) {
-        super(id, name, appointments);
     }
 }

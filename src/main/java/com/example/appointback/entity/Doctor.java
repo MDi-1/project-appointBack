@@ -2,19 +2,16 @@ package com.example.appointback.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity(name = "DOCTORS")
 @DiscriminatorValue("Doc")
-public class Doctor extends CalendarHolder{
+public class Doctor extends CalendarHolder {
 
     @Column(name = "LAST_NAME")
     private String lastName;
@@ -44,7 +41,7 @@ public class Doctor extends CalendarHolder{
         this.goCalendarSync = goCalendarSync;
     }
 
-    public Doctor(Long id, @NotNull String name, String lastName, String position, boolean goCalendarSync,
+    public Doctor(Long id, String name, String lastName, String position, boolean goCalendarSync,
                   List<Appointment> appointments, List<TimeFrame> timeFrames, List<MedicalService> medicalServices) {
         super(id, name, appointments);
         this.lastName = lastName;
@@ -52,7 +49,7 @@ public class Doctor extends CalendarHolder{
         this.goCalendarSync = goCalendarSync;
         this.timeFrames = timeFrames;
         this.medicalServices = medicalServices;
-    }
+    } // sprawdzić, czy nie wystarczy zamienić tego na @AllArgsConstructor
 
     @Override
     public String toString() {

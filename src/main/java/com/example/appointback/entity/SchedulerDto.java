@@ -18,4 +18,6 @@ public class SchedulerDto {
         this.id = id;
         this.name = name;
     }
-}
+} // Pomysł na zastosowanie wzorca Factory: Ten wzorzec można spróbować zastosować tylko na obiektach typu DTO dla
+// Doctor, Scheduler i jakiś jeszcze (który dziedziczy po CalendarHolder; trzeba wymyślić jakiś). Trzeba będzie zrobić
+// dla nich jeden Controller, który w switch-u będzie tworzył różne obiekty dziedziczące po CalendarHolder
