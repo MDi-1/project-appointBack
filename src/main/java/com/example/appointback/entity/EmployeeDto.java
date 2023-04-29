@@ -10,18 +10,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class DoctorDto implements FactoryDtoOutput {
+public class EmployeeDto implements FactoryDtoOutput {
 
     private Long id;
     private String name;
     private String lastName;
     private String position;
     private boolean goCalendarSync;
-    private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
-    private List<Long> medServiceIds;
+    private List<Long> timeFrameIds;
 
-    public DoctorDto(Long id, String name, String lastName, String position, boolean goCalendarSync) {
+    public EmployeeDto(Long id, String name, String lastName, String position, boolean goCalendarSync) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -31,10 +30,8 @@ public class DoctorDto implements FactoryDtoOutput {
 
     @Override
     public String toString() {
-        return "DoctorDto{" + "id=" + id + ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' + ", position='" + position +
-                '\'' + ", timeFrameIds=" + timeFrameIds +
-                ", appointmentIds=" + appointmentIds +
-                ", medServiceIds=" + medServiceIds + '}';
+        return "EmployeeDto{" + "id=" + id + ", name='" + name + '\'' + ", lastName='" + lastName + '\'' +
+                ", position='" + position + '\'' + ", goCalendarSync=" + goCalendarSync +
+                ", timeFrameIds=" + timeFrameIds + ", appointmentIds=" + appointmentIds + '}';
     }
 }

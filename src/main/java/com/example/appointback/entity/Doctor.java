@@ -22,8 +22,7 @@ public class Doctor extends CalendarHolder {
     @Column(name = "GO_CALENDAR_SYNC")
     private boolean goCalendarSync;
 
-    @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor",
-            cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @ManyToMany(targetEntity = com.example.appointback.entity.MedicalService.class,
@@ -49,7 +48,7 @@ public class Doctor extends CalendarHolder {
         this.goCalendarSync = goCalendarSync;
         this.timeFrames = timeFrames;
         this.medicalServices = medicalServices;
-    } // sprawdzić, czy nie wystarczy zamienić tego na @AllArgsConstructor
+    } // (i) when tried @AllArgsConstructor turns out Lombok does not insert "super(id, name, appointments)"
 
     @Override
     public String toString() {
@@ -67,9 +66,9 @@ public class Doctor extends CalendarHolder {
                 ", timeFrames=" + timeFrames +
                 ", msList size= " + msListSize +
                 //", medicalServices=" + medicalServices +    // <== don't print this!
-                // printing list of medicalServices will result in back and forth references doctor to medicalService,
-                // then to doctor, then to medicalService, ...and eventually we get StackOverflowError; thus be careful
-                // when using toString() in @ManyToMany relationship.
+                // (i) printing list of medicalServices will result in back and forth references doctor to
+                // medicalService, then to doctor, then to medicalService, ...and eventually we get StackOverflowError;
+                // thus be careful when using toString() in @ManyToMany relationship.
                 '}';
     }
 }

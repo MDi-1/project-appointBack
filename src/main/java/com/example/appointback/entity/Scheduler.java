@@ -2,7 +2,6 @@ package com.example.appointback.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -23,7 +22,6 @@ public class Scheduler extends CalendarHolder {
 
     @Override
     public String toString() {
-        return "Scheduler{" + "id=" + id + ", name='" + name + '\'' +
-                ", appointments=" + appointments + '}';
+        return "Scheduler{" + "id=" + id + ", name='" + name + '\'' + ", appointments=" + appointments + '}';
     }
 }

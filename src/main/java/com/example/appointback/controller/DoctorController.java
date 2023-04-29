@@ -42,16 +42,16 @@ public class DoctorController {
     @DeleteMapping("/{doctorId}")
     public String deleteDoctor(@PathVariable Long doctorId) {
         Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
-        Scheduler s = schedulerRepository.findByName("Default_Scheduler");
+        Scheduler sc = schedulerRepository.findByName("Default_Scheduler");
         if (doc.getAppointments() == null  || doc.getAppointments().size() < 1 ) {
             System.out.println("\"---- Project Appoint application ---- doctor had not any appointment");
             repository.deleteById(doctorId);
             return null;
         }
-        if (s != null) {
-            System.out.println("---- Project Appoint application ---- reassigning from - to:\n" + doc + " \n " + s);
+        if (sc != null) {
+            System.out.println("---- Project Appoint application ---- reassigning from - to:\n" + doc + " \n " + sc);
             for (Appointment app : doc.getAppointments()) {
-                app.setDoctor(s);
+                app.setDoctor(sc);
                 appRepository.save(app);
             }
             repository.deleteById(doctorId);
