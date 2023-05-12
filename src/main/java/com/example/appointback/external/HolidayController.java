@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -35,11 +36,11 @@ public class HolidayController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HolidayController.class);
 
     @PostMapping
-    public void runHolidaysCheck() {
+    public boolean runHolidaysCheck() {
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
-        if (date.isAfter(CoreConfiguration.getStartingDate().plusDays(29L))) return;
+        if (date.isAfter(CoreConfiguration.getStartingDate().plusDays(29L))) return false;
         for (int i = 0; i < 30; i ++) {
             HolidayDto dto = makeHolidayApiRequest(date.plusDays(i));
             if (dto != null) repository.save(new HolidayDao(null, dto.getName(), date.plusDays(i)));
@@ -48,11 +49,12 @@ public class HolidayController {
         LocalDate endDay;
         do {
             n ++;
-            if (n > 20) return;
+            if (n > 20) return true; // trzeba sprawdzić w debuggerze czy ta f. w ogóle działa
             endDay = date.plusDays(30 + n);
         }
         while (makeHolidayApiRequest(endDay) != null);
         repository.save(new HolidayDao(null, "marker", endDay));
+        return true;
     }
 
     private LocalDate findLastHolidayDate(List<HolidayDao> list) {
@@ -69,14 +71,14 @@ public class HolidayController {
     // are made. Therefore it's better to use 'if / else' statement in order to make calls #2 and #3 unreachable after
     // first search is successful.
 
-    public HolidayDto makeHolidayApiRequest(LocalDate beginDate) {
+    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {
         HolidayDto dto;
         URI url = UriComponentsBuilder.fromHttpUrl(endpointPrefix)
                 .queryParam("api_key", key)
                 .queryParam("country", "pl")
-                .queryParam("year" , beginDate.getYear())
-                .queryParam("month", beginDate.getMonthValue())
-                .queryParam("day"  , beginDate.getDayOfMonth())
+                .queryParam("year" , requestedDate.getYear())
+                .queryParam("month", requestedDate.getMonthValue())
+                .queryParam("day"  , requestedDate.getDayOfMonth())
                 .build().encode().toUri();
         try {
             HolidayDto[] response = restTemplate.getForObject(url, HolidayDto[].class);
@@ -116,5 +118,11 @@ public class HolidayController {
     @GetMapping("/getAll")
     public List<HolidayDao> getHolidays() {
         return repository.findAll();
+    }
+
+    // to be used in special cases, saves single holiday to db.
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HolidayDao createSingleHoliday(@RequestBody HolidayDao dao) {
+        return repository.save(dao);
     }
 }

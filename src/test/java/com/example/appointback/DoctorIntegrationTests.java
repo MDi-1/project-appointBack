@@ -87,7 +87,8 @@ public class DoctorIntegrationTests {
         // then
         assertThrows(ConstraintViolationException.class,
                 () -> doctorController.getDoctors().stream().findFirst().orElseThrow(IllegalArgumentException::new),
-                "anticipated exception wasn't thrown");
+                "anticipated exception wasn't thrown"
+        );
     }
 
     @Test

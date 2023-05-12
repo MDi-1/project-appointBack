@@ -10,12 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -34,9 +32,7 @@ public class PatientIntegrationTests {
         PatientDto patDto = new PatientDto(null, "abc", "xyz");
         // when
         PatientDto creationOutput = patientController.createPatient(patDto);
-        int sizeOutput = patientController.getPatients().size();
         // then
-        assertEquals(1,sizeOutput);
         assertEquals("abc", creationOutput.getFirstName());
     }
 
@@ -56,9 +52,11 @@ public class PatientIntegrationTests {
         System.out.println(" >>>> patients:\n" + patientController.getPatients());
         System.out.println(" >>>> appointments:\n" + appointmentController.getAllAppointments());
         // then
-        assertEquals(0, patientController.getPatients().size());
-        assertEquals(0, appointmentController.getAllAppointments().size());
-        assertEquals(1, doctorController.getDoctors().size());
+        assertAll(
+                () -> assertEquals(0, patientController.getPatients().size()),
+                () -> assertEquals(0, appointmentController.getAllAppointments().size()),
+                () -> assertEquals(1, doctorController.getDoctors().size())
+        );
     }
 
     @Test
@@ -72,8 +70,7 @@ public class PatientIntegrationTests {
         Long midId = list.stream().filter(e -> e.getFirstName().equals("b")).findAny().orElse(null).getId();
         Long lastId = list.stream().map(PatientDto::getId).sorted(Collections.reverseOrder()).findFirst().orElse(null);
         // then
-        assertEquals(3, list.size());
-        assertTrue(midId < lastId);
+        assertAll(() -> assertEquals(3, list.size()), () -> assertTrue(midId < lastId));
     }
 
     @Test

@@ -1,9 +1,7 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.Appointment;
-import com.example.appointback.entity.AppointmentDto;
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.Patient;
+import com.example.appointback.entity.*;
+import com.example.appointback.entityfactory.CalendarHolderRepository;
 import com.example.appointback.external.GoCalendarClient;
 import com.google.api.services.calendar.model.Event;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ public class AppointmentController {
     private final AppointmentRepository repository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final CalendarHolderRepository calendarHolderRepository;
 
     @GetMapping("/{apId}")
     public AppointmentDto getAppointment(@PathVariable Long apId) {
@@ -50,12 +49,22 @@ public class AppointmentController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AppointmentDto createAppointment(@RequestBody AppointmentDto dto) {
-        Appointment response = repository.save(mapper.mapToAppointment(dto));
-        Doctor doc = doctorRepository.findById(dto.getDoctorId()).orElseThrow(IllegalArgumentException::new);
-        if (doc.isGoCalendarSync()) postEvent(response);
+    public AppointmentDto createAppointment(@RequestBody AppointmentDto appointmentDto) {
+        Appointment response = repository.save(mapper.mapToAppointment(appointmentDto));
+        CalendarHolder calendarHolder = calendarHolderRepository.findById(appointmentDto.getOwnersId())
+                .orElseThrow(IllegalArgumentException::new);
+        boolean synced = false;
+        if (calendarHolder instanceof Doctor) {
+            Doctor doc = (Doctor) calendarHolder;
+            synced = doc.isGoCalendarSync();
+        }
+        if (calendarHolder instanceof Employee) {
+            Employee employee = (Employee) calendarHolder;
+            synced = employee.isGoCalendarSync();
+        }
+        if (synced) postEvent(response);
         return mapper.mapToAppointmentDto(response);
-    }
+    } // pick up from here - write some additional tests for CalendarHolder
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public AppointmentDto updateAppointment(@RequestBody AppointmentDto dto) {

@@ -20,9 +20,9 @@ public class AppointmentMapper {
     private PatientRepository patientRepository;
 
     public Appointment mapToAppointment(final AppointmentDto dto) {
-        CalendarHolder calendarHolder = doctorRepository.findById(dto.getDoctorId()).orElse(null);
+        CalendarHolder calendarHolder = doctorRepository.findById(dto.getOwnersId()).orElse(null);
         if (calendarHolder == null) {
-            calendarHolder = scRepository.findById(dto.getDoctorId()).orElseThrow(IllegalArgumentException::new);
+            calendarHolder = scRepository.findById(dto.getOwnersId()).orElseThrow(IllegalArgumentException::new);
         }
         return new Appointment(
                 dto.getId(),
