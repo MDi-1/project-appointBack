@@ -36,7 +36,7 @@ public class HolidayController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HolidayController.class);
 
     @PostMapping
-    public boolean runHolidaysCheck() {
+    public boolean runHolidaysCheck() { // writes to db holidays and marker objects for about a month onward.
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
@@ -71,7 +71,7 @@ public class HolidayController {
     // are made. Therefore it's better to use 'if / else' statement in order to make calls #2 and #3 unreachable after
     // first search is successful.
 
-    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {
+    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {//requests info on 1 day from app.abstractapi.com
         HolidayDto dto;
         URI url = UriComponentsBuilder.fromHttpUrl(endpointPrefix)
                 .queryParam("api_key", key)
@@ -99,7 +99,7 @@ public class HolidayController {
     }
 
     @PutMapping("/applyToTfs")
-    public void applyHolidaysToTfs() {
+    public void applyHolidaysToTfs() { // alters TimeFrame table according to Holidays table.
         List<TimeFrame> tfList = tfRepository.findAll();
         List<HolidayDao> holidayList = getHolidays()
                 .stream().filter(e -> !e.getName().equals("marker")).collect(Collectors.toList());
