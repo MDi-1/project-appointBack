@@ -4,21 +4,12 @@ import com.example.appointback.controller.CoreConfiguration;
 import com.example.appointback.controller.TimeFrameRepository;
 import com.example.appointback.entity.TimeFrame;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,23 +17,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HolidayController {
 
-    @Value("${abstractapi.endpoint}")
-    private String endpointPrefix;
-    @Value("${abstractapi.key}")
-    private String key;
-    private final RestTemplate restTemplate;
     private final HolidayRepository repository;
     private final TimeFrameRepository tfRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(HolidayController.class);
 
     @PostMapping
-    public boolean runHolidaysCheck() { // writes to db holidays and marker objects for about a month onward.
+    public boolean runHolidaysCheck(HolidayClient client) { // writes to db holidays and marker objects for about a month onward.
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
         if (date.isAfter(CoreConfiguration.getStartingDate().plusDays(29L))) return false;
         for (int i = 0; i < 30; i ++) {
-            HolidayDto dto = makeHolidayApiRequest(date.plusDays(i));
+            HolidayDto dto = client.makeHolidayApiRequest(date.plusDays(i));
             if (dto != null) repository.save(new HolidayDao(null, dto.getName(), date.plusDays(i)));
         }
         int n = 0;
@@ -52,7 +37,7 @@ public class HolidayController {
             if (n > 20) return true; // trzeba sprawdzić w debuggerze czy ta f. w ogóle działa
             endDay = date.plusDays(30 + n);
         }
-        while (makeHolidayApiRequest(endDay) != null);
+        while (client.makeHolidayApiRequest(endDay) != null);
         repository.save(new HolidayDao(null, "marker", endDay));
         return true;
     }
@@ -70,33 +55,6 @@ public class HolidayController {
     // desired item. It turns out that these two consecutive calls (findLastHolidayDate() and getPresentDate() )
     // are made. Therefore it's better to use 'if / else' statement in order to make calls #2 and #3 unreachable after
     // first search is successful.
-
-    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {//requests info on 1 day from app.abstractapi.com
-        HolidayDto dto;
-        URI url = UriComponentsBuilder.fromHttpUrl(endpointPrefix)
-                .queryParam("api_key", key)
-                .queryParam("country", "pl")
-                .queryParam("year" , requestedDate.getYear())
-                .queryParam("month", requestedDate.getMonthValue())
-                .queryParam("day"  , requestedDate.getDayOfMonth())
-                .build().encode().toUri();
-        try {
-            HolidayDto[] response = restTemplate.getForObject(url, HolidayDto[].class);
-            List<HolidayDto> list = Optional.ofNullable(response).map(Arrays::asList).orElse(Collections.emptyList());
-            dto = list.stream().findFirst().orElse(null);
-        } catch (RestClientException e) {
-            LOGGER.error(e.getMessage(), e);
-            dto = null;
-        }
-        try {
-            Thread.sleep(2000);
-            System.out.println("---- Project Appoint app; external API request sent:\n" + url);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return dto;
-    }
 
     @PutMapping("/applyToTfs")
     public void applyHolidaysToTfs() { // alters TimeFrame table according to Holidays table.
