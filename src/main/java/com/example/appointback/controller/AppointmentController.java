@@ -88,7 +88,4 @@ public class AppointmentController {
     public Event goApiPost(@RequestBody AppointmentDto dto) {
         return GoCalendarClient.postEvent(mapper.mapToAppointment(dto));
     }
-
-    @GetMapping("/deleteEv/{apId}")
-    public void goApiDel() { }
 }
