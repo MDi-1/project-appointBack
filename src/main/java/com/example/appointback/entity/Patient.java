@@ -43,5 +43,5 @@ public class Patient {
 }
 // During bootcamp we have been learnt to use Long type for ID of entities but for some entities I decided to try
 // other types like Integer and int.
-//track ofthelines properly.Using the same argument for indentation in the tabs vs spaces debate
+//track of the lines properly.Using the same argument for indentation in the tabs vs spaces debate
 

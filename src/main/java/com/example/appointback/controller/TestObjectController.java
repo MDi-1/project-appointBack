@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/v1/test")
 @RequiredArgsConstructor
@@ -23,9 +22,7 @@ public class TestObjectController {
 
     @GetMapping("/getAll")
     public List<TestObjectDto> getTestObjects() {
-        List<TestObject> testObjects = repository.findAll();
-        List<TestObjectDto> dtos = mapper.mapToTestObjectDtoList(testObjects);
-        return dtos;
+        return mapper.mapToTestObjectDtoList(repository.findAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
