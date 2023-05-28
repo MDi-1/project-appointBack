@@ -39,3 +39,4 @@ out/
 **/out/
 **/build/
 **/tokens/
+credentials.json

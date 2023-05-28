@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Component("holidayClient")
 @RequiredArgsConstructor
 public class HolidayClient {
 
@@ -50,6 +50,7 @@ public class HolidayClient {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return dto;
+        if (dto != null && dto.getType().equals("National")) return dto;
+        else return null;
     }
 }

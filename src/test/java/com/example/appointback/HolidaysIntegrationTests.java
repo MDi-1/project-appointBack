@@ -2,18 +2,15 @@ package com.example.appointback;
 
 import com.example.appointback.external.*;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.Comparator;
 
 import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,11 +22,14 @@ import static org.mockito.Mockito.when;
 public class HolidaysIntegrationTests {
 
     @Mock
-    private HolidayClient client_old; // 2 B deleted? fixme
-    @Mock
-    private HolidayClientStub client;
+    private ClientStub clientStub; // (i) field name is pretty much meaningful here (camelCase use here),
+    // Spring knows here what to be autowired in HolidayController as holidayController because
+    // class ClientStub extends HolidayClient. Whenever here and in HolidayClient we would use field name let's say
+    // "client" then we get IllegalStateException: Failed to load ApplicationContext. Spring has got 2 same autowire
+    // candidates and doesn't know which to choose.
     @Autowired
     private HolidayController controller;
+
     @Autowired
     private HolidayRepository repository;
 
@@ -38,33 +38,27 @@ public class HolidaysIntegrationTests {
         // given
         LocalDate dateForTesting = getStartingDate().plusDays(27L);
         repository.save(new HolidayDao(null, "very special holiday", getStartingDate().plusDays(17L)));
-        HolidayDto mockedDto = new HolidayDto("abc", dateForTesting.toString());
+        HolidayDto mockedDto = new HolidayDto("abc", dateForTesting.toString(), "National");
         HolidayDate argumentMatcherToInsert = new HolidayDate(dateForTesting);
         System.out.println(
                 " ]] argument matcher: [[\n" + argumentMatcherToInsert + "\n" + " ]] mockedDto: [[\n" + mockedDto);
-        // trzeba będzie zrobić jak w kodilla-course klasa: WeatherForecastTestSuite. f. runHolidaysCheck() będzie
-        // musiała przyjmować arg w postaci interface i to będzie obiekt klasy, w konstruktorze której wykonujemy
-        // API request, bądź stubujemy API request
-        // fixme
-
-        when(client.makeHolidayApiRequest(argThat(argumentMatcherToInsert))).thenReturn(mockedDto);
+        when(clientStub.makeHolidayApiRequest(argThat(argumentMatcherToInsert))).thenReturn(mockedDto);
         // when
-        boolean functionRan = controller.runHolidaysCheck(client);
-        HolidayDao dao = controller.getHolidays().stream().min(Collections.reverseOrder()).orElse(null);
-        String name = dao.getName();
+        boolean functionRan = controller.runHolidaysCheck(clientStub);
+        HolidayDao dao = controller.getHolidays().stream()
+                .max(Comparator.comparingLong(HolidayDao::getId)).orElse(null);
         // then
-        System.out.println(" ]] all holiday repo print: [[\n" + repository.findAll());
         assertAll(
-                () -> assertTrue(functionRan)
-                //() -> assertEquals("marker", name)
+                () -> assertTrue(functionRan),
+                () -> assertEquals("marker", dao.getName())
         );
     }
 }
 
-@Component
-class HolidayClientStub extends HolidayClient {
+@Component("clientStub")
+class ClientStub extends HolidayClient {
 
-    public HolidayClientStub(RestTemplate restTemplate) {
+    public ClientStub(RestTemplate restTemplate) {
         super(restTemplate);
     }
 

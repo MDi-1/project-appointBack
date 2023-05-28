@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HolidayDto {
@@ -16,6 +17,9 @@ public class HolidayDto {
 
     @JsonProperty
     private String date;
+
+    @JsonProperty
+    private String type;
 
     @Override
     public String toString() {

@@ -19,9 +19,15 @@ public class HolidayController {
 
     private final HolidayRepository repository;
     private final TimeFrameRepository tfRepository;
+    private final HolidayClient holidayClient;
 
-    @PostMapping
-    public boolean runHolidaysCheck(HolidayClient client) { // writes to db holidays and marker objects for about a month onward.
+    @PostMapping("/runApi")
+    public boolean runHolidaysCheckWrapper() {
+        return runHolidaysCheck(holidayClient);
+    }
+
+    // writes to db holidays and marker objects for about a month onward.
+    public boolean runHolidaysCheck(HolidayClient client) {
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
