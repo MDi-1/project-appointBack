@@ -38,11 +38,6 @@ public class DoctorMapper {
                 appointments, timeFrames, msList);
     }
 
-    public Doctor mapToNewDoctor(final DoctorDto doctorDto) {
-        return new Doctor(
-                doctorDto.getName(), doctorDto.getLastName(), doctorDto.getPosition(), doctorDto.isGoCalendarSync());
-    }
-
     public DoctorDto mapToNewDoctorDto(final Doctor doctor) {
         return new DoctorDto(
                 doctor.getId(),doctor.getName(),doctor.getLastName(),doctor.getPosition(),doctor.isGoCalendarSync());

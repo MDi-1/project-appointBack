@@ -41,17 +41,15 @@ public class AppointmentIntegrationTests {
         dId = dOut.getId();
         PatientDto pOut = patientController.createPatient(new PatientDto(null, "Pat", "Xyz", null));
         pId = pOut.getId();
-        AppointmentDto appDto1 = new AppointmentDto(null, "2023-03-03T09:00", 160, dId, pOut.getId());
-        AppointmentDto appDto2 = new AppointmentDto(null, "2023-03-04T10:00", 200, dId, pOut.getId());
-        AppointmentDto appOut1 = appController.createAppointment(appDto1);
-        AppointmentDto appOut2 = appController.createAppointment(appDto2);
+        AppointmentDto a1 = appController.createAppointment(new AppointmentDto(null,"2023-03-03T09:00",160,dId,pId));
+        AppointmentDto a2 = appController.createAppointment(new AppointmentDto(null,"2023-03-04T10:00",200,dId,pId));
         TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
-        aId = appOut2.getId();
-        List<Long> appList = new ArrayList<>(Arrays.asList(appOut1.getId(), aId));
+        aId = a2.getId();
+        List<Long> appList = new ArrayList<>(Arrays.asList(a1.getId(), aId));
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
-        DoctorDto dDto = new DoctorDto(dOut.getId(), "Doc","Abc","Specialist", false, tfList, appList, null);
-        doctorController.updateDoctor(dDto);
+        doctorController.updateDoctor(new DoctorDto(dId, "Doc", "Abc", "Specialist", false, tfList, appList, null));
+        patientController.updatePatient(new PatientDto(pId, "Pat", "Xyz", appList));
     }
 
     @Test
@@ -87,11 +85,11 @@ public class AppointmentIntegrationTests {
     }
 
     @Test
-    public void testDeleteAppointment() {
+    public void testUpdateAppointment() {
         // given, when
-        appController.deleteAppointment(aId);
-        List<AppointmentDto> list = appController.getAllAppointments();
+        AppointmentDto a = appController.updateAppointment(new AppointmentDto(aId, "2023-03-04T10:00", 50, dId, pId));
+        AppointmentDto appointmentDto = appController.getAppointment(a.getId());
         // then
-        assertEquals(1, list.size());
+        assertEquals(50, appointmentDto.getPrice());
     }
 }

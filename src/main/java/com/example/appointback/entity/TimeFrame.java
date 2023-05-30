@@ -58,15 +58,6 @@ public class TimeFrame {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TimeFrame timeFrame = (TimeFrame) o;
-        return Objects.equals(timeframeDate, timeFrame.timeframeDate) &&
-                Objects.equals(doctor, timeFrame.doctor);
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hash(timeframeDate, doctor);
     }

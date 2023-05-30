@@ -48,6 +48,20 @@ public class TimeFrameIntegrationTests {
     }
 
     @Test
+    public void testGetTfById() {
+        // given
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist", false));
+        TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", "Present", dOut.getId());
+        TimeFrameDto tf = tfController.createTimeFrame(tfDto);
+        List<Long> list = new ArrayList<>(Collections.singletonList(tf.getId()));
+        doctorController.updateDoctor(new DoctorDto(dOut.getId(), "Abc","Xyz","Specialist", false, list, null, null));
+        // when
+        TimeFrameDto dtoRetrieved = tfController.getTimeFrame(tf.getId());
+        // then
+        assertEquals("2023-03-03", dtoRetrieved.getTimeFrameDate());
+    }
+
+    @Test
     public void testTfUpdate() {
         // given
         DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", "Specialist", false));
@@ -96,5 +110,29 @@ public class TimeFrameIntegrationTests {
                 tf2.getId(), LocalDate.of(2023, 3, 7).toString(), "off", "off", "aaa", doctor.getId()));
         // then
         assertEquals("Day_Off", tfController.getTimeFrame(tf2mod.getId()).getStatus());
+    }
+
+    @Test
+    public void testAppsOutsideTf() {
+        // given
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", "Specialist", false));
+        PatientDto pat = patientController.createPatient(new PatientDto(null, "pat", "Pat"));
+        TimeFrameDto tf = tfController.createTimeFrame(new TimeFrameDto(
+                null, LocalDate.of(2023, 9, 15).toString(), "09:00", "12:00", "Present", doctor.getId()));
+        AppointmentDto a1 = appController.createAppointment(new AppointmentDto(
+                null, LocalDateTime.of(2023, 9, 15,  8, 0).toString(), 160, doctor.getId(), pat.getId()));
+        AppointmentDto a2 = appController.createAppointment(new AppointmentDto(
+                null, LocalDateTime.of(2023, 9, 15, 10, 0).toString(), 160, doctor.getId(), pat.getId()));
+        AppointmentDto a3 = appController.createAppointment(new AppointmentDto(
+                null, LocalDateTime.of(2023, 9, 15, 11, 0).toString(), 160, doctor.getId(), pat.getId()));
+        AppointmentDto a4 = appController.createAppointment(new AppointmentDto(
+                null, LocalDateTime.of(2023, 9, 15, 12, 0).toString(), 160, doctor.getId(), pat.getId()));
+        // when
+        List<Long> tfList = new ArrayList<>(Collections.singletonList(tf.getId()));
+        List<Long> appList = new ArrayList<>(Arrays.asList(a1.getId(), a2.getId(), a3.getId(), a4.getId()));
+        doctorController.updateDoctor(new DoctorDto(doctor.getId(),"doc","Doc","Board", false, tfList, appList, null));
+        List<AppointmentDto> appsOutsideTf = tfController.getAppsOutsideTf(tf.getId());
+        // then
+        assertEquals(2, appsOutsideTf.size());
     }
 }

@@ -42,6 +42,9 @@ public class AppointmentMapper {
     }
 
     public List<AppointmentDto> mapToAppointmentDtoList(final List<Appointment> appointments) {
-        return appointments.stream().map(this::mapToAppointmentDto).collect(Collectors.toList());
+        return appointments
+                .stream()
+                .map(this::mapToAppointmentDto)
+                .collect(Collectors.toList());
     }
 }

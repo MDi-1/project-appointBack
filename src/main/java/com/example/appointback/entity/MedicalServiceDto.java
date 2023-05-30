@@ -16,11 +16,6 @@ public class MedicalServiceDto {
     private String description;
     private List<Long> doctorIds;
 
-    public MedicalServiceDto(String serviceName, String description) {
-        this.serviceName = serviceName;
-        this.description = description;
-    }
-
     @Override
     public String toString() {
         return " MedicalServiceDto: ( " + " id=" + id + ", serviceName ='" +

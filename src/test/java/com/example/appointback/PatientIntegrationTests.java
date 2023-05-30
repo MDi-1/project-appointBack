@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
 @SpringBootTest
@@ -47,9 +48,9 @@ public class PatientIntegrationTests {
         // when
         PatientDto updatedDto = new PatientDto(p.getId(), "pat", "Pat", Collections.singletonList(a.getId()));
         PatientDto result = patientController.updatePatient(updatedDto);
-        patientController.deletePatient(p.getId());
-        System.out.println(" ]]] result: " + result);
-        System.out.println(" >>>> patients:\n" + patientController.getPatients());
+        patientController.deletePatient(p.getId()); // czy tu udało się usunąć pacjenta? jak tak to dlaczego usuwanie..
+        System.out.println(" ]]] result: " + result); // nie działa w innych testach controllerów? może chodzi o...
+        System.out.println(" >>>> patients:\n" + patientController.getPatients()); // cascade type: all ; fixmer
         System.out.println(" >>>> appointments:\n" + appointmentController.getAllAppointments());
         // then
         assertAll(
@@ -71,6 +72,16 @@ public class PatientIntegrationTests {
         Long lastId = list.stream().map(PatientDto::getId).sorted(Collections.reverseOrder()).findFirst().orElse(null);
         // then
         assertAll(() -> assertEquals(3, list.size()), () -> assertTrue(midId < lastId));
+    }
+
+    @Test
+    public void testGetPatientById() {
+        // given
+        PatientDto patient = patientController.createPatient(new PatientDto(null, "a", "A"));
+        // when
+        PatientDto dtoReceived = patientController.getPatient(patient.getId());
+        // then
+        assertEquals("a", dtoReceived.getFirstName());
     }
 
     @Test

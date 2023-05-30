@@ -64,7 +64,7 @@ public class AppointmentController {
         }
         if (synced) postEvent(response);
         return mapper.mapToAppointmentDto(response);
-    } // pick up from here - write some additional tests for CalendarHolder
+    }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public AppointmentDto updateAppointment(@RequestBody AppointmentDto dto) {

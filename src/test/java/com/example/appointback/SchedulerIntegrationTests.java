@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -40,6 +42,26 @@ public class SchedulerIntegrationTests {
                 .stream().findAny().orElseThrow(IllegalArgumentException::new).getName();
         // then
         assertEquals("sc", result);
+    }
+
+    @Test
+    public void testGetSchedulerById() {
+        // given
+        SchedulerDto sc = scController.createScheduler(new SchedulerDto(null, "sc"));
+        // when
+        SchedulerDto dtoRetrieved = scController.getScheduler(sc.getId());
+        // then
+        assertEquals("sc", dtoRetrieved.getName());
+    }
+
+    @Test
+    public void testGetSchedulerByName() {
+        // given
+        SchedulerDto sc = scController.createScheduler(new SchedulerDto(null, "the_scheduler"));
+        // when
+        SchedulerDto dtoRetrieved = scController.getSchedulerByName("the_scheduler");
+        // then
+        assertEquals("the_scheduler", dtoRetrieved.getName());
     }
 
     @Test
