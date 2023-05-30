@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.apache.coyote.http11.Constants.a;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -33,7 +35,6 @@ public class AppointmentIntegrationTests {
     private Long aId;
     private Long dId;
     private Long pId;
-
 
     @BeforeEach
     public void prepareDB() {
@@ -86,10 +87,27 @@ public class AppointmentIntegrationTests {
 
     @Test
     public void testUpdateAppointment() {
-        // given, when
+        // given
         AppointmentDto a = appController.updateAppointment(new AppointmentDto(aId, "2023-03-04T10:00", 50, dId, pId));
+        // when
         AppointmentDto appointmentDto = appController.getAppointment(a.getId());
         // then
         assertEquals(50, appointmentDto.getPrice());
+    }
+
+    @Test
+    public void testDeleteAppointment() {
+        // given
+        List<Long> tfIdList = tfController.getTimeFramesByDoctor(dId).stream()
+                .map(TimeFrameDto::getId).collect(Collectors.toList());
+        List<Long> idAppList = appController.getAllAppointments().stream()
+                .map(AppointmentDto::getId).collect(Collectors.toList());
+        // when
+        idAppList.remove(aId);
+        doctorController.updateDoctor(new DoctorDto(dId,"Doc","Abc","Specialist", false, tfIdList, idAppList, null));
+        patientController.updatePatient(new PatientDto(pId, "Pat", "Xyz", idAppList));
+        appController.deleteAppointment(aId);
+        // then
+        assertEquals(1, appController.getAllAppointments().size());
     }
 }
