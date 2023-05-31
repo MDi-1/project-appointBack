@@ -4,7 +4,6 @@ import com.example.appointback.controller.CoreConfiguration;
 import com.example.appointback.controller.TimeFrameRepository;
 import com.example.appointback.entity.TimeFrame;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -82,11 +81,5 @@ public class HolidayController {
     @GetMapping("/getAll")
     public List<HolidayDao> getHolidays() {
         return repository.findAll();
-    }
-
-    // to be used in special cases, saves single holiday to db.
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HolidayDao createSingleHoliday(@RequestBody HolidayDao dao) {
-        return repository.save(dao);
     }
 }

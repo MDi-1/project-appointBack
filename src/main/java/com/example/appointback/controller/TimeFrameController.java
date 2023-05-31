@@ -13,8 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/timeFrame")
 @RequiredArgsConstructor
-public class TimeFrameController {
-
+public class TimeFrameController { // need to introduce: enum TfStatus { Present, Day_Off, Holiday }
+                                    // especially -- Holiday ! -- fixme
     private final TimeFrameMapper mapper;
     private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;

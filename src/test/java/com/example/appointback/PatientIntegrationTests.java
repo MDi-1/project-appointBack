@@ -44,14 +44,10 @@ public class PatientIntegrationTests {
         DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", "Specialist", false));
         AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, d.getId(), p.getId());
         AppointmentDto a = appointmentController.createAppointment(appDto);
-        System.out.println(" ]]] got app list: " + appointmentController.getAllAppointments());
         // when
         PatientDto updatedDto = new PatientDto(p.getId(), "pat", "Pat", Collections.singletonList(a.getId()));
         PatientDto result = patientController.updatePatient(updatedDto);
-        patientController.deletePatient(p.getId()); // czy tu udało się usunąć pacjenta? jak tak to dlaczego usuwanie..
-        System.out.println(" ]]] result: " + result); // nie działa w innych testach controllerów? może chodzi o...
-        System.out.println(" >>>> patients:\n" + patientController.getPatients()); // cascade type: all ; fixme
-        System.out.println(" >>>> appointments:\n" + appointmentController.getAllAppointments());
+        patientController.deletePatient(p.getId());
         // then
         assertAll(
                 () -> assertEquals(0, patientController.getPatients().size()),
