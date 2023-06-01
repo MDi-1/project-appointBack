@@ -1,6 +1,5 @@
 package com.example.appointback.controller;
 
-import com.example.appointback.entity.TestObject;
 import com.example.appointback.entity.TestObjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

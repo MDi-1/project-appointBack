@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 public class TestObjectMapper {
 
     public TestObject mapToTestObject(final TestObjectDto dto) {
-        return new TestObject(dto.getId(), dto.getName(), dto.isTrueOrFalse());
+        return new TestObject(dto.getId(), dto.getName(), dto.isTrueOrFalse(), dto.getRankLabel());
     }
 
-    public TestObjectDto mapToTestObjectDto(final TestObject testObject) {
-        return new TestObjectDto(testObject.getId(), testObject.getName(), testObject.isTrueOrFalse());
+    public TestObjectDto mapToTestObjectDto(final TestObject tstObj) {
+        return new TestObjectDto(tstObj.getId(), tstObj.getName(), tstObj.isTrueOrFalse(), tstObj.getRankLabel());
     }
 
     public List<TestObjectDto> mapToTestObjectDtoList(final List<TestObject> testList) {
