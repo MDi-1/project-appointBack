@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.appointback.entity.TimeFrame.TfStatus.Holiday;
+
 @RestController
 @RequestMapping("/v1/holiday")
 @RequiredArgsConstructor
@@ -71,7 +73,7 @@ public class HolidayController {
                         .anyMatch(holidayElement -> holidayElement.getDate().equals(tfElement.getTimeframeDate())))
                 .collect(Collectors.toList());
         tfOutputList.forEach(timeFrame -> {
-            timeFrame.setStatus("Holiday");
+            timeFrame.setTfStatus(Holiday);
             timeFrame.setTimeStart(LocalTime.of(0, 0));
             timeFrame.setTimeEnd(LocalTime.of(0, 0));
             tfRepository.save(timeFrame);

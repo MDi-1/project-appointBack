@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.example.appointback.entity.TimeFrame.TfStatus.*;
+
 @RestController
 @RequestMapping("/v1/timeFrame")
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
         if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
             dto.setTimeStart("00:00");
             dto.setTimeEnd("00:00");
-            dto.setStatus("Day_Off");
+            dto.setTfStatus(Day_Off);
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         checkForAppsOutsideTf(tf);
@@ -60,7 +62,7 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
         if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
             dto.setTimeStart("00:00");
             dto.setTimeEnd("00:00");
-            dto.setStatus("Day_Off");
+            dto.setTfStatus(Day_Off);
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         List<Appointment> aList = checkForAppsOutsideTf(tf);
@@ -83,7 +85,7 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
             List<TimeFrame> newTfList = new ArrayList<>();
             for(int n = 0; n < 30; n++) {
                 TimeFrame sampleTf = new TimeFrame(
-                        today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), "Present", doc);
+                        today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), Present, doc);
                 boolean found = false;
                 for (TimeFrame singleTf : tfList) {
                     if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) {

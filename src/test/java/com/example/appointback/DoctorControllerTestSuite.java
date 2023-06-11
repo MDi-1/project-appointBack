@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.example.appointback.entity.CalendarHolder.Position.Board;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -30,8 +31,8 @@ public class DoctorControllerTestSuite {
     @Test
     public void testCreateDoctor() throws Exception {
         // given
-        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board", false);
-        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board", false);
+        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", Board, false);
+        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", Board, false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoIn);
         // when
@@ -51,8 +52,8 @@ public class DoctorControllerTestSuite {
     @Test
     public void testUpdateDoctor() throws Exception {
         // given
-        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", "Board", false);
-        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", "Board", false);
+        DoctorDto dtoIn  = new DoctorDto(null, "AbcName", "AbcLastname", Board, false);
+        DoctorDto dtoOut = new DoctorDto(1L, "AbcName", "AbcLastname", Board, false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoIn);
         // when

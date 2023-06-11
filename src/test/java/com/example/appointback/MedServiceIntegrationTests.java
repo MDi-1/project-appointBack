@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.example.appointback.entity.CalendarHolder.Position.Specialist;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -28,7 +30,7 @@ public class MedServiceIntegrationTests {
     @Test
     public void testMsCreate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
         msController.createMedService(new MedicalServiceDto(null, "MS", "des", docList));
         // when
@@ -41,7 +43,7 @@ public class MedServiceIntegrationTests {
     @Test
     public void testMsUpdate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", "Specialist", false));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
         MedicalServiceDto m1 = msController.createMedService(new MedicalServiceDto(null, "s", "S", new ArrayList<>()));
         MedicalServiceDto m2 = msController.updateMedService(new MedicalServiceDto(m1.getId(), "s2", "desc", docList));

@@ -11,8 +11,8 @@ public class TimeFrameDto {
     private String timeFrameDate;
     private String timeStart;
     private String timeEnd;
-    private String status;
-    private Long doctorId;
+    private TimeFrame.TfStatus tfStatus;
+    private Long ownersId;
 
     public void setTimeStart(String timeStart) {
         this.timeStart = timeStart;
@@ -22,14 +22,14 @@ public class TimeFrameDto {
         this.timeEnd = timeEnd;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTfStatus(TimeFrame.TfStatus tfStatus) {
+        this.tfStatus = tfStatus;
     }
 
     @Override
     public String toString() {
         return "TimeFrameDto{" + "id=" + id + ", timeFrameDate='" + timeFrameDate + '\'' +
-                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' + ", status='" + status + '\'' +
-                ", doctorId=" + doctorId + '}';
+                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' + ", status='" + tfStatus + '\'' +
+                ", ownersId=" + ownersId + '}';
     }
 }

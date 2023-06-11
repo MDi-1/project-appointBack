@@ -43,9 +43,6 @@ public class HolidaysIntegrationTests {
         HolidayDao dao = controller.getHolidays().stream()
                 .max(Comparator.comparingLong(HolidayDao::getId)).orElse(null);
         // then
-        assertAll(
-                () -> assertTrue(functionRan),
-                () -> assertEquals("marker", dao.getName())
-        );
+        assertAll( () -> assertTrue(functionRan), () -> assertEquals("marker", dao.getName()));
     }
 }

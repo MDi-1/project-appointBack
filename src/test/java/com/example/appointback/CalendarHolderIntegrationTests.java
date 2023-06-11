@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.appointback.entity.CalendarHolder.Position.Board;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
@@ -29,19 +30,19 @@ public class CalendarHolderIntegrationTests {
     @Test
     public void testChGet() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", "Board", false));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", Board, false));
         SchedulerDto scheduler = schedulerController.createScheduler(new SchedulerDto(null, "scheduler"));
         // when
         DoctorDto doc = (DoctorDto) calendarHolderController.getCH(doctor.getId());
         SchedulerDto sc = (SchedulerDto) calendarHolderController.getCH(scheduler.getId());
         // then
-        assertAll(() -> assertEquals("Board", doc.getPosition()), () -> assertEquals("scheduler", sc.getName()));
+        assertAll(() -> assertEquals(Board, doc.getPosition()), () -> assertEquals("scheduler", sc.getName()));
     }
 
     @Test
     public void testChGetAll() {
         // given
-        doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", "Board", false));
+        doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", Board, false));
         schedulerController.createScheduler(new SchedulerDto(null, "scheduler"));
         // when
         List<FactoryDtoOutput> list = calendarHolderController.getAllCH();
@@ -52,7 +53,7 @@ public class CalendarHolderIntegrationTests {
     @Test
     public void testChDelete() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", "Board", false));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "abc", "xyz", Board, false));
         SchedulerDto scheduler = schedulerController.createScheduler(new SchedulerDto(null, "scheduler"));
         // when
         int before = calendarHolderController.getAllCH().size();

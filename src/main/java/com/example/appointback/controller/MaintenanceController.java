@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+
+import static com.example.appointback.entity.CalendarHolder.Position.*;
+import static com.example.appointback.entity.TimeFrame.TfStatus.Present;
 
 @RestController
 @RequestMapping("/v1/service")
@@ -49,23 +51,23 @@ public class MaintenanceController {
 
     @PostMapping("/sampleDataFeed")
     public void sampleDataFeed() {
-        Doctor doc1 = new Doctor("Dough", "Smith", "Specialist", false);
-        Doctor doc2 = new Doctor("Alison", "Green", "Manager", false);
-        Doctor doc3 = new Doctor("Doc", "Marshall", "Board", false);
+        Doctor doc1 = new Doctor("Dough", "Smith", Specialist, false);
+        Doctor doc2 = new Doctor("Alison", "Green", Manager, false);
+        Doctor doc3 = new Doctor("Doc", "Marshall", Board, false);
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
         schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
         doctorRepository.save(doc1);
         doctorRepository.save(doc2);
         doctorRepository.save(doc3);
         LocalDate today = LocalDate.of(2022, 9, 15); // for deployment "today"to be changed into this: LocalDate.now();
-        TimeFrame tf0 = new TimeFrame(today.plusDays(30L), LocalTime.of(9 , 0), LocalTime.of(15, 0), "Present", doc1);
-        TimeFrame tf1 = new TimeFrame(today.plusDays(31L), LocalTime.of(9 , 0), LocalTime.of(16, 0), "Present", doc1);
-        TimeFrame tf2 = new TimeFrame(today.plusDays(32L), LocalTime.of(9 , 0), LocalTime.of(15, 0), "Present", doc1);
-        TimeFrame tf3 = new TimeFrame(today.plusDays(31L), LocalTime.of(8 , 0), LocalTime.of(16, 0), "Present", doc2);
-        TimeFrame tf4 = new TimeFrame(today.plusDays(32L), LocalTime.of(8 , 0), LocalTime.of(16, 0), "Present", doc2);
-        TimeFrame tf5 = new TimeFrame(today.plusDays(33L), LocalTime.of(8 , 0), LocalTime.of(16, 0), "Present", doc3);
-        TimeFrame tf6 = new TimeFrame(today.plusDays(34L), LocalTime.of(10, 0), LocalTime.of(16, 0), "Present", doc3);
-        TimeFrame tf7 = new TimeFrame(today.plusDays(27L), LocalTime.of(10, 0), LocalTime.of(16, 0), "Present", doc3);
+        TimeFrame tf0 = new TimeFrame(today.plusDays(30L), LocalTime.of(9 , 0), LocalTime.of(15, 0), Present, doc1);
+        TimeFrame tf1 = new TimeFrame(today.plusDays(31L), LocalTime.of(9 , 0), LocalTime.of(16, 0), Present, doc1);
+        TimeFrame tf2 = new TimeFrame(today.plusDays(32L), LocalTime.of(9 , 0), LocalTime.of(15, 0), Present, doc1);
+        TimeFrame tf3 = new TimeFrame(today.plusDays(31L), LocalTime.of(8 , 0), LocalTime.of(16, 0), Present, doc2);
+        TimeFrame tf4 = new TimeFrame(today.plusDays(32L), LocalTime.of(8 , 0), LocalTime.of(16, 0), Present, doc2);
+        TimeFrame tf5 = new TimeFrame(today.plusDays(33L), LocalTime.of(8 , 0), LocalTime.of(16, 0), Present, doc3);
+        TimeFrame tf6 = new TimeFrame(today.plusDays(34L), LocalTime.of(10, 0), LocalTime.of(16, 0), Present, doc3);
+        TimeFrame tf7 = new TimeFrame(today.plusDays(27L), LocalTime.of(10, 0), LocalTime.of(16, 0), Present, doc3);
         timeFrameRepository.saveAll(Arrays.asList(tf0, tf1, tf2, tf3, tf4, tf5, tf6, tf7));
         Patient p1 = new Patient("Jane", "Dou");
         Patient p2 = new Patient("John", "Doe");

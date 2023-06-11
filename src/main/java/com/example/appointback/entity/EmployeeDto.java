@@ -4,7 +4,6 @@ import com.example.appointback.entityfactory.FactoryDtoOutput;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,12 +14,12 @@ public class EmployeeDto implements FactoryDtoOutput {
     private Long id;
     private String name;
     private String lastName;
-    private String position;
+    private CalendarHolder.Position position;
     private boolean goCalendarSync;
     private List<Long> appointmentIds;
     private List<Long> timeFrameIds;
 
-    public EmployeeDto(Long id, String name, String lastName, String position, boolean goCalendarSync) {
+    public EmployeeDto(Long id,String name,String lastName, CalendarHolder.Position position, boolean goCalendarSync) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

@@ -15,13 +15,13 @@ public class DoctorDto implements FactoryDtoOutput {
     private Long id;
     private String name;
     private String lastName;
-    private String position;
+    private CalendarHolder.Position position;
     private boolean goCalendarSync;
     private List<Long> timeFrameIds;
     private List<Long> appointmentIds;
     private List<Long> medServiceIds;
 
-    public DoctorDto(Long id, String name, String lastName, String position, boolean goCalendarSync) {
+    public DoctorDto(Long id, String name, String lastName, CalendarHolder.Position position, boolean goCalendarSync) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

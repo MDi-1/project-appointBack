@@ -2,7 +2,6 @@ package com.example.appointback.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +14,6 @@ public class Doctor extends CalendarHolder {
 
     @Column(name = "LAST_NAME")
     private String lastName;
-
-    @Column(name = "POSITION")
-    private String position;
 
     @Column(name = "GO_CALENDAR_SYNC")
     private boolean goCalendarSync;
@@ -33,18 +29,17 @@ public class Doctor extends CalendarHolder {
             inverseJoinColumns = {@JoinColumn(name = "SERVICE_ID", referencedColumnName = "S_ID")})
     private List<MedicalService> medicalServices;
 
-    public Doctor(String name, String lastName, String position, boolean goCalendarSync) {
+    public Doctor(String name, String lastName, Position position, boolean goCalendarSync) {
         this.name = name;
         this.lastName = lastName;
         this.position = position;
         this.goCalendarSync = goCalendarSync;
     }
 
-    public Doctor(Long id, String name, String lastName, String position, boolean goCalendarSync,
+    public Doctor(Long id, String name, String lastName, Position position, boolean goCalendarSync,
                   List<Appointment> appointments, List<TimeFrame> timeFrames, List<MedicalService> medicalServices) {
-        super(id, name, appointments);
+        super(id, name, position, appointments);
         this.lastName = lastName;
-        this.position = position;
         this.goCalendarSync = goCalendarSync;
         this.timeFrames = timeFrames;
         this.medicalServices = medicalServices;

@@ -23,6 +23,8 @@ import java.util.Objects;
 @Entity(name = "TIMEFRAMES")
 public class TimeFrame {
 
+    public enum TfStatus { Present, Day_Off, Holiday }
+
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true)
@@ -40,20 +42,18 @@ public class TimeFrame {
     @Column(name = "TIME_END")
     private LocalTime timeEnd;
 
-    @NotNull
-    @Column(name = "STATUS")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TfStatus tfStatus;
 
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
-    private Doctor doctor;
+    private CalendarHolder doctor;
 
-    public TimeFrame(LocalDate timeframeDate, LocalTime timeStart,
-                     LocalTime timeEnd, String status, Doctor doctor) {
-        this.timeframeDate = timeframeDate;
+    public TimeFrame(LocalDate tfDate, LocalTime timeStart, LocalTime timeEnd, TfStatus tfStatus, Doctor doctor) {
+        this.timeframeDate = tfDate;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
-        this.status = status;
+        this.tfStatus = tfStatus;
         this.doctor = doctor;
     }
 
@@ -66,6 +66,6 @@ public class TimeFrame {
     public String toString() {
         return "TimeFrame{" + "id=" + id + ", timeframeDate=" + timeframeDate +
                 ", timeStart=" + timeStart + ", timeEnd=" + timeEnd +
-                ", status='" + status + '\'' + ", doctor= dont show" + '}';
+                ", status='" + tfStatus + '\'' + ", doctor= dont show" + '}';
     }
 }

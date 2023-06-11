@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 
+import static com.example.appointback.entity.CalendarHolder.Position.Specialist;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,7 +42,7 @@ public class PatientIntegrationTests {
     public void testPatientRemoval() {
         // given
         PatientDto p = patientController.createPatient(new PatientDto(null, "abc", "xyz"));
-        DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", "Specialist", false));
+        DoctorDto d = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", Specialist, false));
         AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, d.getId(), p.getId());
         AppointmentDto a = appointmentController.createAppointment(appDto);
         // when
@@ -84,7 +85,7 @@ public class PatientIntegrationTests {
     public void testPatientUpdate() {
         // given
         PatientDto pat = patientController.createPatient(new PatientDto(null, "abc", "xyz"));
-        DoctorDto doc = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", "Specialist", false));
+        DoctorDto doc = doctorController.createDoctor(new DoctorDto(null, "doc", "Doc", Specialist, false));
         AppointmentDto aIn = new AppointmentDto(null, "2023-03-03T09:00", 160, doc.getId(), pat.getId());
         AppointmentDto aOut = appointmentController.createAppointment(aIn);
         // when
