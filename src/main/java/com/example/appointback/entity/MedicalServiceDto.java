@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class MedicalServiceDto {
 
@@ -15,11 +14,4 @@ public class MedicalServiceDto {
     private String serviceName;
     private String description;
     private List<Long> doctorIds;
-
-    @Override
-    public String toString() {
-        return " MedicalServiceDto: ( " + " id=" + id + ", serviceName ='" +
-                 serviceName + '\'' + ", description='" + description + '\'' +
-                ", doctorIds=" + doctorIds + ')';
-    }
 }

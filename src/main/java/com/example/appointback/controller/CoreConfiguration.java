@@ -17,6 +17,6 @@ public class CoreConfiguration {
     }
 
     public static LocalDate getStartingDate() {
-        return LocalDate.of(2022, 9, 15); // to be changed for deployment to .now()
+        return LocalDate.now();
     }
 }

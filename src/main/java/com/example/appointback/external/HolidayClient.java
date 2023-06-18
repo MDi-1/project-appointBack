@@ -26,7 +26,7 @@ public class HolidayClient {
     private final RestTemplate restTemplate;
     private static final Logger LOGGER = LoggerFactory.getLogger(HolidayController.class);
 
-    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {//requests info on 1 day from app.abstractapi.com
+    public HolidayDto makeHolidayApiRequest(LocalDate requestedDate) {
         HolidayDto dto;
         URI url = UriComponentsBuilder.fromHttpUrl("https://holidays.abstractapi.com/v1/")
                 .queryParam("api_key", key)

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class PatientDto {
 
@@ -20,11 +19,5 @@ public class PatientDto {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    @Override
-    public String toString() {
-        return "PatientDto{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' +
-                ", appointmentsIds=" + appointmentsIds + '}';
     }
 }

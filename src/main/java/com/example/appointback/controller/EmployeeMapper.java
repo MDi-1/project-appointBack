@@ -30,10 +30,6 @@ public class EmployeeMapper {
                 appointments, timeFrames);
     }
 
-    public Employee mapToNewEmployee(final EmployeeDto dto) {
-        return new Employee(dto.getName(), dto.getLastName(), dto.getPosition(), dto.isGoCalendarSync());
-    }
-
     public EmployeeDto mapToNewEmployeeDto(final Employee emp) {
         return new EmployeeDto(emp.getId(),emp.getName(),emp.getLastName(),emp.getPosition(),emp.isGoCalendarSync());
     }

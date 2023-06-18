@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.appointback.external.GoCalendarClient.deleteEvent;
@@ -50,7 +52,8 @@ public class AppointmentController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public AppointmentDto createAppointment(@RequestBody AppointmentDto appointmentDto) {
-        Appointment response = repository.save(mapper.mapToAppointment(appointmentDto));
+        Appointment clearedAppointment = clearWeekendCollision(mapper.mapToAppointment(appointmentDto));
+        Appointment response = repository.save(clearedAppointment);
         CalendarHolder calendarHolder = calendarHolderRepository.findById(appointmentDto.getOwnersId())
                 .orElseThrow(IllegalArgumentException::new);
         boolean synced = false;
@@ -67,8 +70,9 @@ public class AppointmentController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AppointmentDto updateAppointment(@RequestBody AppointmentDto dto) {
-        return mapper.mapToAppointmentDto(repository.save(mapper.mapToAppointment(dto)));
+    public AppointmentDto updateAppointment(@RequestBody AppointmentDto appointmentDto) {
+        Appointment clearedAppointment = clearWeekendCollision(mapper.mapToAppointment(appointmentDto));
+        return mapper.mapToAppointmentDto(repository.save(clearedAppointment));
     }
 
     @DeleteMapping("/{apId}")
@@ -87,5 +91,14 @@ public class AppointmentController {
     @PostMapping(value = "/createEv", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Event goApiPost(@RequestBody AppointmentDto dto) {
         return GoCalendarClient.postEvent(mapper.mapToAppointment(dto));
+    }
+
+    public Appointment clearWeekendCollision(Appointment appointment) {
+        LocalDateTime dateTime = appointment.getStartDateTime();
+        while(dateTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || dateTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            dateTime = dateTime.plusDays(1L);
+        }
+        appointment.setStartDateTime(dateTime);
+        return appointment;
     }
 }

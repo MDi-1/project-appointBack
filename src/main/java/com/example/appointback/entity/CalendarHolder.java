@@ -42,9 +42,4 @@ public abstract class CalendarHolder {
         this.name = name;
         this.appointments = appointments;
     }
-
-    @Override
-    public String toString() {
-        return "CalendarHolder{" + "id=" + id + ", name='" + name + '\'' + ", appointments=" + appointments + '}';
-    }
 }

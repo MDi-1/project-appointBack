@@ -2,11 +2,11 @@ package com.example.appointback.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@ToString
 public class AppointmentDto {
 
     private Long id;
@@ -14,11 +14,4 @@ public class AppointmentDto {
     private Integer price; // pricing functionality is in fact not developed yet fixme
     private Long ownersId;
     private Long patientId;
-
-    @Override
-    public String toString() {
-        return " AppointmentDto= (" + " id=" + id + ", startDateTime='" +
-                startDateTime + '\'' + ", price=" + price + ", doctorId=" +
-                ownersId + ", patientId=" + patientId + ')';
-    }
 }

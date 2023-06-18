@@ -44,7 +44,7 @@ public class DoctorController {
         Doctor doc = repository.findById(doctorId).orElseThrow(IllegalArgumentException::new);
         Scheduler sc = schedulerRepository.findByName("Default_Scheduler");
         if (doc.getAppointments() == null  || doc.getAppointments().size() < 1 ) {
-            System.out.println("\"---- Project Appoint application ---- doctor had not any appointment");
+            System.out.println("---- Project Appoint application ---- doctor had not any appointment");
             repository.deleteById(doctorId);
             return null;
         }

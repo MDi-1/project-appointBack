@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity(name = "PATIENTS")
 public class Patient {
 
@@ -21,7 +20,7 @@ public class Patient {
     @NotNull
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id; // changed from int to Long; previously I thought there is separate id numbering for each entity
+    private Long id; // (i) changed from int to Long; previously I thought there is separate id numbering for each entity
                     // but Hibernate by default assigns id numbers from one "pool" for all entities! this "pool"
                     // is hibernate_sequence table which has just one column "next_val" with one row.
     @NotNull
@@ -41,7 +40,3 @@ public class Patient {
         this.lastName = lastName;
     }
 }
-// During bootcamp we have been learnt to use Long type for ID of entities but for some entities I decided to try
-// other types like Integer and int.
-//track of the lines properly.Using the same argument for indentation in the tabs vs spaces debate
-

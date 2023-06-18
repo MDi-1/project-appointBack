@@ -24,10 +24,6 @@ public class TimeFrameMapper {
         if (calendarHolder == null) {
             calendarHolder = employeeRepository.findById(timeFrameDto.getOwnersId()).orElseThrow(IllegalArgumentException::new);
         }
-
-
-
-
         return new TimeFrame(
                 timeFrameDto.getId(),
                 LocalDate.parse(timeFrameDto.getTimeFrameDate()),

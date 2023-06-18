@@ -27,8 +27,10 @@ public class HolidayController {
         return runHolidaysCheck(holidayClient);
     }
 
-    // writes to db holidays and marker objects for about a month onward.
+    // writes to db holidays and marker entities for about a month onward.
     public boolean runHolidaysCheck(HolidayClient client) {
+        int n = 0;
+        LocalDate endDay;
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
@@ -37,11 +39,9 @@ public class HolidayController {
             HolidayDto dto = client.makeHolidayApiRequest(date.plusDays(i));
             if (dto != null) repository.save(new HolidayDao(null, dto.getName(), date.plusDays(i)));
         }
-        int n = 0;
-        LocalDate endDay;
         do {
             n ++;
-            if (n > 20) return true; // trzeba sprawdzić w debuggerze czy ta f. w ogóle działa
+            if (n > 20) return true;
             endDay = date.plusDays(30 + n);
         }
         while (client.makeHolidayApiRequest(endDay) != null);

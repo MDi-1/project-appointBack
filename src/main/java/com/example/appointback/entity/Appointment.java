@@ -1,9 +1,6 @@
 package com.example.appointback.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -54,11 +51,5 @@ public class Appointment {
     @Override
     public int hashCode() {
         return Objects.hash(startDateTime, doctor);
-    }
-
-    @Override
-    public String toString() {
-        return "Appointment{" + "id=" + id + ", startDateTime=" + startDateTime + ", price=" + price +
-                ", doctor=" + doctor + ", patient=" + patient + '}';
     }
 }

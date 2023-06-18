@@ -12,7 +12,6 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
-@ToString
 @Entity(name = "HOLIDAYS")
 public class HolidayDao {
 
@@ -28,17 +27,4 @@ public class HolidayDao {
     @NotNull
     @Column(name = "DATE")
     private LocalDate date;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HolidayDao that = (HolidayDao) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(date, that.date);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, date);
-    }
 }

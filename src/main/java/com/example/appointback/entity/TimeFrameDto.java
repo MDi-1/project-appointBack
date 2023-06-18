@@ -28,8 +28,8 @@ public class TimeFrameDto {
 
     @Override
     public String toString() {
-        return "TimeFrameDto{" + "id=" + id + ", timeFrameDate='" + timeFrameDate + '\'' +
-                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' + ", status='" + tfStatus + '\'' +
-                ", ownersId=" + ownersId + '}';
+        return "TimeFrameDto(" + "id=" + id + ", timeFrameDate='" + timeFrameDate + '\'' +
+                ", timeStart='" + timeStart + '\'' + ", timeEnd='" + timeEnd + '\'' +
+                ", tfStatus='" + tfStatus + '\'' + ", ownersId=" + ownersId + ")";
     }
 }

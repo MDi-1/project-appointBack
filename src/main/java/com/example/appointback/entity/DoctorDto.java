@@ -28,13 +28,4 @@ public class DoctorDto implements FactoryDtoOutput {
         this.position = position;
         this.goCalendarSync = goCalendarSync;
     }
-
-    @Override
-    public String toString() {
-        return "DoctorDto{" + "id=" + id + ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' + ", position='" + position +
-                '\'' + ", timeFrameIds=" + timeFrameIds +
-                ", appointmentIds=" + appointmentIds +
-                ", medServiceIds=" + medServiceIds + '}';
-    }
 }

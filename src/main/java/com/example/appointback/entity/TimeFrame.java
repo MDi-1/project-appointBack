@@ -58,6 +58,15 @@ public class TimeFrame {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeFrame timeFrame = (TimeFrame) o;
+        return Objects.equals(timeframeDate, timeFrame.timeframeDate) &&
+                Objects.equals(doctor, timeFrame.doctor);
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(timeframeDate, doctor);
     }
@@ -66,6 +75,6 @@ public class TimeFrame {
     public String toString() {
         return "TimeFrame{" + "id=" + id + ", timeframeDate=" + timeframeDate +
                 ", timeStart=" + timeStart + ", timeEnd=" + timeEnd +
-                ", status='" + tfStatus + '\'' + ", doctor= dont show" + '}';
+                ", tfStatus='" + tfStatus + '\'' + ", doctor= don't show" + '}';
     }
 }

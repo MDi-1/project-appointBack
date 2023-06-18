@@ -8,7 +8,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity(name = "SERVICES")
 public class MedicalService {
 
@@ -25,8 +25,7 @@ public class MedicalService {
     private String description;
 
     @ManyToMany(targetEntity = com.example.appointback.entity.Doctor.class,
-            cascade = { CascadeType.PERSIST, CascadeType.DETACH,
-                                     CascadeType.MERGE, CascadeType.REFRESH },
+            cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
             fetch = FetchType.LAZY,
             mappedBy = "medicalServices")
     private List<Doctor> doctors;

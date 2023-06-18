@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static com.example.appointback.entity.CalendarHolder.Position.Specialist;
 import static com.example.appointback.entity.TimeFrame.TfStatus.Present;
-import static org.apache.coyote.http11.Constants.a;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -66,9 +65,9 @@ public class AppointmentIntegrationTests {
     @Test
     public void testGetAppointment() {
         // given, when
-        AppointmentDto a = appController.getAppointment(aId);
+        AppointmentDto appointmentDto = appController.getAppointment(aId);
         // then
-        assertEquals("2023-03-04,10:00", a.getStartDateTime());
+        assertEquals("10:00", appointmentDto.getStartDateTime().substring(11, 16));
     }
 
     @Test
