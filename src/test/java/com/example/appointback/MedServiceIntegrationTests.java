@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.example.appointback.entity.CalendarHolder.Position.Specialist;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -32,7 +32,7 @@ public class MedServiceIntegrationTests {
         // given
         DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
-        msController.createMedService(new MedicalServiceDto(null, "MS", "des", docList));
+        msController.createMedService(new MedicalServiceDto(null, "MS", "des", 200, docList));
         // when
         MedicalServiceDto result = msController.getMedServices()
                 .stream().findFirst().orElseThrow(IllegalArgumentException::new);
@@ -45,11 +45,15 @@ public class MedServiceIntegrationTests {
         // given
         DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
-        MedicalServiceDto m1 = msController.createMedService(new MedicalServiceDto(null, "s", "S", new ArrayList<>()));
-        MedicalServiceDto m2 = msController.updateMedService(new MedicalServiceDto(m1.getId(), "s2", "desc", docList));
+        MedicalServiceDto msDtoInput = new MedicalServiceDto(null, "MS1", "d", 180, new ArrayList<>());
+        MedicalServiceDto creationResponse = msController.createMedService(msDtoInput);
+        MedicalServiceDto dtoUpdate = new MedicalServiceDto(creationResponse.getId(), "MS1", "desc", 180, docList);
+        MedicalServiceDto updatingResponse = msController.updateMedService(dtoUpdate);
         // when
-        MedicalServiceDto result = msController.getMedService(m2.getId());
+        MedicalServiceDto result = msController.getMedService(creationResponse.getId());
+        System.out.println(" ]]] printing medical services [[[: ");
+        msController.getMedServices().forEach(System.out::println);
         // then
-        assertEquals("desc", result.getDescription());
+        assertAll (() -> assertEquals("desc", result.getDescription()), () -> assertNotNull(updatingResponse));
     }
 }

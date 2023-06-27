@@ -78,7 +78,7 @@ public class MaintenanceController {
         );
         appointments.forEach(appointmentController::clearWeekendCollision);
         appRepository.saveAll(appointments);
-        medServiceRepo.save(new MedicalService("Laryngologist", null));
+        medServiceRepo.save(new MedicalService("Laryngologist", null, 180));
         tfController.autoCreateTimeFrames(getStartingDate());
     }
 }

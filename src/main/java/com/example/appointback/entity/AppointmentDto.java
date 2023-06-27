@@ -11,7 +11,7 @@ public class AppointmentDto {
 
     private Long id;
     private String startDateTime;
-    private Integer price; // pricing functionality is in fact not developed yet fixme
+    private Integer price;
     private Long ownersId;
     private Long patientId;
 }

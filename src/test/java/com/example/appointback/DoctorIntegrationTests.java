@@ -72,7 +72,7 @@ public class DoctorIntegrationTests {
         TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", Present, dOut.getId());
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
         MedicalServiceDto msDto = new MedicalServiceDto(
-                null,"Laryngologist", null, new ArrayList<>(Collections.singletonList(dOut.getId())));
+                null,"Laryngologist", null, 200, new ArrayList<>(Collections.singletonList(dOut.getId())));
         MedicalServiceDto msOut = msController.createMedService(msDto);
         // when
         List<Long> appList = new ArrayList<>(Collections.singletonList(aOut.getId()));

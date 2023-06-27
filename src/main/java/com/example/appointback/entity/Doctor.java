@@ -22,8 +22,7 @@ public class Doctor extends CalendarHolder {
     private List<TimeFrame> timeFrames = new ArrayList<>();
 
     @ManyToMany(targetEntity = com.example.appointback.entity.MedicalService.class,
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name = "JOIN_DOC_SERVICE",
             joinColumns = {@JoinColumn(name = "DOCTOR_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "SERVICE_ID", referencedColumnName = "S_ID")})
@@ -45,11 +44,17 @@ public class Doctor extends CalendarHolder {
         this.medicalServices = medicalServices;
     } // (i) when tried @AllArgsConstructor turns out Lombok does not insert "super(id, name, appointments)"
 
+    public void setMedicalServices(List<MedicalService> medicalServices) {
+        this.medicalServices = medicalServices;
+    }
+
     @Override
     public String toString() {
-        int appListSize, msListSize;
+        int appListSize, timeframesSize, msListSize;
         if (appointments == null) appListSize = -1;
         else appListSize = appointments.size();
+        if (timeFrames == null) timeframesSize = -1;
+        else timeframesSize = timeFrames.size();
         if (medicalServices == null) msListSize = -1;
         else msListSize = medicalServices.size();
         return "Doctor{" + "id=" + id +
@@ -58,7 +63,7 @@ public class Doctor extends CalendarHolder {
                 ", position='" + position + '\'' +
                 ", goCalendarSync='" + goCalendarSync + '\'' +
                 ", appList size= " + appListSize +
-                ", timeFrames=" + timeFrames +
+                ", tf size=" + timeframesSize +
                 ", msList size= " + msListSize +
                 //", medicalServices=" + medicalServices +    // <== don't print this!
                 // (i) printing list of medicalServices will result in back and forth references doctor to

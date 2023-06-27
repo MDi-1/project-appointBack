@@ -4,6 +4,7 @@ import com.example.appointback.entityfactory.FactoryDtoOutput;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 

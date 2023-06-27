@@ -1,7 +1,6 @@
 package com.example.appointback.external;
 
 import com.example.appointback.entity.Appointment;
-import com.example.appointback.entity.Patient;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -53,7 +52,7 @@ public class GoCalendarClient {
                 .setApplicationName("proj-appoint 0").build();
     }
 
-    public static void getEvents() throws IOException, GeneralSecurityException {
+    public static void getEvents() throws IOException, GeneralSecurityException { // is this f. needed? fixme
         Events events = getCalendarService().events()
                 .list(CALENDAR_ID)
                 .setMaxResults(10)
@@ -78,7 +77,7 @@ public class GoCalendarClient {
         Event event = new Event()
                 .setId("proapp" + appointment.getId().toString())
                 .setSummary(patientString + " - appointment")
-                .setDescription("appointment with " + patientString + " valued " + appointment.getPrice());
+                .setDescription("appointment with " + patientString + " valued " + "appointment.getPrice() "); // fixme
         DateTime startDateTime = new DateTime(appointment.getStartDateTime() + ":00+02:00");
         EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("Europe/Warsaw");
         event.setStart(start);
