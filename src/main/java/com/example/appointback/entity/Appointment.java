@@ -25,6 +25,9 @@ public class Appointment {
     @Column(name = "PRICE")
     private int price;
 
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
     private CalendarHolder doctor;
@@ -33,9 +36,10 @@ public class Appointment {
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
-    public Appointment (LocalDateTime startDateTime, int price, CalendarHolder doctor, Patient patient) {
+    public Appointment (LocalDateTime startDateTime, int price, String desc, CalendarHolder doctor, Patient patient) {
         this.startDateTime = startDateTime;
         this.price = price;
+        this.description = desc;
         this.doctor = doctor;
         this.patient = patient;
     }

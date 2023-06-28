@@ -66,15 +66,15 @@ public class MaintenanceController {
         Patient p5 = new Patient("Kristina", "Ronaldina");
         patientRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
         List<Appointment> appointments = Arrays.asList(
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(0L), LocalTime.of(11, 0)), 150, doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(2L), LocalTime.of(12, 0)), 150, doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(1L), LocalTime.of(13, 0)), 160, doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3L), LocalTime.of(14, 0)), 160, doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3L), LocalTime.of(8 , 0)), 200, doc2, p2),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(5L), LocalTime.of(9 , 0)), 150, doc2, p3),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3L), LocalTime.of(9 , 0)), 160, doc3, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(4L), LocalTime.of(15, 0)), 160, doc3, p3),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(7L), LocalTime.of(11, 0)), 160, doc3, p3)
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(0), LocalTime.of(11, 0)), 150, "abc", doc1, p1),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(2), LocalTime.of(12, 0)), 150, "abc", doc1, p1),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(1), LocalTime.of(13, 0)), 160, "abc", doc1, p1),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(14, 0)), 160, "abc", doc1, p1),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(8 , 0)), 200, "abc", doc2, p2),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(5), LocalTime.of(9 , 0)), 150, "abc", doc2, p3),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(9 , 0)), 180, "abc", doc3, p1),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(4), LocalTime.of(15, 0)), 180, "abc", doc3, p3),
+            new Appointment(LocalDateTime.of(getStartingDate().plusDays(7), LocalTime.of(11, 0)), 180, "abc", doc3, p3)
         );
         appointments.forEach(appointmentController::clearWeekendCollision);
         appRepository.saveAll(appointments);
