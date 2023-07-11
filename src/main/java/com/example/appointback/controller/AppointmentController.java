@@ -77,15 +77,11 @@ public class AppointmentController {
 
     @DeleteMapping("/{apId}")
     public void deleteAppointment(@PathVariable Long apId) {
+        System.out.println(" ]]] DELETE APPOINTMENT FIRED [[[ ");
         Appointment appointment = repository.findById(apId).orElseThrow(IllegalArgumentException::new);
         Doctor doctor = (Doctor) appointment.getDoctor();
         if (doctor.isGoCalendarSync()) deleteEvent(apId);
         repository.deleteById(apId);
-    }
-
-    @GetMapping("/getEv")
-    public void goApiGet() throws GeneralSecurityException, IOException {
-        GoCalendarClient.getEvents();
     }
 
     @PostMapping(value = "/createEv", consumes = MediaType.APPLICATION_JSON_VALUE)

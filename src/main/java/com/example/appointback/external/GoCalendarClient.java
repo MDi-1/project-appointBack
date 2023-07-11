@@ -16,7 +16,6 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.Events;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,32 +51,12 @@ public class GoCalendarClient {
                 .setApplicationName("proj-appoint 0").build();
     }
 
-    public static void getEvents() throws IOException, GeneralSecurityException { // is this f. needed? fixme
-        Events events = getCalendarService().events()
-                .list(CALENDAR_ID)
-                .setMaxResults(10)
-                .setTimeMin(new DateTime(System.currentTimeMillis()))
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .execute();
-        List<Event> items = events.getItems();
-        if (items.isEmpty()) System.out.println("No upcoming events found.");
-        else {
-            System.out.println("Upcoming events");
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) start = event.getStart().getDate();
-                System.out.printf("%s (%s)\n", event.getSummary(), start);
-            }
-        }
-    }
-
     public static Event postEvent(Appointment appointment) {
         String patientString = appointment.getPatient().getFirstName() + " " + appointment.getPatient().getLastName();
         Event event = new Event()
                 .setId("proapp" + appointment.getId().toString())
                 .setSummary(patientString + " - appointment")
-                .setDescription("appointment with " + patientString + " valued " + "appointment.getPrice() "); // fixme
+                .setDescription("appointment with " + patientString + " valued " + appointment.getPrice());
         DateTime startDateTime = new DateTime(appointment.getStartDateTime() + ":00+02:00");
         EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("Europe/Warsaw");
         event.setStart(start);
@@ -85,10 +64,7 @@ public class GoCalendarClient {
         EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone("Europe/Warsaw");
         event.setEnd(end);
         try {
-            return getCalendarService()
-                    .events()
-                    .insert(CALENDAR_ID, event)
-                    .execute();
+            return getCalendarService().events().insert(CALENDAR_ID, event).execute();
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
             return null;
@@ -97,10 +73,7 @@ public class GoCalendarClient {
 
     public static void deleteEvent(Long id) {
         try {
-            getCalendarService()
-                    .events()
-                    .delete(CALENDAR_ID, "proapp" + id)
-                    .execute(); // (i) strange Google's f.chaining: Calendar=>Calendar.Events=>Calendar.Events.Delete
+            getCalendarService().events().delete(CALENDAR_ID, "proapp" + id).execute();
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }

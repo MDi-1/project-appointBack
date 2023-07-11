@@ -44,7 +44,7 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorCreationUnrelated() {
         // given
-        DoctorDto dto = new DoctorDto(null, "Doctress", "Doctoree", Board, false);
+        DoctorDto dto = new DoctorDto("Doctress", "Doctoree", Board, false);
         // when
         DoctorDto output = doctorController.createDoctor(dto);
         // then
@@ -65,15 +65,15 @@ public class DoctorIntegrationTests {
     @Test
     public void testDoctorUpdate() {
         // given
-        DoctorDto dOut = doctorController.createDoctor(new DoctorDto(null, "", "", Specialist, false));
+        DoctorDto dOut = doctorController.createDoctor(new DoctorDto("", "", Specialist, false));
         PatientDto pOut = patientController.createPatient(new PatientDto(null, "Pat", "Phatient", null));
-        AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, dOut.getId(), pOut.getId());
+        List<Long> docs = new ArrayList<>(Collections.singletonList(dOut.getId()));
+        MedicalServiceDto msOut = msController.createMedService(new MedicalServiceDto(null,"a", "A", 200, null, docs));
+        AppointmentDto appDto = new AppointmentDto(
+                null, "2023-03-03T09:00", msOut.getPrice(), msOut.getId(), dOut.getId(), pOut.getId());
         AppointmentDto aOut = appController.createAppointment(appDto);
         TimeFrameDto tfDto = new TimeFrameDto(null, "2023-03-03", "08:00", "16:00", Present, dOut.getId());
         TimeFrameDto tfOut = tfController.createTimeFrame(tfDto);
-        MedicalServiceDto msDto = new MedicalServiceDto(
-                null,"Laryngologist", null, 200, new ArrayList<>(Collections.singletonList(dOut.getId())));
-        MedicalServiceDto msOut = msController.createMedService(msDto);
         // when
         List<Long> appList = new ArrayList<>(Collections.singletonList(aOut.getId()));
         List<Long> tfList = new ArrayList<>(Collections.singletonList(tfOut.getId()));
@@ -98,17 +98,19 @@ public class DoctorIntegrationTests {
     @Test
     public void testRemoveDoctor() {
         // given
-        DoctorDto doctor1 = doctorController.createDoctor(new DoctorDto(null, "x", "X", Manager, false));
-        DoctorDto dto2input = new DoctorDto(null, "y", "Y", Specialist, false, null, new ArrayList<>(), null);
-        DoctorDto doctor2 = doctorController.createDoctor(dto2input);
+        MedicalServiceDto ms = msController.createMedService(new MedicalServiceDto("Laryngologist", 200));
+        List<Long> msList = Collections.singletonList(ms.getId());
+        DoctorDto doctor1 = doctorController.createDoctor(new DoctorDto("x", "X", msList));
+        DoctorDto doctor2 = doctorController.createDoctor(
+                new DoctorDto(null, "xy", "XY", Specialist, false, null, new ArrayList<>(), msList));
         PatientDto patient = patientController.createPatient(new PatientDto(null, "pat", "Pat"));
         schedulerController.createScheduler(new SchedulerDto(null, "Default_Scheduler"));
         // when
-        AppointmentDto appDto = new AppointmentDto(null, "2023-03-03T09:00", 160, doctor1.getId(), patient.getId());
-        AppointmentDto appointmentCreationResponse = appController.createAppointment(appDto);
-        List<Long> appointmentIdList = Collections.singletonList(appointmentCreationResponse.getId());
-        DoctorDto updDoc = new DoctorDto(doctor1.getId(), "Abc", "Xyz", Manager, false, null, appointmentIdList, null);
-        DoctorDto docUpdateResponse = doctorController.updateDoctor(updDoc);
+        AppointmentDto appCreationResponse = appController.createAppointment(
+                new AppointmentDto(null, "2023-03-03T09:00", 200, ms.getId(), doctor1.getId(), patient.getId()));
+        List<Long> appList = Collections.singletonList(appCreationResponse.getId());
+        DoctorDto docToUpdate = new DoctorDto(doctor1.getId(), "Abc", "Xyz", Manager, false, null, appList, msList);
+        DoctorDto docUpdateResponse = doctorController.updateDoctor(docToUpdate);
         String deletionResponse1 = doctorController.deleteDoctor(docUpdateResponse.getId());
         String deletionResponse2 = doctorController.deleteDoctor(doctor2.getId());
         // then

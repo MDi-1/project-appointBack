@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
-import static com.example.appointback.entity.CalendarHolder.Position.*;
+import static com.example.appointback.controller.CoreConfiguration.*;
 
 @RestController
 @RequestMapping("/v1/service")
@@ -21,64 +24,106 @@ public class MaintenanceController {
 
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
-    private final AppointmentRepository appRepository;
     private final MedServiceRepository medServiceRepo;
-    private final TimeFrameRepository timeFrameRepository;
     private final SchedulerRepository schedulerRepository;
-    private final AppointmentController appointmentController;
-    private final AppointmentMapper appointmentMapper;
+    private final AppointmentRepository appRepository;
+    private final AppointmentController appController;
     private final TimeFrameController tfController;
-    private final TimeFrameMapper tfMapper;
+    private List<AppointmentDto> appExcessList = new ArrayList<>();
+    private List<TimeFrameDto> tfExcessList = new ArrayList<>();
 
     @Scheduled(cron = "0 0 10 * * *")
     @GetMapping("/dDbCheck") // abbreviation: "duplicate database check"
-    public int dDbCheck() { // something is wrong with it, I think. (but scheduler works) fixme
-        Set<Appointment> appCheckSet = new HashSet<>();
-        List<AppointmentDto> appExcessList = new ArrayList<>();
-        for (Appointment appointment : appRepository.findAll()) {
-            if (!appCheckSet.add(appointment)) appExcessList.add(appointmentMapper.mapToAppointmentDto(appointment));
+    public int dDbCheck() {
+        List<AppointmentDto> allAppointments = appController.getAllAppointments();
+        List<TimeFrameDto> allTimeFrames = tfController.getTimeFrames();
+        Set<AppointmentDto> appCheckSet = new HashSet<>();
+        for (AppointmentDto appointmentDto : allAppointments) {
+            if (!appCheckSet.add(appointmentDto)) appExcessList.add(appointmentDto);
         }
-        Set<TimeFrame> tfCheckSet = new HashSet<>();
-        List<TimeFrameDto> tfExcessList = new ArrayList<>();
-        for (TimeFrame timeFrame : timeFrameRepository.findAll()) {
-            if (!tfCheckSet.add(timeFrame)) tfExcessList.add(tfMapper.mapToTimeFrameDto(timeFrame));
+        Set<TimeFrameDto> tfCheckSet = new HashSet<>();
+        for (TimeFrameDto timeFrameDto : allTimeFrames) {
+            if (!tfCheckSet.add(timeFrameDto)) tfExcessList.add(timeFrameDto);
         }
         System.out.println("---- Project Appoint application; duplicate objects in db: ----");
         for (AppointmentDto appItem : appExcessList) System.out.println(appItem);
         for (TimeFrameDto tfItem : tfExcessList) System.out.println(tfItem);
-        return appExcessList.size() + tfExcessList.size();
+        int duplicateAmount = appExcessList.size() + tfExcessList.size();
+        appExcessList.clear();
+        tfExcessList.clear();
+        return duplicateAmount;
     }
 
     @PostMapping("/sampleDataFeed")
     public void sampleDataFeed() {
-        Doctor doc1 = new Doctor("Dough", "Smith", Specialist, false);
-        Doctor doc2 = new Doctor("Alison", "Green", Manager, false);
-        Doctor doc3 = new Doctor("Doc", "Marshall", Board, false);
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
         schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
-        doctorRepository.save(doc1);
-        doctorRepository.save(doc2);
-        doctorRepository.save(doc3);
-        Patient p1 = new Patient("Jane", "Dou");
-        Patient p2 = new Patient("John", "Doe");
-        Patient p3 = new Patient("Hugo", "Bossy");
-        Patient p4 = new Patient("Kriss", "deValnor");
-        Patient p5 = new Patient("Kristina", "Ronaldina");
-        patientRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
-        List<Appointment> appointments = Arrays.asList(
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(0), LocalTime.of(11, 0)), 150, "abc", doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(2), LocalTime.of(12, 0)), 150, "abc", doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(1), LocalTime.of(13, 0)), 160, "abc", doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(14, 0)), 160, "abc", doc1, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(8 , 0)), 200, "abc", doc2, p2),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(5), LocalTime.of(9 , 0)), 150, "abc", doc2, p3),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(3), LocalTime.of(9 , 0)), 180, "abc", doc3, p1),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(4), LocalTime.of(15, 0)), 180, "abc", doc3, p3),
-            new Appointment(LocalDateTime.of(getStartingDate().plusDays(7), LocalTime.of(11, 0)), 180, "abc", doc3, p3)
-        );
-        appointments.forEach(appointmentController::clearWeekendCollision);
+        MedicalService[] msArray = {new MedicalService("Physician", 160), new MedicalService("Laryngologist", 200)};
+        medServiceRepo.saveAll(Arrays.asList(msArray));
+        Doctor[] doctors = {
+                new Doctor("Dough", "Smith", CalendarHolder.Position.Specialist, false),
+                new Doctor("Alison", "Green", CalendarHolder.Position.Manager, false),
+                new Doctor("Doc", "Marshall", CalendarHolder.Position.Board, false)
+        };
+        doctors[0].setMedicalServices(Collections.singletonList(msArray[0]));
+        doctors[1].setMedicalServices(Collections.singletonList(msArray[0]));
+        doctors[2].setMedicalServices(Collections.singletonList(msArray[1]));
+        doctorRepository.saveAll(Arrays.asList(doctors));
+        Patient[] patients = {
+                new Patient("Jane", "Dou"),
+                new Patient("John", "Doe"),
+                new Patient("Hugo", "Bossy"),
+                new Patient("Kriss", "deValnor"),
+                new Patient("Kristina", "Ronaldina")
+        };
+        patientRepository.saveAll(Arrays.asList(patients));
+        feedDatabaseWithRandomApps(doctors, patients, getPresentDate().toString());
+        tfController.autoCreateTimeFrames(getPresentDate());
+    }
+
+    @PostMapping("/addSomeRandomApps/{startingDateString}")
+    public void feedDatabaseWithRandomApps(Doctor[] doctorArray, Patient[] patientArray, String startingDateString) {
+        List<Doctor> doctorList;
+        List<Patient> patientList;
+        if (doctorArray == null) doctorList = doctorRepository.findAll();
+        else doctorList = Arrays.asList(doctorArray);
+        if (patientArray == null) patientList = patientRepository.findAll();
+        else patientList = Arrays.asList(patientArray);
+        LocalDate startingDate = LocalDate.parse(startingDateString,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Random random = new Random();
+        int iterations = 4 + random.nextInt(12);
+        List<Appointment> appointments = doctorList.stream()
+                .flatMap(doc -> IntStream.range(0, iterations)
+                        .mapToObj(e -> {
+                            long days = random.nextInt(15);
+                            int hour = 8 + random.nextInt(7);
+                            int idxPat = random.nextInt(patientList.size());
+                            List<MedicalService> docMsList = doc.getMedicalServices();
+                            MedicalService ms = docMsList.get(random.nextInt(docMsList.size()));
+                            LocalDateTime dt = LocalDateTime.of(startingDate.plusDays(days), LocalTime.of(hour, 0));
+                            return new Appointment(null, dt, ms.getPrice(), ms, doc, patientList.get(idxPat));
+                        }))
+                .collect(Collectors.toList());
+        appointments.forEach(appController::clearWeekendCollision);
         appRepository.saveAll(appointments);
-        medServiceRepo.save(new MedicalService("Laryngologist", null, 180));
-        tfController.autoCreateTimeFrames(getStartingDate());
+        dDbCheck();
+        appExcessList.forEach(dto -> {
+            try {
+                appController.deleteAppointment(dto.getId());
+            } catch (IllegalArgumentException e) {
+                System.out.println(" ]]] caught IllegalArgumentException when deleting [[[ ");
+                appController.getAllAppointments().stream().filter(a -> a.equals(dto)).forEach(x -> {
+                    System.out.println("   x");
+                });
+            }
+        });
+    }
+
+    public void setAppExcessList(List<AppointmentDto> appExcessList) {
+        this.appExcessList = appExcessList;
+    }
+
+    public void setTfExcessList(List<TimeFrameDto> tfExcessList) {
+        this.tfExcessList = tfExcessList;
     }
 }

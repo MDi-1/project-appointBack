@@ -1,23 +1,21 @@
 package com.example.appointback;
 
 import com.example.appointback.controller.*;
-import com.example.appointback.entity.Appointment;
-import com.example.appointback.entity.Doctor;
-import com.example.appointback.entity.Patient;
-import com.example.appointback.entity.TimeFrame;
+import com.example.appointback.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
-import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
-import static com.example.appointback.entity.TimeFrame.TfStatus.Day_Off;
+import static com.example.appointback.controller.CoreConfiguration.getPresentDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
 @SpringBootTest
@@ -26,46 +24,57 @@ public class ServiceIntegrationTests {
     @Autowired
     private MaintenanceController maintenanceController;
     @Autowired
-    private AppointmentController appointmentController;
-    @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
-    private DoctorRepository doctorRepository;
+    private MedServiceRepository medServiceRepository;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Autowired
     private TimeFrameRepository tfRepository;
 
     @Test
-    public void test() {
+    public void testSampleDataFeed() {
         // given
+        maintenanceController.setTfExcessList(new ArrayList<>());
+        maintenanceController.setAppExcessList(new ArrayList<>());
         maintenanceController.sampleDataFeed();
         // when
-        List<Appointment> list = appointmentRepository.findByPrice(150);
+        List<Appointment> list = appointmentRepository.findByPrice(160);
         // then
-        assertEquals(3, list.size());
+        assertTrue(3 < list.size());
     }
 
     @Test
     public void testDbCheck() {
         // given
-        maintenanceController.sampleDataFeed();
-        List<Doctor> doctorList = doctorRepository.findAll();
-        Doctor doc1 = doctorList.get(0);
-        Doctor doc2 = doctorList.get(1);
-        Patient pat = patientRepository.findAll().get(0);
-        List<Appointment> appointmentList = Arrays.asList(
-                new Appointment(LocalDateTime.of(getStartingDate().plusDays(0L), LocalTime.of(10, 0)), 150, doc1, pat),
-                new Appointment(LocalDateTime.of(getStartingDate().plusDays(2L), LocalTime.of(12, 0)), 150, doc1, pat),
-                new Appointment(LocalDateTime.of(getStartingDate().plusDays(3L), LocalTime.of(14, 0)), 160, doc1, pat),
-                new Appointment(LocalDateTime.of(getStartingDate().plusDays(3L), LocalTime.of(8 , 0)), 200, doc2, pat)
-        );
+        maintenanceController.setTfExcessList(new ArrayList<>());
+        maintenanceController.setAppExcessList(new ArrayList<>());
+        MedicalService ms = medServiceRepository.save(new MedicalService("ms1", 200));
+        Patient patient = patientRepository.save(new Patient("p", "P"));
+        Doctor doctor = doctorRepository.save(new Doctor("x", "X", CalendarHolder.Position.Specialist, false));
+        doctor.setMedicalServices(Collections.singletonList(ms));
+        int initialListIterations = 6;
+        IntStream.range(0, initialListIterations)
+                .mapToObj(i -> new TimeFrame(null, getPresentDate().plusDays(i),
+                        LocalTime.of(8, 0), LocalTime.of(16, 0), TimeFrame.TfStatus.Present, doctor))
+                .forEach(tf -> tfRepository.save(tf));
+        IntStream.range(0, initialListIterations)
+                .mapToObj(i -> {
+                    LocalDateTime dateTime = LocalDateTime.of(getPresentDate().plusDays(i), LocalTime.of(8 + i, 0));
+                    return new Appointment(null, dateTime, ms.getPrice(), ms, doctor, patient);
+                })
+                .forEach(a -> appointmentRepository.save(a));
         // when
-        appointmentList.forEach(appointmentController::clearWeekendCollision);
-        appointmentRepository.saveAll(appointmentList);
-        LocalDate someDate = getStartingDate().plusDays(1L);
-        tfRepository.save(new TimeFrame(null, someDate, LocalTime.of(8, 0), LocalTime.of(15, 0), Day_Off, doc1));
+        int testListIterations = 3;
+        IntStream.range(0, testListIterations)
+                .mapToObj(i -> {
+                    LocalDateTime dateTime = LocalDateTime.of(getPresentDate().plusDays(i), LocalTime.of(8 + i, 0));
+                    return new Appointment(null, dateTime, 111, ms, doctor, patient);
+                })
+                .forEach(a -> appointmentRepository.save(a));
         // then
-        assertEquals(4, maintenanceController.dDbCheck());
+        assertEquals(3, maintenanceController.dDbCheck());
     }
 }

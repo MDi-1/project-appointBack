@@ -18,7 +18,6 @@ public class Doctor extends CalendarHolder {
     @Column(name = "GO_CALENDAR_SYNC")
     private boolean goCalendarSync;
 
-    // cascade = CascadeType.ALL ? => test related TF removal. fixme
     @OneToMany(targetEntity = TimeFrame.class, mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeFrame> timeFrames = new ArrayList<>();
 

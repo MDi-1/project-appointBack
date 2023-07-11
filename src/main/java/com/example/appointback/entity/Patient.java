@@ -3,8 +3,6 @@ package com.example.appointback.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -20,9 +18,8 @@ public class Patient {
     @NotNull
     @GeneratedValue
     @Column(name = "ID", unique = true)
-    private Long id; // (i) changed from int to Long; previously I thought there is separate id numbering for each entity
-                    // but Hibernate by default assigns id numbers from one "pool" for all entities! this "pool"
-                    // is hibernate_sequence table which has just one column "next_val" with one row.
+    private Long id;
+
     @NotNull
     @Column(name = "FIRST_NAME")
     private String firstName;

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -68,16 +67,15 @@ public class SchedulerIntegrationTests {
     public void testSchedulerUpdate() {
         // given
         String dateTime = LocalDateTime.now().toString();
-        SchedulerDto scheduler = scController.createScheduler(new SchedulerDto(null, "sc"));
+        SchedulerDto sc = scController.createScheduler(new SchedulerDto(null, "sc"));
         PatientDto patDto = patientController.createPatient(new PatientDto(null, "abc", "xyz"));
-        AppointmentDto appDto = new AppointmentDto(null, dateTime, 100, scheduler.getId(), patDto.getId());
+        AppointmentDto appDto = new AppointmentDto(null, dateTime, 100, 999L, sc.getId(), patDto.getId());
         AppointmentDto appOut = appointmentController.createAppointment(appDto);
-        List<Long> aList = new ArrayList<>(Collections.singletonList(appOut.getId()));
+        List<Long> aList = new ArrayList<>();
         // when
-        scController.updateScheduler(new SchedulerDto(scheduler.getId(), "sc", aList));
-        String result = scController.getSchedulers()
-                .stream().findAny().orElseThrow(IllegalArgumentException::new).getName();
+        scController.updateScheduler(new SchedulerDto(sc.getId(), "sc", Collections.singletonList(appOut.getId())));
+        SchedulerDto s = scController.getSchedulers().stream().findAny().orElseThrow(IllegalArgumentException::new);
         // then
-        assertEquals("sc", result);
+        assertEquals("sc", s.getName());
     }
 }

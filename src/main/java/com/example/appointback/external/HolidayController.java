@@ -34,7 +34,7 @@ public class HolidayController {
         List<HolidayDao> list = getHolidays();
         LocalDate date = list.stream().filter(e -> e.getName().equals("marker"))
                 .map(HolidayDao::getDate).min(Collections.reverseOrder()).orElse(findLastHolidayDate(list));
-        if (date.isAfter(CoreConfiguration.getStartingDate().plusDays(29L))) return false;
+        if (date.isAfter(CoreConfiguration.getPresentDate().plusDays(29L))) return false;
         for (int i = 0; i < 30; i ++) {
             HolidayDto dto = client.makeHolidayApiRequest(date.plusDays(i));
             if (dto != null) repository.save(new HolidayDao(null, dto.getName(), date.plusDays(i)));
@@ -56,7 +56,7 @@ public class HolidayController {
 
     private LocalDate getPresentDate() {
         System.out.println("---- Project Appoint app; .orElse() call performed #3 - getPresentDate()");
-        return CoreConfiguration.getStartingDate();
+        return CoreConfiguration.getPresentDate();
     }
     // (i) purpose of 2 prints above is to see if .orElse argument is checked in a stream, even if stream finds
     // desired item. It turns out that these two consecutive calls (findLastHolidayDate() and getPresentDate() )

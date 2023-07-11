@@ -29,7 +29,7 @@ public class PatientMapper {
         List<Long> appointments;
         if (patient.getAppointments() != null) {
             appointments = patient.getAppointments().stream().map(Appointment::getId).collect(Collectors.toList());
-        } else appointments = new ArrayList<>(); // later to be written without "if" but in one stream() line.
+        } else appointments = new ArrayList<>();
         return new PatientDto(patient.getId(), patient.getFirstName(), patient.getLastName(), appointments);
     }
 

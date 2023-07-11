@@ -30,29 +30,27 @@ public class MedServiceIntegrationTests {
     @Test
     public void testMsCreate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
-        List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
-        msController.createMedService(new MedicalServiceDto(null, "MS", "des", 200, docList));
+        MedicalServiceDto ms = msController.createMedService(new MedicalServiceDto("MS", 200));
+        DoctorDto docIn = new DoctorDto("Abc", "Xyz", Collections.singletonList(ms.getId()));
+        DoctorDto doctor = doctorController.createDoctor(docIn);
         // when
-        MedicalServiceDto result = msController.getMedServices()
-                .stream().findFirst().orElseThrow(IllegalArgumentException::new);
+        MedicalServiceDto result = msController.getMedServices().stream()
+                .findFirst().orElseThrow(IllegalArgumentException::new);
         // then
-        assertEquals("des", result.getDescription());
+        assertEquals("MS", result.getServiceName());
     }
 
     @Test
     public void testMsUpdate() {
         // given
-        DoctorDto doctor = doctorController.createDoctor(new DoctorDto(null, "Abc", "Xyz", Specialist, false));
+        DoctorDto doctor = doctorController.createDoctor(new DoctorDto("Abc", "Xyz", Specialist, false));
         List<Long> docList = new ArrayList<>(Collections.singletonList(doctor.getId()));
-        MedicalServiceDto msDtoInput = new MedicalServiceDto(null, "MS1", "d", 180, new ArrayList<>());
+        MedicalServiceDto msDtoInput = new MedicalServiceDto(null, "MS1", "d", 180, null, new ArrayList<>());
         MedicalServiceDto creationResponse = msController.createMedService(msDtoInput);
-        MedicalServiceDto dtoUpdate = new MedicalServiceDto(creationResponse.getId(), "MS1", "desc", 180, docList);
+        MedicalServiceDto dtoUpdate = new MedicalServiceDto(creationResponse.getId(),"MS1","desc",180, null, docList);
         MedicalServiceDto updatingResponse = msController.updateMedService(dtoUpdate);
         // when
         MedicalServiceDto result = msController.getMedService(creationResponse.getId());
-        System.out.println(" ]]] printing medical services [[[: ");
-        msController.getMedServices().forEach(System.out::println);
         // then
         assertAll (() -> assertEquals("desc", result.getDescription()), () -> assertNotNull(updatingResponse));
     }

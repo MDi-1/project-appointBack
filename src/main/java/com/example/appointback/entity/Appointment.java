@@ -25,8 +25,9 @@ public class Appointment {
     @Column(name = "PRICE")
     private int price;
 
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @ManyToOne
+    @JoinColumn (name = "SERVICE_ID")
+    private MedicalService medicalService;
 
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
@@ -35,14 +36,6 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
-
-    public Appointment (LocalDateTime startDateTime, int price, String desc, CalendarHolder doctor, Patient patient) {
-        this.startDateTime = startDateTime;
-        this.price = price;
-        this.description = desc;
-        this.doctor = doctor;
-        this.patient = patient;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -7,16 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static com.example.appointback.entity.TimeFrame.TfStatus.*;
 
 @RestController
 @RequestMapping("/v1/timeFrame")
 @RequiredArgsConstructor
-public class TimeFrameController { // need to introduce: enum TfStatus { Present, Day_Off, Holiday }
-                                    // especially -- Holiday ! -- fixme
+public class TimeFrameController {
+
     private final TimeFrameMapper mapper;
     private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;
@@ -40,13 +37,13 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto createTimeFrame(@RequestBody TimeFrameDto dto) {
         if (dto.getTimeStart().equals("-") && dto.getTimeEnd().equals("-")) {
-            dto.setTimeStart("08:00");
-            dto.setTimeEnd("16:00");
+            dto.setTimeStart(CoreConfiguration.DEFAULT_STARTING_TIME.toString());
+            dto.setTimeEnd(CoreConfiguration.DEFAULT_ENDING_TIME.toString());
         }
         if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
             dto.setTimeStart("00:00");
             dto.setTimeEnd("00:00");
-            dto.setTfStatus(Day_Off);
+            dto.setTfStatus(TimeFrame.TfStatus.Day_Off);
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         checkForAppsOutsideTf(tf);
@@ -56,13 +53,13 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TimeFrameDto updateTimeFrame(@RequestBody TimeFrameDto dto) {
         if (dto.getTimeStart().equals("-") && dto.getTimeEnd().equals("-")) {
-            dto.setTimeStart("08:00");
-            dto.setTimeEnd("16:00");
+            dto.setTimeStart(CoreConfiguration.DEFAULT_STARTING_TIME.toString());
+            dto.setTimeEnd(CoreConfiguration.DEFAULT_ENDING_TIME.toString());
         }
         if (dto.getTimeStart().equals("off") && dto.getTimeEnd().equals("off")) {
             dto.setTimeStart("00:00");
             dto.setTimeEnd("00:00");
-            dto.setTfStatus(Day_Off);
+            dto.setTfStatus(TimeFrame.TfStatus.Day_Off);
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         List<Appointment> aList = checkForAppsOutsideTf(tf);
@@ -78,49 +75,54 @@ public class TimeFrameController { // need to introduce: enum TfStatus { Present
     }
 
     @PostMapping("/autoCreateTfList")
-    public boolean autoCreateTimeFrames(LocalDate today) {
-        List<Doctor> doctorList = docRepository.findAll();
-        for(Doctor doc : doctorList) {
-            List<TimeFrame> tfList = repository.findTimeFrameByDoc(doc.getId());
-            List<TimeFrame> newTfList = new ArrayList<>();
-            for(int n = 0; n < 30; n++) {
-                TimeFrame sampleTf = new TimeFrame(
-                        today.plusDays(n), LocalTime.of(8, 0), LocalTime.of(16, 0), Present, doc);
+    public void autoCreateTimeFrames(LocalDate today) {
+        if (today == null) today = LocalDate.now();
+        for (Doctor iteratedDoctor : docRepository.findAll()) {
+            List<TimeFrame> tfList = repository.findTimeFrameByDoc(iteratedDoctor.getId());
+            List<TimeFrame> newList = new ArrayList<>();
+            for (int n = 0; n < 30; n++) {
                 boolean found = false;
                 for (TimeFrame singleTf : tfList) {
-                    if (singleTf.getTimeframeDate().equals(sampleTf.getTimeframeDate())) {
+                    if (singleTf.getTimeframeDate().equals(today.plusDays(n))) {
                         found = true;
                         break;
                     }
                 }
-                if (!found) newTfList.add(sampleTf);
+                if (!found) {
+                    newList.add(new TimeFrame(
+                            today.plusDays(n),
+                            CoreConfiguration.DEFAULT_STARTING_TIME,
+                            CoreConfiguration.DEFAULT_ENDING_TIME,
+                            TimeFrame.TfStatus.Present,
+                            iteratedDoctor
+                    ));
+                }
             }
-            tfList.addAll(newTfList);
+            tfList.addAll(newList);
             repository.saveAll(tfList);
         }
-        return true;
     }
 
     @GetMapping("getAppsOutsideTf/{timeFrameId}")
     public List<AppointmentDto> getAppsOutsideTf(@PathVariable Long timeFrameId) {
         return aMapper.mapToAppointmentDtoList(checkForAppsOutsideTf(repository.findById(timeFrameId)
                 .orElseThrow(IllegalArgumentException::new)));
-    } // we will need complete DB check - all TFs against Appointments
+    }
 
     public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {
         List<Appointment> appOutsideList = new ArrayList<>();
-        if (tf.getDoctor().getAppointments() == null || tf.getDoctor().getAppointments().size() == 0) {
+        List<Appointment> inputList = tf.getDoctor().getAppointments();
+        if (inputList == null || inputList.size() == 0) {
             System.out.println(" Doctor: " + tf.getDoctor().getName() + " has no appointments");
-            return Collections.emptyList();
+            return appOutsideList;
         }
-        for (Appointment item : tf.getDoctor().getAppointments()) {
-            LocalDate aDate = LocalDate.from(item.getStartDateTime());
-            LocalTime aTime = LocalTime.from(item.getStartDateTime());
-            if (tf.getTimeframeDate().equals(aDate)) {
-                if (aTime.isBefore(tf.getTimeStart()) ||aTime.isAfter(tf.getTimeEnd()) ||aTime.equals(tf.getTimeEnd()))
-                {
-                    appOutsideList.add(item);
-                }
+        for (Appointment item : inputList) {
+            LocalDate date = LocalDate.from(item.getStartDateTime());
+            LocalTime time = LocalTime.from(item.getStartDateTime());
+            LocalTime tStart = tf.getTimeStart(), tEnd = tf.getTimeEnd();
+            if (tf.getTimeframeDate().equals(date) &&
+                    (time.isBefore(tStart) || time.isAfter(tEnd) || time.equals(tEnd))) {
+                appOutsideList.add(item);
             }
         }
         return appOutsideList;

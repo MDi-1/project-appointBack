@@ -1,14 +1,12 @@
 package com.example.appointback.external;
 
 import lombok.*;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @AllArgsConstructor
 @Getter

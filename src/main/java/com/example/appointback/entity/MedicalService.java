@@ -1,9 +1,9 @@
 package com.example.appointback.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,16 +23,19 @@ public class MedicalService {
 
     @Column(name = "DESCRIPTION")
     private String description;
-                        // precision of BigDecimal is irrelevant here since this project is just for educational
-    @Column(name = "PRICE") // purpose no one in this imaginary clinic would price services more precisely than tens of
-    private int price; // currency units, so 'int' type is more than good enough.
+                           // precision of BigDecimal is irrelevant here since this project is just for educational
+    @Column(name = "PRICE")// purpose, no one in this imaginary clinic would price services more precisely than tens of
+    private int price;     // currency units, so 'int' type is more than good enough.
+
+    @OneToMany (targetEntity= Appointment.class, mappedBy= "medicalService", cascade= CascadeType.ALL,
+            fetch= FetchType.LAZY)
+    private List<Appointment> appointments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "medicalServices")
     private List<Doctor> doctors;
 
-    public MedicalService(String serviceName, String description, int price) {
+    public MedicalService(String serviceName, int price) {
         this.serviceName = serviceName;
-        this.description = description;
         this.price = price;
     }
 }

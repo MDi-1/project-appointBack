@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-import static com.example.appointback.controller.CoreConfiguration.getStartingDate;
+import static com.example.appointback.controller.CoreConfiguration.getPresentDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.when;
@@ -33,8 +33,8 @@ public class HolidaysIntegrationTests {
     @Test
     public void testRunHolidaysCheck() {
         // given
-        LocalDate dateForTesting = getStartingDate().plusDays(27L);
-        repository.save(new HolidayDao(null, "very special holiday", getStartingDate().plusDays(17L)));
+        LocalDate dateForTesting = getPresentDate().plusDays(27L);
+        repository.save(new HolidayDao(null, "very special holiday", getPresentDate().plusDays(17L)));
         HolidayDto mockedDto = new HolidayDto("abc", dateForTesting.toString(), "National");
         HolidayDateMatcher argumentMatcherToInsert = new HolidayDateMatcher(dateForTesting);
         when(holidayClientStub.makeHolidayApiRequest(argThat(argumentMatcherToInsert))).thenReturn(mockedDto);
