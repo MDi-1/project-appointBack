@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -77,7 +75,6 @@ public class AppointmentController {
 
     @DeleteMapping("/{apId}")
     public void deleteAppointment(@PathVariable Long apId) {
-        System.out.println(" ]]] DELETE APPOINTMENT FIRED [[[ ");
         Appointment appointment = repository.findById(apId).orElseThrow(IllegalArgumentException::new);
         Doctor doctor = (Doctor) appointment.getDoctor();
         if (doctor.isGoCalendarSync()) deleteEvent(apId);
