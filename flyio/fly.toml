@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for appoint on 2023-09-13T11:31:07+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "appoint"
+primary_region = "waw"
+
+[build]
+
+[env]
+  _JAVA_OPTIONS="-XX:MaxRAM=70m"
+  SPRING_PROFILES_ACTIVE="prod,api-docs"
+  MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED="false"
+  SPRING_DATASOURCE_USERNAME="postgres"
+  SPRING_DATASOURCE_URL="jdbc:postgresql://proappointdb.internal:5432/?user=postgres&password=MXgOlAPIcHsaQHB"
+  SPRING_LIQUIBASE_URL="jdbc:postgresql://proappointdb.internal:5432/?user=postgres&password=MXgOlAPIcHsaQHB"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
