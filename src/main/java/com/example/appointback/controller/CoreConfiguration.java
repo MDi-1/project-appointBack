@@ -12,7 +12,7 @@ import java.time.LocalTime;
 public class CoreConfiguration {
 
     public static LocalTime DEFAULT_STARTING_TIME = LocalTime.of(8, 0);
-    public static LocalTime DEFAULT_ENDING_TIME = LocalTime.of(8, 0);
+    public static LocalTime DEFAULT_ENDING_TIME = LocalTime.of(16, 0);
 
     @Bean
     public RestTemplate restTemplate() {

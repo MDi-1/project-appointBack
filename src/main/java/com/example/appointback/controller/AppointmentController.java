@@ -7,9 +7,6 @@ import com.google.api.services.calendar.model.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;

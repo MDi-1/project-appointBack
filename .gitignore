@@ -36,7 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+# added by author
 **/out/
 **/build/
 **/tokens/
 credentials.json
+flyio/fly.toml
