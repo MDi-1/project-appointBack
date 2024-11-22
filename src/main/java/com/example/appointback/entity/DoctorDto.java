@@ -1,6 +1,6 @@
 package com.example.appointback.entity;
 
-import com.example.appointback.entityfactory.FactoryDtoOutput;
+import com.example.appointback.entityfactory.CalHolderDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @ToString
-public class DoctorDto implements FactoryDtoOutput {
+public class DoctorDto implements CalHolderDto {
 
     private Long id;
     private String name;

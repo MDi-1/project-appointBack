@@ -20,12 +20,12 @@ public class CalendarHolderController {
     private final EmployeeMapper employeeMapper;
 
     @GetMapping("/{id}")
-    public FactoryDtoOutput getCH(@PathVariable Long id) {
+    public CalHolderDto getCH(@PathVariable Long id) {
         return dtoFactory(repository.findById(id).orElseThrow(IllegalArgumentException::new));
     }
 
     @GetMapping("/getAll")
-    public List<FactoryDtoOutput> getAllCH() {
+    public List<CalHolderDto> getAllCH() {
         return repository.findAll().stream().map(this::dtoFactory).collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public class CalendarHolderController {
         repository.deleteById(id);
     }
 
-    public FactoryDtoOutput dtoFactory(CalendarHolder entity) {
+    public CalHolderDto dtoFactory(CalendarHolder entity) {
         switch (entity.getClass().getSimpleName()) {
             case "Doctor":
                 return doctorMapper.mapToDoctorDto((Doctor) entity);

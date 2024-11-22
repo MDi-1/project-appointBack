@@ -5,7 +5,7 @@ import com.example.appointback.controller.SchedulerController;
 import com.example.appointback.entity.DoctorDto;
 import com.example.appointback.entity.SchedulerDto;
 import com.example.appointback.entityfactory.CalendarHolderController;
-import com.example.appointback.entityfactory.FactoryDtoOutput;
+import com.example.appointback.entityfactory.CalHolderDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +45,7 @@ public class CalendarHolderIntegrationTests {
         doctorController.createDoctor(new DoctorDto("abc", "xyz", Board, false));
         schedulerController.createScheduler(new SchedulerDto(null, "scheduler"));
         // when
-        List<FactoryDtoOutput> list = calendarHolderController.getAllCH();
+        List<CalHolderDto> list = calendarHolderController.getAllCH();
         // then
         assertEquals(2, list.size());
     }
