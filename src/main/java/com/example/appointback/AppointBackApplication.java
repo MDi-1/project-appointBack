@@ -11,3 +11,4 @@ public class AppointBackApplication {
         System.out.println("---- Project Appoint application; version in development 0.0 ----\n");
     }
 }
+// temporarily restoring branch to play with "test objects" (like TestObjectController)
