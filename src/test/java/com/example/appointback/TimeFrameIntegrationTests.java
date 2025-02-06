@@ -122,16 +122,17 @@ public class TimeFrameIntegrationTests {
         assertEquals(Day_Off, tfController.getTimeFrame(tf2mod.getId()).getTfStatus());
     }
 
-    @Test
-    public void testAppsOutsideTf() {
+    @Test // does not work when appointment is in another day than tf; f. getAppsOutsideTf(tf.getId())
+    public void testAppsOutsideTf() {// should work independently, from tfs.
         // given
         Long msId = msController.getMedServices().get(0).getId();
         PatientDto pat = patientController.createPatient(new PatientDto(null, "pat", "Pat"));
         TimeFrameDto tf = tfController.createTimeFrame(new TimeFrameDto(
                 null, LocalDate.of(2023, 9, 15).toString(), "09:00", "12:00", Present, doctorOut.getId()));
         LocalDateTime[] dateTime = {
-                LocalDateTime.of(2023, 9, 15,  8, 0), LocalDateTime.of(2023, 9, 15, 10, 0),
-                LocalDateTime.of(2023, 9, 15, 11, 0), LocalDateTime.of(2023, 9, 15, 12, 0)
+                LocalDateTime.of(2023, 9, 15,  1, 0), LocalDateTime.of(2023, 9, 15, 1, 0),
+                LocalDateTime.of(2023, 9, 15, 11, 0), LocalDateTime.of(2023, 9, 15, 12, 0),
+                LocalDateTime.of(2023, 9, 15, 16, 0), LocalDateTime.of(2023, 9, 15, 17, 0)
         };
         List<Long> msList = Collections.singletonList(msId);
         List<Long> tfList = Collections.singletonList(tf.getId());
