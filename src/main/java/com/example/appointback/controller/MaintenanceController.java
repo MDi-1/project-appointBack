@@ -2,6 +2,7 @@ package com.example.appointback.controller;
 
 import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +56,8 @@ public class MaintenanceController {
     }
 
     @PostMapping("/sampleDataFeed")
-    public void sampleDataFeed() {
+    public void sampleDataFeed() { // intended for use only to populate empty database; not allowed to use repetitively
+        System.out.println("---- Project Appoint application; execute -sampleDataFeed- function: ----");
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
         schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
         MedicalService[] msArray = {new MedicalService("Physician", 160), new MedicalService("Laryngologist", 200)};
@@ -77,12 +79,16 @@ public class MaintenanceController {
                 new Patient("Kristina", "Ronaldina")
         };
         patientRepository.saveAll(Arrays.asList(patients));
+
+        System.out.println("present date:" + getPresentDate());
+
         feedDatabaseWithRandomApps(doctors, patients, getPresentDate().toString());
         tfController.autoCreateTimeFrames(getPresentDate());
     }
 
     @PostMapping("/addSomeRandomApps/{startingDateString}")
     public void feedDatabaseWithRandomApps(Doctor[] doctorArray, Patient[] patientArray, String startingDateString) {
+        System.out.println("---- execute -addSomeRandomApps- function: ----");
         List<Doctor> doctorList;
         List<Patient> patientList;
         if (doctorArray == null) doctorList = doctorRepository.findAll();
@@ -101,6 +107,8 @@ public class MaintenanceController {
                             List<MedicalService> docMsList = doc.getMedicalServices();
                             MedicalService ms = docMsList.get(random.nextInt(docMsList.size()));
                             LocalDateTime dt = LocalDateTime.of(startingDate.plusDays(days), LocalTime.of(hour, 0));
+                            Appointment a = new Appointment(null, dt, ms.getPrice(), ms, doc, patientList.get(idxPat)); // 2 B del fixme
+                            System.out.println(a);
                             return new Appointment(null, dt, ms.getPrice(), ms, doc, patientList.get(idxPat));
                         }))
                 .collect(Collectors.toList());
