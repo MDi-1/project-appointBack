@@ -109,4 +109,6 @@ public class AppointmentIntegrationTests {
         // then
         assertEquals(1, appController.getAllAppointments().size());
     }
+
+    // tests here are not working? fixme
 }

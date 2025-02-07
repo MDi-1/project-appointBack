@@ -127,4 +127,13 @@ public class TimeFrameController {
         }
         return appOutsideList;
     }
+
+    public List<Appointment> searchForOrphanedApps() {
+        //List<Appointment> aList =
+        List<TimeFrame> tfList = repository.findAll();
+
+        tfList.forEach(this::checkForAppsOutsideTf);
+
+        return null;
+    }
 }

@@ -124,6 +124,10 @@ public class TimeFrameIntegrationTests {
 
     @Test // does not work when appointment is in another day than tf; f. getAppsOutsideTf(tf.getId())
     public void testAppsOutsideTf() {// should work independently, from tfs.
+        // ...after a little bit of thinking - no, actually it's correct; we can check particular day if all
+        // appointments are framed correctly inside tf. Completely orphaned appointments should be checked by some
+        // other function.
+
         // given
         Long msId = msController.getMedServices().get(0).getId();
         PatientDto pat = patientController.createPatient(new PatientDto(null, "pat", "Pat"));

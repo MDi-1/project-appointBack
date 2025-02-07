@@ -56,7 +56,7 @@ public class MaintenanceController {
     }
 
     @PostMapping("/sampleDataFeed")
-    public void sampleDataFeed() { // intended for use only to populate empty database; not allowed to use repetitively
+    public void sampleDataFeed() { // intended for use to populate empty database only; not allowed to use repetitively
         System.out.println("---- Project Appoint application; execute -sampleDataFeed- function: ----");
         schedulerRepository.save(new Scheduler("Default_Scheduler"));
         schedulerRepository.save(new Scheduler("Holiday_Scheduler"));
