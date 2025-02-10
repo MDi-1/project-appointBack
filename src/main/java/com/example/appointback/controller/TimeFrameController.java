@@ -18,6 +18,7 @@ public class TimeFrameController {
     private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
+    private final AppointmentRepository appRepository;
 
     @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
@@ -63,7 +64,7 @@ public class TimeFrameController {
         }
         TimeFrame tf = mapper.mapToTimeFrame(dto);
         List<Appointment> aList = checkForAppsOutsideTf(tf);
-        if (aList.size() > 0) {
+        if (!aList.isEmpty()) {
             System.out.println("---- Project Appoint application ---- appointments are outside doctor's timeframe");
         }
         return mapper.mapToTimeFrameDto(repository.save(tf));
@@ -88,7 +89,7 @@ public class TimeFrameController {
                         break;
                     }
                 }
-                if (!found) {
+                if (!found) { // wyrzucić "if" bo found zawsze = false, jeśli wykonanie dojdzie do tego miejsca; fixme
                     newList.add(new TimeFrame(
                             today.plusDays(n),
                             CoreConfiguration.DEFAULT_STARTING_TIME,
@@ -112,7 +113,7 @@ public class TimeFrameController {
     public List<Appointment> checkForAppsOutsideTf(TimeFrame tf) {
         List<Appointment> appOutsideList = new ArrayList<>();
         List<Appointment> inputList = tf.getDoctor().getAppointments();
-        if (inputList == null || inputList.size() == 0) {
+        if (inputList == null || inputList.isEmpty()) {
             System.out.println(" Doctor: " + tf.getDoctor().getName() + " has no appointments");
             return appOutsideList;
         }
@@ -120,8 +121,7 @@ public class TimeFrameController {
             LocalDate date = LocalDate.from(item.getStartDateTime());
             LocalTime time = LocalTime.from(item.getStartDateTime());
             LocalTime tStart = tf.getTimeStart(), tEnd = tf.getTimeEnd();
-            if (tf.getTimeframeDate().equals(date) &&
-                    (time.isBefore(tStart) || time.isAfter(tEnd) || time.equals(tEnd))) {
+            if (tf.getTimeframeDate().equals(date) && (time.isBefore(tStart)||time.isAfter(tEnd)||time.equals(tEnd))) {
                 appOutsideList.add(item);
             }
         }
@@ -129,11 +129,15 @@ public class TimeFrameController {
     }
 
     public List<Appointment> searchForOrphanedApps() {
-        //List<Appointment> aList =
-        List<TimeFrame> tfList = repository.findAll();
+        List<Appointment> resultList = appRepository.findAll();
+        List<Appointment> aListToSubtract = new ArrayList<>();
+        repository.findAll().forEach(tf -> aListToSubtract.addAll(checkForAppsOutsideTf(tf)));
+        resultList.removeAll(aListToSubtract);
+        return resultList;
+    }
 
-        tfList.forEach(this::checkForAppsOutsideTf);
-
-        return null;
+    @GetMapping("getOrphanedApps/{timeFrameId}")
+    public List<AppointmentDto> getOrphanedApps() {
+        return aMapper.mapToAppointmentDtoList(searchForOrphanedApps());
     }
 }
