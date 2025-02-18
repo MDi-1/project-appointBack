@@ -11,3 +11,4 @@ public class AppointBackApplication {
         System.out.println("---- Project Appoint application; version in development 0.1 ----\n");
     }
 }
+// exploring scanner feasibility - todo
