@@ -81,21 +81,25 @@ public class MaintenanceController {
         patientRepository.saveAll(Arrays.asList(patients));
 
         System.out.println("present date:" + getPresentDate());
-
-        feedDatabaseWithRandomApps(doctors, patients, getPresentDate().toString());
+        System.out.println("---- execute -feedDatabaseWithRandomApps- function: ----"); // fixme
+        feedDatabaseWithRandomApps(doctors, patients, getPresentDate());
         tfController.autoCreateTimeFrames(getPresentDate());
     }
 
-    @PostMapping("/addSomeRandomApps/{startingDateString}")
-    public void feedDatabaseWithRandomApps(Doctor[] doctorArray, Patient[] patientArray, String startingDateString) {
-        System.out.println("---- execute -addSomeRandomApps- function: ----");
+    @PostMapping("/addSomeRandomApps/{startingDateString}") // tu jest 1 param. i tak trzeba zrobić w argumentach f. poniżej fixme
+    public void addSomeRandomApps(String startingDateString) {
+        System.out.println("---- execute -addSomeRandomApps- function: ----"); // fixme
+        LocalDate startingDate = LocalDate.parse(startingDateString,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        feedDatabaseWithRandomApps(null, null, startingDate);
+    }
+
+    protected void feedDatabaseWithRandomApps(Doctor[] doctorArray, Patient[] patientArray, LocalDate startingDate) {
         List<Doctor> doctorList;
         List<Patient> patientList;
         if (doctorArray == null) doctorList = doctorRepository.findAll();
         else doctorList = Arrays.asList(doctorArray);
         if (patientArray == null) patientList = patientRepository.findAll();
         else patientList = Arrays.asList(patientArray);
-        LocalDate startingDate = LocalDate.parse(startingDateString,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Random random = new Random();
         int iterations = 4 + random.nextInt(12);
         List<Appointment> appointments = doctorList.stream()
@@ -125,6 +129,11 @@ public class MaintenanceController {
                 });
             }
         });
+    } // test this f. then clear those System.out.println statements. fixme
+
+    @GetMapping("/getDateFromNow")
+    public void getDateFromNow() {
+        System.out.println(getPresentDate());
     }
 
     public void setAppExcessList(List<AppointmentDto> appExcessList) {

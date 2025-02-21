@@ -2,7 +2,7 @@ package com.example.appointback;
 
 import com.example.appointback.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
+// in fact this class isn't needed; just display db contents in "mysql workbench" for example. fixme
 public class AuxTools {
 
     @Autowired
