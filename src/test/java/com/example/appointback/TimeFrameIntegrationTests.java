@@ -34,7 +34,7 @@ public class TimeFrameIntegrationTests {
     private TimeFrameController tfController;
     @Autowired
     private MedServiceController msController;
-    DoctorDto doctorOut;
+    private DoctorDto doctorOut;
 
     @BeforeEach
     public void prepareDoctor() {
@@ -122,25 +122,21 @@ public class TimeFrameIntegrationTests {
         assertEquals(Day_Off, tfController.getTimeFrame(tf2mod.getId()).getTfStatus());
     }
 
-    @Test // does not work when appointment is in another day than tf; f. getAppsOutsideTf(tf.getId())
-    public void testAppsOutsideTf() {// should work independently, from tfs.
-        // ...after a little bit of thinking - no, actually it's correct; we can check particular day if all
-        // appointments are framed correctly inside tf. Completely orphaned appointments should be checked by some
-        // other function.
-
+    @Test
+    public void testAppsOutsideTfForADay() {
         // given
         Long msId = msController.getMedServices().get(0).getId();
         PatientDto pat = patientController.createPatient(new PatientDto(null, "pat", "Pat"));
         TimeFrameDto tf = tfController.createTimeFrame(new TimeFrameDto(
                 null, LocalDate.of(2023, 9, 15).toString(), "09:00", "12:00", Present, doctorOut.getId()));
         LocalDateTime[] dateTime = {
-                LocalDateTime.of(2023, 9, 15,  1, 0), LocalDateTime.of(2023, 9, 15, 1, 0),
+                LocalDateTime.of(2023, 9, 15,  1, 0), LocalDateTime.of(2023, 9, 15, 9, 0),
                 LocalDateTime.of(2023, 9, 15, 11, 0), LocalDateTime.of(2023, 9, 15, 12, 0),
                 LocalDateTime.of(2023, 9, 15, 16, 0), LocalDateTime.of(2023, 9, 15, 17, 0)
         };
         List<Long> msList = Collections.singletonList(msId);
         List<Long> tfList = Collections.singletonList(tf.getId());
-        List<Long> appList = IntStream.range(0, 4)
+        List<Long> appList = IntStream.range(0, 5)
                 .mapToObj(i -> appController.createAppointment(new AppointmentDto(
                         null, dateTime[i].toString(), 160, msId, doctorOut.getId(), pat.getId())).getId())
                 .collect(Collectors.toList());
@@ -149,6 +145,6 @@ public class TimeFrameIntegrationTests {
                 new DoctorDto(doctorOut.getId(), "DocName", "DocLastname" , Board, false, tfList, appList, msList));
         List<AppointmentDto> appsOutsideTf = tfController.getAppsOutsideTf(tf.getId());
         // then
-        assertEquals(2, appsOutsideTf.size());
+        assertEquals(3, appsOutsideTf.size());
     }
 }

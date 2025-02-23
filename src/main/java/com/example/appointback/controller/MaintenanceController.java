@@ -4,10 +4,8 @@ import com.example.appointback.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -87,7 +85,7 @@ public class MaintenanceController {
     }
 
     @PostMapping("/addSomeRandomApps/{startingDateString}") // tu jest 1 param. i tak trzeba zrobić w argumentach f. poniżej fixme
-    public void addSomeRandomApps(String startingDateString) {
+    public void addSomeRandomApps(@PathVariable String startingDateString) {
         System.out.println("---- execute -addSomeRandomApps- function: ----"); // fixme
         LocalDate startingDate = LocalDate.parse(startingDateString,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         feedDatabaseWithRandomApps(null, null, startingDate);

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.appointback.external.GoCalendarClient.deleteEvent;
@@ -20,7 +21,9 @@ import static com.example.appointback.external.GoCalendarClient.postEvent;
 public class AppointmentController {
 
     private final AppointmentMapper mapper;
+    private final TimeFrameController tfController;
     private final AppointmentRepository repository;
+    private final TimeFrameRepository tfRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final CalendarHolderRepository calendarHolderRepository;
@@ -94,4 +97,18 @@ public class AppointmentController {
         appointment.setStartDateTime(dateTime);
         return appointment;
     }
+
+    public List<Appointment> searchForOrphanedApps() {
+        List<Appointment> resultList = repository.findAll();
+        List<Appointment> aListToSubtract = new ArrayList<>();
+        tfRepository.findAll().forEach(tf -> aListToSubtract.addAll(tfController.checkForAppsOutsideTf(tf)));
+        resultList.removeAll(aListToSubtract);
+        return resultList;
+    }
+
+    @GetMapping("getOrphanedApps/{timeFrameId}")
+    public List<AppointmentDto> getOrphanedApps() {
+        return mapper.mapToAppointmentDtoList(searchForOrphanedApps());
+    }
+
 }

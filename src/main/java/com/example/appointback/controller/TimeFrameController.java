@@ -18,7 +18,6 @@ public class TimeFrameController {
     private final AppointmentMapper aMapper;
     private final TimeFrameRepository repository;
     private final DoctorRepository docRepository;
-    private final AppointmentRepository appRepository;
 
     @GetMapping("/getOne/{timeFrameId}")
     public TimeFrameDto getTimeFrame(@PathVariable Long timeFrameId) {
@@ -128,16 +127,4 @@ public class TimeFrameController {
         return appOutsideList;
     }
 
-    public List<Appointment> searchForOrphanedApps() {
-        List<Appointment> resultList = appRepository.findAll();
-        List<Appointment> aListToSubtract = new ArrayList<>();
-        repository.findAll().forEach(tf -> aListToSubtract.addAll(checkForAppsOutsideTf(tf)));
-        resultList.removeAll(aListToSubtract);
-        return resultList;
-    }
-
-    @GetMapping("getOrphanedApps/{timeFrameId}")
-    public List<AppointmentDto> getOrphanedApps() {
-        return aMapper.mapToAppointmentDtoList(searchForOrphanedApps());
-    }
 }
