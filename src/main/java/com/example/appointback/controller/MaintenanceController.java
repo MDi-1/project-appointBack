@@ -27,6 +27,7 @@ public class MaintenanceController {
     private final SchedulerRepository schedulerRepository;
     private final AppointmentRepository appRepository;
     private final AppointmentController appController;
+    private final TimeFrameRepository tfRepository;
     private final TimeFrameController tfController;
     private List<AppointmentDto> appExcessList = new ArrayList<>();
     private List<TimeFrameDto> tfExcessList = new ArrayList<>();
@@ -77,11 +78,8 @@ public class MaintenanceController {
                 new Patient("Kristina", "Ronaldina")
         };
         patientRepository.saveAll(Arrays.asList(patients));
-
-        System.out.println("present date:" + getPresentDate());
-        System.out.println("---- execute -feedDatabaseWithRandomApps- function: ----"); // fixme
         feedDatabaseWithRandomApps(doctors, patients, getPresentDate());
-        tfController.autoCreateTimeFrames(getPresentDate());
+        tfController.autoCreateTimeFrames(null);
     }
 
     @PostMapping("/addSomeRandomApps/{startingDateString}") // tu jest 1 param. i tak trzeba zrobić w argumentach f. poniżej fixme
@@ -91,6 +89,7 @@ public class MaintenanceController {
         feedDatabaseWithRandomApps(null, null, startingDate);
     }
 
+    // na razie f. generuje na 2 tygodnie (long days = random.nextInt(15)); trzeba to rozszerzyć na miesiąc. todo
     protected void feedDatabaseWithRandomApps(Doctor[] doctorArray, Patient[] patientArray, LocalDate startingDate) {
         List<Doctor> doctorList;
         List<Patient> patientList;
@@ -99,11 +98,11 @@ public class MaintenanceController {
         if (patientArray == null) patientList = patientRepository.findAll();
         else patientList = Arrays.asList(patientArray);
         Random random = new Random();
-        int iterations = 4 + random.nextInt(12);
+        int iterations = 4 + random.nextInt(10);
         List<Appointment> appointments = doctorList.stream()
                 .flatMap(doc -> IntStream.range(0, iterations)
                         .mapToObj(e -> {
-                            long days = random.nextInt(15);
+                            long days = random.nextInt(25);
                             int hour = 8 + random.nextInt(7);
                             int idxPat = random.nextInt(patientList.size());
                             List<MedicalService> docMsList = doc.getMedicalServices();
@@ -129,9 +128,14 @@ public class MaintenanceController {
         });
     } // test this f. then clear those System.out.println statements. fixme
 
-    @GetMapping("/getDateFromNow")
-    public void getDateFromNow() {
-        System.out.println(getPresentDate());
+    //@Scheduled(cron = "0 0 0 1 * *")
+    @PostMapping("/dummyAutoFill")
+    public void dummyAutoFill() {
+        LocalDate dateNow = getPresentDate();
+        tfRepository.findAll().stream().filter(e -> e.getTimeframeDate().equals(dateNow)).findFirst().ifPresent(e -> {
+                    tfController.autoCreateTimeFrames(null);
+                    feedDatabaseWithRandomApps(null, null, getPresentDate());
+                });
     }
 
     public void setAppExcessList(List<AppointmentDto> appExcessList) {

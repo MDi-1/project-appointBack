@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.appointback.external.GoCalendarClient.deleteEvent;
 import static com.example.appointback.external.GoCalendarClient.postEvent;
@@ -98,17 +100,28 @@ public class AppointmentController {
         return appointment;
     }
 
+    // eventually we ran across the problem where we can find Appointments posted without validation (Appointment
+    // with no timeframe coverage) So there should be validation logic first instead of building
+    // things like searchForOrphanedApps().
     public List<Appointment> searchForOrphanedApps() {
+        List<Appointment> negativeList = new ArrayList<>();
         List<Appointment> resultList = repository.findAll();
-        List<Appointment> aListToSubtract = new ArrayList<>();
-        tfRepository.findAll().forEach(tf -> aListToSubtract.addAll(tfController.checkForAppsOutsideTf(tf)));
-        resultList.removeAll(aListToSubtract);
-        return resultList;
+        List<TimeFrame> allTfs = tfRepository.findAll();
+        allTfs.forEach(tf -> negativeList.addAll(tfController.checkForAppsOutsideTf(tf)));
+        resultList.removeAll(negativeList);
+        return resultList.stream().filter(app -> allTfs.stream()
+                        .noneMatch(tf -> {
+                            boolean condition2 = app.getStartDateTime().toLocalDate().equals(tf.getTimeframeDate());
+                            boolean condition1 = app.getDoctor().equals(tf.getDoctor());
+                            return condition1 && condition2;
+                            // return keyword here terminates shenanigans with extracted conditions. May try to see how
+                            // simplified this be when conditions to be refactored as inline variable, then return
+                            // keyword and curly braces need to be removed.
+                        })).collect(Collectors.toList());
     }
 
-    @GetMapping("getOrphanedApps/{timeFrameId}")
+    @GetMapping("/getOrphanedApps")
     public List<AppointmentDto> getOrphanedApps() {
         return mapper.mapToAppointmentDtoList(searchForOrphanedApps());
     }
-
 }
